@@ -6,7 +6,7 @@ Une ligne = un changement à faire dans `pawrise-figma`. Le détail du débat es
 
 | Préfixe | Signifie | Où le trouver |
 | --- | --- | --- |
-| `S` | Écran | [Figma Pawrise-App](https://www.figma.com/design/33w6Fklug8ywPYh6aDNGCj/Pawrise-App) · [USER_STORIES_FIGMA.md](../pawrise-figma/docs/USER_STORIES_FIGMA.md) |
+| `S` | Écran | Index S → lien Figma : [FIGMA_DELIVERY.md](../pawrise-figma/docs/FIGMA_DELIVERY.md) · [Figma, visuels](https://www.figma.com/design/oSH1BWg8ek3AtXc4DJ2LBx?node-id=4-98) |
 | `US` | User story | [USER_STORIES_FIGMA.md](../pawrise-figma/docs/USER_STORIES_FIGMA.md) |
 | `D` | Écart BDD ↔ maquette | [questions.md](questions.md) |
 | `RG` | Règle de gestion BDD | [mcd-doc.md](../bdd/mcd-doc.md) |

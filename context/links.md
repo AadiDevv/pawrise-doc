@@ -5,6 +5,7 @@
 | Ressource | Référence |
 | --- | --- |
 | Maquette Figma (app mobile, code dans `pawrise-figma/`) | https://www.figma.com/design/33w6Fklug8ywPYh6aDNGCj/Pawrise-App — file key `33w6Fklug8ywPYh6aDNGCj` |
+| Figma — écrans S01–S26 et user stories (index : `pawrise-figma/docs/FIGMA_DELIVERY.md`) | https://www.figma.com/design/oSH1BWg8ek3AtXc4DJ2LBx — file key `oSH1BWg8ek3AtXc4DJ2LBx` |
 | Repo maquette | https://github.com/Pawrise/pawrise-figma |
 | Figma — architecture principale | file key `4GNvmMvgKEnp96rfCkWXvb` |
 | Figma — architecture secondaire | file key `X2FPYXvpBfvaRhH1xNQm1H` |
