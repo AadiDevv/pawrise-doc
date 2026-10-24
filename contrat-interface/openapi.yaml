@@ -8,7 +8,7 @@ info:
     Un endpoint marqué `x-status: provisoire` dépend d'une question ouverte de `questions.md` (`x-depends-on`).
 servers:
   - url: https://api.pawrise.example/v1
-    description: Adresse à fixer (convention 7 : version dans l'URL)
+    description: "Adresse à fixer (convention 7 : version dans l'URL)"
 
 tags:
   - name: Compte
@@ -71,6 +71,62 @@ paths:
                 code: EMAIL_ALREADY_USED
                 title: Email already used
 
+  /auth/login:
+    post:
+      tags: [Compte]
+      operationId: login
+      summary: Se connecter
+      description: |
+        Écran S19 Connexion (US-27). Ouvre une session et renvoie les jetons.
+
+        Règles appliquées :
+        - Même réponse 401 `INVALID_CREDENTIALS` si l'e-mail est inconnu ou si le mot de passe est faux : l'API ne révèle pas qu'un compte existe (la maquette affiche déjà un message unique, « E-mail ou mot de passe incorrect. »).
+        - E-mail comparé sans tenir compte de la casse (RG10).
+        - Trop d'essais ratés d'affilée → 429 `TOO_MANY_ATTEMPTS` (protection contre le devinage du mot de passe ; seuil fixé côté serveur).
+      x-status: provisoire
+      x-depends-on: [T1]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
+            example:
+              email: camille.martin@example.com
+              password: "chien-oslo-2026"
+      responses:
+        '200':
+          description: Session ouverte.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuthSession' }
+        '400':
+          description: Champ manquant ou e-mail mal formé (`VALIDATION_FAILED`, codes `REQUIRED`, `INVALID_EMAIL`).
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/ValidationProblem' }
+        '401':
+          description: E-mail ou mot de passe incorrect.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example:
+                status: 401
+                code: INVALID_CREDENTIALS
+                title: Invalid credentials
+        '429':
+          description: Trop d'essais ratés, réessayer plus tard. L'en-tête `Retry-After` donne le délai en secondes.
+          headers:
+            Retry-After:
+              schema: { type: integer }
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example:
+                status: 429
+                code: TOO_MANY_ATTEMPTS
+                title: Too many attempts
+
 components:
   securitySchemes:
     bearerAuth:
@@ -101,6 +157,14 @@ components:
           type: string
           maxLength: 20
           description: Version des CGU acceptée par l'utilisateur (RG11, D13).
+
+    LoginRequest:
+      type: object
+      additionalProperties: false
+      required: [email, password]
+      properties:
+        email: { type: string, format: email, maxLength: 255 }
+        password: { type: string, maxLength: 128, writeOnly: true }
 
     User:
       type: object
