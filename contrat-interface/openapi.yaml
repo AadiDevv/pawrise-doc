@@ -1,0 +1,147 @@
+openapi: 3.1.0
+info:
+  title: Pawrise API-CORE — app mobile
+  version: 0.1.0
+  description: |
+    Contrat entre l'app mobile propriétaire et l'API-CORE (sprint 1).
+    Conventions transverses : `conventions.md` (dates, identifiants, nommage, erreurs, pagination, en-têtes, versioning, énumérations, PATCH).
+    Un endpoint marqué `x-status: provisoire` dépend d'une question ouverte de `questions.md` (`x-depends-on`).
+servers:
+  - url: https://api.pawrise.example/v1
+    description: Adresse à fixer (convention 7 : version dans l'URL)
+
+tags:
+  - name: Compte
+    description: Inscription, connexion, profil, suppression (C3)
+
+paths:
+  /auth/register:
+    post:
+      tags: [Compte]
+      operationId: register
+      summary: Créer un compte propriétaire
+      description: |
+        Écran S20 Inscription (US-28). Crée le compte, enregistre l'acceptation des CGU dans la même transaction (RG11) et ouvre une session : l'app enchaîne sur la découverte (S21) sans reconnexion.
+
+        Règles appliquées :
+        - RG10 : e-mail unique, sans tenir compte de la casse → 409 `EMAIL_ALREADY_USED`.
+        - RG11 : acceptation des CGU obligatoire, enregistrée dans `consent` (`terms_privacy`, version acceptée).
+        - Le mot de passe est stocké haché (`password_hash`), jamais renvoyé.
+      x-status: provisoire
+      x-depends-on: [T1, D7, D13, D14]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RegisterRequest' }
+            example:
+              firstName: Camille
+              lastName: Martin
+              email: camille.martin@example.com
+              phoneNumber: "+33612345678"
+              password: "chien-oslo-2026"
+              acceptedTermsVersion: "2026-10"
+      responses:
+        '201':
+          description: Compte créé, session ouverte.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuthSession' }
+        '400':
+          description: |
+            Données invalides (`VALIDATION_FAILED`). Codes par champ : `REQUIRED`, `INVALID_EMAIL`, `INVALID_PHONE`, `PASSWORD_TOO_SHORT`, `TERMS_NOT_ACCEPTED`.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/ValidationProblem' }
+              example:
+                status: 400
+                code: VALIDATION_FAILED
+                title: Validation failed
+                errors:
+                  - { field: email, code: INVALID_EMAIL }
+                  - { field: password, code: PASSWORD_TOO_SHORT }
+        '409':
+          description: E-mail déjà utilisé (RG10).
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example:
+                status: 409
+                code: EMAIL_ALREADY_USED
+                title: Email already used
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Jeton d'accès court (convention 6, dépend de T1).
+
+  schemas:
+    RegisterRequest:
+      type: object
+      additionalProperties: false
+      required: [firstName, lastName, email, password, acceptedTermsVersion]
+      properties:
+        firstName: { type: string, minLength: 1, maxLength: 100 }
+        lastName: { type: string, minLength: 1, maxLength: 100 }
+        email: { type: string, format: email, maxLength: 255 }
+        phoneNumber:
+          type: [string, 'null']
+          maxLength: 20
+          description: Facultatif (BDD nullable ; la maquette le demande sans l'exiger). Format E.164.
+        password:
+          type: string
+          minLength: 8
+          maxLength: 128
+          writeOnly: true
+          description: 8 caractères minimum (hypothèse D14 ; la maquette en demande 6).
+        acceptedTermsVersion:
+          type: string
+          maxLength: 20
+          description: Version des CGU acceptée par l'utilisateur (RG11, D13).
+
+    User:
+      type: object
+      required: [id, firstName, lastName, email, phoneNumber, registeredAt]
+      properties:
+        id: { type: string, format: uuid }
+        firstName: { type: string }
+        lastName: { type: string }
+        email: { type: string, format: email }
+        phoneNumber: { type: [string, 'null'] }
+        registeredAt: { type: string, format: date-time }
+
+    AuthSession:
+      type: object
+      required: [user, accessToken, refreshToken]
+      properties:
+        user: { $ref: '#/components/schemas/User' }
+        accessToken: { type: string, description: Jeton court (≈ 15 min). }
+        refreshToken: { type: string, description: Jeton long, échangé via POST /auth/refresh. }
+
+    Problem:
+      type: object
+      description: Erreur au format Problem Details (RFC 9457), convention 4.
+      required: [status, code, title]
+      properties:
+        status: { type: integer }
+        code: { type: string, description: Code stable lu par l'app. }
+        title: { type: string }
+        detail: { type: string }
+
+    ValidationProblem:
+      allOf:
+        - $ref: '#/components/schemas/Problem'
+        - type: object
+          required: [errors]
+          properties:
+            errors:
+              type: array
+              items:
+                type: object
+                required: [field, code]
+                properties:
+                  field: { type: string }
+                  code: { type: string }
