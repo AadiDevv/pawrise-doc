@@ -6,6 +6,33 @@ Où est **défini** chaque code utilisé dans la doc. Un fichier qui ne fait que
 
 Vérifié le 2026-10-24 sur les fichiers locaux. Les liens Figma viennent de `FIGMA_DELIVERY.md` ; ils n'ont pas pu être ouverts depuis l'agent (pas d'accès au fichier).
 
+## Par où commencer
+
+Document mère → documents filles. En revenant sur le projet, lire de haut en bas.
+
+```
+Carte du contrat (artifact, vue d'ensemble) ......... https://claude.ai/artifact/D2uBEcXosYW5a7KR8ZNcAz
+└── contrat-interface/README.md ...................... où j'en suis, kanban C1–C11
+    ├── ecrans.md ............ C1  écran → données → endpoint
+    ├── conventions.md ....... C2  règles communes à tous les endpoints
+    ├── openapi.yaml ......... C3–C10  le contrat, domaine par domaine
+    ├── questions.md ......... T, D, Q  écarts et questions ouvertes
+    └── maquette-a-modifier.md  M  changements à proposer sur la maquette
+
+AGENTS.md ............................................ contexte projet, point d'entrée des agents
+├── context/ ......... overview, architecture (I), decisions, links, references (ce fichier)
+└── bdd/README.md .... App-DB
+    ├── schema.md ........ tables et colonnes (lire en premier)
+    ├── mcd-doc.md ....... RG, justifications, points ouverts
+    ├── mld-doc.md, sql/, diagrams/ (les .drawio font foi)
+
+pawrise-figma/ (dépôt de la maquette)
+├── docs/FIGMA_DELIVERY.md ..... S : index écran → Figma
+└── docs/USER_STORIES_FIGMA.md . US
+```
+
+## Où est défini chaque code
+
 ```
 Pawrise/
 ├── bdd/
