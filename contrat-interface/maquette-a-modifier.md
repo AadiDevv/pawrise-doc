@@ -6,11 +6,11 @@ Une ligne = un changement à faire dans `pawrise-figma`. Le détail du débat es
 
 | Préfixe | Signifie | Où le trouver |
 | --- | --- | --- |
-| `S20` | Écran de la maquette | `../pawrise-figma/docs/USER_STORIES_FIGMA.md` (écrans S01 à S26) |
-| `US-28` | User story de la maquette | même fichier |
-| `D13` | Écart BDD ↔ maquette, avec l'hypothèse retenue | `questions.md` (registre) |
-| `RG11` | Règle de gestion de la BDD | `../bdd/mcd-doc.md` |
-| `M1` | Ligne de ce fichier | ici |
+| `S` | Écran | [Figma Pawrise-App](https://www.figma.com/design/33w6Fklug8ywPYh6aDNGCj/Pawrise-App) · [USER_STORIES_FIGMA.md](../pawrise-figma/docs/USER_STORIES_FIGMA.md) |
+| `US` | User story | [USER_STORIES_FIGMA.md](../pawrise-figma/docs/USER_STORIES_FIGMA.md) |
+| `D` | Écart BDD ↔ maquette | [questions.md](questions.md) |
+| `RG` | Règle de gestion BDD | [mcd-doc.md](../bdd/mcd-doc.md) |
+| `M` | Modification de maquette | ce fichier |
 
 **Statuts** : `à proposer` · `proposé à l'équipe` · `accepté` · `refusé` · `fait`
 
