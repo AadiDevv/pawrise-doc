@@ -2,7 +2,7 @@
 
 Rangé dans l'ordre du Figma : par US (US-01 à US-36), puis par écran et par overlay (`↳` = sheet, modale ou page posée sur l'écran). Pour chaque ligne : ce que l'écran **lit**, ce qu'il **écrit**, l'endpoint appelé et son domaine (= section de `openapi.yaml`).
 
-Sources : `../pawrise-figma/docs/USER_STORIES_FIGMA.md` (US, écrans S01–S26) et le code `../pawrise-figma/src/`, passé écran par écran (relevé du 2026-10-18).
+Sources : `../pawrise-figma/docs/USER_STORIES_FIGMA.md` (US et leurs écrans), `../pawrise-figma/docs/FIGMA_DELIVERY.md` (index des écrans S → Figma) et le code `../pawrise-figma/src/`, passé écran par écran (relevé du 2026-10-18).
 
 Les endpoints sont des brouillons : nommage et conventions fixés à l'étape C2. Les écarts renvoient à `questions.md`.
 

@@ -8,6 +8,7 @@ Lire uniquement les fichiers utiles à la tâche.
 
 | Besoin | Fichier |
 | --- | --- |
+| Où est défini chaque code (S, US, RG, D, Q, T, I, C, M) | `context/references.md` |
 | Vue d'ensemble, équipe, architecture backend | `context/overview.md` |
 | Choix techniques validés et principes | `context/decisions.md` |
 | Architecture macroservices (MVP / post-MVP), interfaces entre services | `context/architecture.md` |
