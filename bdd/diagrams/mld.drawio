@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="oIKVt3CJ03BWsYuHZ_YI">
+    <mxGraphModel dx="4642" dy="1964" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <object label="SPECIES" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_SPECIES&quot;]}}]}" id="SPECIES">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="74" width="200" x="1950" y="1300" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="SPECIES_a" parent="SPECIES" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;species_code&lt;/u&gt;&lt;br&gt;species_name" vertex="1">
+          <mxGeometry height="48" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="BREED_TYPE" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_BREED_TYPE&quot;]}}]}" id="BREED_TYPE">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="74" width="200" x="2400" y="1600" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="BREED_TYPE_a" parent="BREED_TYPE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;breed_type_code&lt;/u&gt;&lt;br&gt;breed_type_name" vertex="1">
+          <mxGeometry height="48" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="BREED" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_BREED&quot;]}}]}" id="BREED">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="114" width="200" x="2400" y="1300" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="BREED_a" parent="BREED" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;breed_code&lt;/u&gt;&lt;br&gt;breed_name&lt;br&gt;#species_code&lt;br&gt;#breed_type_code" vertex="1">
+          <mxGeometry height="88" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="PET" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_PET&quot;]}}]}" id="PET">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1">
+            <mxGeometry height="234" width="200" x="1400" y="900" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="PET_a" parent="PET" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;id_pet&lt;/u&gt;&lt;br&gt;pet_name&lt;br&gt;birth_date&lt;br&gt;sex&lt;br&gt;is_sterilized&lt;br&gt;identification_number&lt;br&gt;coat_color&lt;br&gt;photo&lt;br&gt;#species_code&lt;br&gt;#ordinal_number" vertex="1">
+          <mxGeometry height="208" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="PET_BREED" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_PET_BREED&quot;]}}]}" id="PET_BREED">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1">
+            <mxGeometry height="94" width="200" x="1750" y="1470" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="PET_BREED_a" parent="PET_BREED" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;#id_pet&lt;/u&gt;&lt;br&gt;&lt;u&gt;#breed_code&lt;/u&gt;&lt;br&gt;is_primary" vertex="1">
+          <mxGeometry height="68" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="USER_ACCOUNT" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_USER_ACCOUNT&quot;]}}]}" id="USER_ACCOUNT">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="214" width="200" x="1400" y="250" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="USER_ACCOUNT_a" parent="USER_ACCOUNT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;id_user&lt;/u&gt;&lt;br&gt;email&lt;br&gt;password&lt;br&gt;first_name&lt;br&gt;last_name&lt;br&gt;phone_number&lt;br&gt;email_verified_at&lt;br&gt;registration_date&lt;br&gt;payment_customer_ref" vertex="1">
+          <mxGeometry height="188" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="PET_OWNER" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_PET_OWNER&quot;]}}]}" id="PET_OWNER">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1">
+            <mxGeometry height="94" width="200" x="1400" y="610" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="PET_OWNER_a" parent="PET_OWNER" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;#id_user&lt;/u&gt;&lt;br&gt;&lt;u&gt;#id_pet&lt;/u&gt;&lt;br&gt;owner_role" vertex="1">
+          <mxGeometry height="68" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="DEVICE" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_DEVICE&quot;]}}]}" id="DEVICE">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="134" width="200" x="800" y="80" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="DEVICE_a" parent="DEVICE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;id_device&lt;/u&gt;&lt;br&gt;push_token&lt;br&gt;platform&lt;br&gt;last_active_at&lt;br&gt;#id_user" vertex="1">
+          <mxGeometry height="108" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="CONSENT" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_CONSENT&quot;]}}]}" id="CONSENT">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="134" width="200" x="800" y="300" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CONSENT_a" parent="CONSENT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;#id_user&lt;/u&gt;&lt;br&gt;&lt;u&gt;consent_type&lt;/u&gt;&lt;br&gt;&lt;u&gt;consent_granted_at&lt;/u&gt;&lt;br&gt;consent_version&lt;br&gt;consent_revoked_at" vertex="1">
+          <mxGeometry height="108" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="COLLAR" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_COLLAR&quot;]}}]}" id="COLLAR">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="134" width="200" x="2600" y="945" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="COLLAR_a" parent="COLLAR" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;serial_number&lt;/u&gt;&lt;br&gt;hardware_version&lt;br&gt;firmware_version&lt;br&gt;collar_status&lt;br&gt;activated_at" vertex="1">
+          <mxGeometry height="108" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="COLLAR_ASSIGNMENT" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_COLLAR_ASSIGNMENT&quot;]}}]}" id="COLLAR_ASSIGNMENT">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="114" width="200" x="1950" y="975" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="COLLAR_ASSIGNMENT_a" parent="COLLAR_ASSIGNMENT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;#id_pet&lt;/u&gt;&lt;br&gt;&lt;u&gt;#serial_number&lt;/u&gt;&lt;br&gt;&lt;u&gt;assigned_at&lt;/u&gt;&lt;br&gt;unassigned_at" vertex="1">
+          <mxGeometry height="88" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="HEALTH_ENTRY" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_HEALTH_ENTRY&quot;]}}]}" id="HEALTH_ENTRY">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="234" width="200" x="1400" y="1330" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="HEALTH_ENTRY_a" parent="HEALTH_ENTRY" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;id_health_entry&lt;/u&gt;&lt;br&gt;entry_type&lt;br&gt;entry_date&lt;br&gt;label&lt;br&gt;weight&lt;br&gt;dosage&lt;br&gt;end_date&lt;br&gt;next_due_date&lt;br&gt;notes&lt;br&gt;#id_pet" vertex="1">
+          <mxGeometry height="208" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="GEO_ZONE_SECURITY" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_GEO_ZONE_SECURITY&quot;]}}]}" id="GEO_ZONE_SECURITY">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="174" width="200" x="1800" y="560" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="GEO_ZONE_SECURITY_a" parent="GEO_ZONE_SECURITY" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;id_geo_zone&lt;/u&gt;&lt;br&gt;geo_zone_name&lt;br&gt;zone_type&lt;br&gt;center_latitude&lt;br&gt;center_longitude&lt;br&gt;radius&lt;br&gt;#id_user" vertex="1">
+          <mxGeometry height="148" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="PET_GEO_ZONE" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_PET_GEO_ZONE&quot;]}}]}" id="PET_GEO_ZONE">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1">
+            <mxGeometry height="94" width="200" x="1680" y="790" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="PET_GEO_ZONE_a" parent="PET_GEO_ZONE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;#id_geo_zone&lt;/u&gt;&lt;br&gt;&lt;u&gt;#id_pet&lt;/u&gt;&lt;br&gt;is_active" vertex="1">
+          <mxGeometry height="68" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="VETERINARIAN" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_VETERINARIAN&quot;]}}]}" id="VETERINARIAN">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="154" width="200" x="250" y="1100" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="VETERINARIAN_a" parent="VETERINARIAN" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;ordinal_number&lt;/u&gt;&lt;br&gt;first_name&lt;br&gt;last_name&lt;br&gt;phone_number&lt;br&gt;email&lt;br&gt;is_partner" vertex="1">
+          <mxGeometry height="128" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="CLINIC" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_CLINIC&quot;]}}]}" id="CLINIC">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="214" width="200" x="-300" y="1070" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CLINIC_a" parent="CLINIC" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;id_clinic&lt;/u&gt;&lt;br&gt;clinic_name&lt;br&gt;address&lt;br&gt;postal_code&lt;br&gt;city&lt;br&gt;latitude&lt;br&gt;longitude&lt;br&gt;phone_number&lt;br&gt;has_emergency_service" vertex="1">
+          <mxGeometry height="188" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="VET_CLINIC" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_VET_CLINIC&quot;]}}]}" id="VET_CLINIC">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1">
+            <mxGeometry height="74" width="180" x="-15" y="1140" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="VET_CLINIC_a" parent="VET_CLINIC" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;#ordinal_number&lt;/u&gt;&lt;br&gt;&lt;u&gt;#id_clinic&lt;/u&gt;" vertex="1">
+          <mxGeometry height="48" width="180" y="26" as="geometry" />
+        </mxCell>
+        <object label="PET_VET_ACCESS" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_PET_VET_ACCESS&quot;]}}]}" id="PET_VET_ACCESS">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="134" width="200" x="800" y="1250" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="PET_VET_ACCESS_a" parent="PET_VET_ACCESS" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;#id_pet&lt;/u&gt;&lt;br&gt;&lt;u&gt;#ordinal_number&lt;/u&gt;&lt;br&gt;&lt;u&gt;access_granted_at&lt;/u&gt;&lt;br&gt;access_revoked_at&lt;br&gt;access_source" vertex="1">
+          <mxGeometry height="108" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="ALERT" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_ALERT&quot;]}}]}" id="ALERT">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="194" width="200" x="2200" y="560" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="ALERT_a" parent="ALERT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;id_alert&lt;/u&gt;&lt;br&gt;alert_type&lt;br&gt;severity&lt;br&gt;explanation&lt;br&gt;triggered_at&lt;br&gt;acknowledged_at&lt;br&gt;#id_pet&lt;br&gt;#id_geo_zone" vertex="1">
+          <mxGeometry height="168" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="CONVERSATION" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_CONVERSATION&quot;]}}]}" id="CONVERSATION">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="114" width="200" x="800" y="640" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CONVERSATION_a" parent="CONVERSATION" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;id_conversation&lt;/u&gt;&lt;br&gt;started_at&lt;br&gt;#id_pet&lt;br&gt;#id_user" vertex="1">
+          <mxGeometry height="88" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="MESSAGE" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_MESSAGE&quot;]}}]}" id="MESSAGE">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="194" width="200" x="250" y="600" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="MESSAGE_a" parent="MESSAGE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;id_message&lt;/u&gt;&lt;br&gt;sender_role&lt;br&gt;content&lt;br&gt;sent_at&lt;br&gt;model_version&lt;br&gt;sources&lt;br&gt;confidence_score&lt;br&gt;#id_conversation" vertex="1">
+          <mxGeometry height="168" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="ESCALATION" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_ESCALATION&quot;]}}]}" id="ESCALATION">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="194" width="200" x="800" y="880" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="ESCALATION_a" parent="ESCALATION" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;id_escalation&lt;/u&gt;&lt;br&gt;escalation_reason&lt;br&gt;escalated_at&lt;br&gt;escalation_status&lt;br&gt;preliminary_report&lt;br&gt;closed_at&lt;br&gt;#id_conversation&lt;br&gt;#ordinal_number" vertex="1">
+          <mxGeometry height="168" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="SUBSCRIPTION" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_SUBSCRIPTION&quot;]}}]}" id="SUBSCRIPTION">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="214" width="200" x="2100" y="250" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="SUBSCRIPTION_a" parent="SUBSCRIPTION" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;id_subscription&lt;/u&gt;&lt;br&gt;plan_code&lt;br&gt;subscription_status&lt;br&gt;started_at&lt;br&gt;current_period_end&lt;br&gt;canceled_at&lt;br&gt;payment_provider_ref&lt;br&gt;#id_user&lt;br&gt;#serial_number" vertex="1">
+          <mxGeometry height="188" width="200" y="26" as="geometry" />
+        </mxCell>
+        <object label="DOCUMENT" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_DOCUMENT&quot;]}}]}" id="DOCUMENT">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="174" width="200" x="1400" y="1740" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="DOCUMENT_a" parent="DOCUMENT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;id_document&lt;/u&gt;&lt;br&gt;file_name&lt;br&gt;file_type&lt;br&gt;storage_ref&lt;br&gt;document_source&lt;br&gt;uploaded_at&lt;br&gt;#id_health_entry" vertex="1">
+          <mxGeometry height="148" width="200" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_breed_species" edge="1" parent="1" source="BREED" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=0;exitY=0.3;exitDx=0;exitDy=0;entryX=1;entryY=0.46;entryDx=0;entryDy=0;" target="SPECIES">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_breed_type" edge="1" parent="1" source="BREED" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="BREED_TYPE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_pet_species" edge="1" parent="1" source="PET" style="rounded=1;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.88;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=entityRelationEdgeStyle;curved=0;" target="SPECIES">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_pet_vet" edge="1" parent="1" source="PET" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=0;exitY=0.949;exitDx=0;exitDy=0;entryX=1;entryY=0.143;entryDx=0;entryDy=0;" target="VETERINARIAN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_petbreed_pet" edge="1" parent="1" source="PET_BREED" style="rounded=0;html=1;endArrow=block;endFill=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.97;entryDx=0;entryDy=0;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_petbreed_breed" edge="1" parent="1" source="PET_BREED" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.8;entryDx=0;entryDy=0;curved=1;" target="BREED">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_owner_user" edge="1" parent="1" source="PET_OWNER" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="USER_ACCOUNT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_owner_pet" edge="1" parent="1" source="PET_OWNER" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_device_user" edge="1" parent="1" source="DEVICE" style="rounded=1;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.15;entryDx=0;entryDy=0;edgeStyle=entityRelationEdgeStyle;curved=0;" target="USER_ACCOUNT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_consent_user" edge="1" parent="1" source="CONSENT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.547;entryDx=0;entryDy=0;" target="USER_ACCOUNT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_ca_pet" edge="1" parent="1" source="COLLAR_ASSIGNMENT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.564;entryDx=0;entryDy=0;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_ca_collar" edge="1" parent="1" source="COLLAR_ASSIGNMENT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.649;entryDx=0;entryDy=0;" target="COLLAR">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_health_pet" edge="1" parent="1" source="HEALTH_ENTRY" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_doc_health" edge="1" parent="1" source="DOCUMENT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="HEALTH_ENTRY">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_zone_user" edge="1" parent="1" source="GEO_ZONE_SECURITY" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.9;entryDx=0;entryDy=0;curved=0;" target="USER_ACCOUNT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_pgz_zone" edge="1" parent="1" source="PET_GEO_ZONE" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=0.8;exitY=0;exitDx=0;exitDy=0;entryX=0.2;entryY=1;entryDx=0;entryDy=0;" target="GEO_ZONE_SECURITY">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_pgz_pet" edge="1" parent="1" source="PET_GEO_ZONE" style="rounded=0;html=1;endArrow=block;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.85;entryY=0;entryDx=0;entryDy=0;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_vc_vet" edge="1" parent="1" source="VET_CLINIC" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="VETERINARIAN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_vc_clinic" edge="1" parent="1" source="VET_CLINIC" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="CLINIC">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_pva_pet" edge="1" parent="1" source="PET_VET_ACCESS" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0.2;entryY=1;entryDx=0;entryDy=0;curved=1;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_pva_vet" edge="1" parent="1" source="PET_VET_ACCESS" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.9;entryDx=0;entryDy=0;curved=0;" target="VETERINARIAN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_alert_pet" edge="1" parent="1" source="ALERT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.15;entryDx=0;entryDy=0;curved=1;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_alert_zone" edge="1" parent="1" source="ALERT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.557;entryDx=0;entryDy=0;" target="GEO_ZONE_SECURITY">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_conv_user" edge="1" parent="1" source="CONVERSATION" style="rounded=1;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.8;entryDx=0;entryDy=0;edgeStyle=entityRelationEdgeStyle;curved=0;" target="USER_ACCOUNT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_conv_pet" edge="1" parent="1" source="CONVERSATION" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.2;entryDx=0;entryDy=0;curved=0;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_msg_conv" edge="1" parent="1" source="MESSAGE" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="CONVERSATION">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_esc_conv" edge="1" parent="1" source="ESCALATION" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="CONVERSATION">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_esc_vet" edge="1" parent="1" source="ESCALATION" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=0;exitY=0.8;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" target="VETERINARIAN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_sub_user" edge="1" parent="1" source="SUBSCRIPTION" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;exitX=0;exitY=0.3;exitDx=0;exitDy=0;entryX=1;entryY=0.3;entryDx=0;entryDy=0;" target="USER_ACCOUNT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_sub_collar" edge="1" parent="1" source="SUBSCRIPTION" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=0;" target="COLLAR">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <object label="📖 Afficher / masquer toute la documentation" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;tags&quot;:[&quot;doc&quot;]}}]}" id="DOC_ALL">
+          <mxCell parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontStyle=1;fontSize=13;" vertex="1">
+            <mxGeometry height="44" width="340" x="-300" y="1415" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="LEG" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#666666;dashed=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=4;fontSize=16;fontStyle=1;fontColor=#333333;" value="Légende — MLD App-DB (Merise)" vertex="1">
+          <mxGeometry height="530" width="1150" x="-300" y="1480" as="geometry" />
+        </mxCell>
+        <mxCell id="LEG_t" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#333333;" value="&lt;b&gt;Rectangle&lt;/b&gt; = table · &lt;u&gt;souligné&lt;/u&gt; = clé primaire · &lt;b&gt;#&lt;/b&gt; = clé étrangère (même nom que la clé primaire référencée)&lt;br&gt;&lt;b&gt;Flèche&lt;/b&gt; = de la table qui porte la clé étrangère vers la table référencée.&lt;br&gt;&lt;b&gt;Couleurs&lt;/b&gt; : &lt;span style=&quot;background-color:#dae8fc;&quot;&gt;&amp;nbsp;bleu&amp;nbsp;&lt;/span&gt; table issue d&#39;une entité · &lt;span style=&quot;background-color:#fff2cc;&quot;&gt;&amp;nbsp;jaune&amp;nbsp;&lt;/span&gt; table de liaison issue d&#39;une association N-N · &lt;span style=&quot;background-color:#d5e8d4;&quot;&gt;&amp;nbsp;vert&amp;nbsp;&lt;/span&gt; PET, entité pivot&lt;br&gt;&lt;b&gt;Documentation&lt;/b&gt; : en mode lecture, clic sur une table pour afficher / masquer sa fiche ; bouton ci-dessus pour toutes les afficher.&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles de passage MCD → MLD appliquées&lt;/b&gt;&lt;br&gt;• Association binaire (0,n / 1,1) : la clé primaire côté n migre en clé étrangère côté 1,1 ; l&#39;ellipse disparaît.&lt;br&gt;• Association binaire (0,n / 0,1) : clé étrangère côté 0,1, facultative → PET.#ordinal_number (véto traitant, &lt;i&gt;suivre&lt;/i&gt;), ALERT.#id_geo_zone (&lt;i&gt;provoquer&lt;/i&gt;), ESCALATION.#ordinal_number (véto en charge, &lt;i&gt;prendre_en_charge&lt;/i&gt;).&lt;br&gt;• Association (1,1 / 0,1) &lt;i&gt;aboutir&lt;/i&gt; : ESCALATION.#id_conversation, clé étrangère unique.&lt;br&gt;• Association (n / n) : nouvelle table, clé primaire = clés étrangères + attributs portés → PET_BREED (&lt;i&gt;avoir_race&lt;/i&gt;), PET_OWNER (&lt;i&gt;posséder&lt;/i&gt;), PET_GEO_ZONE (&lt;i&gt;surveiller&lt;/i&gt;), VET_CLINIC (&lt;i&gt;exercer&lt;/i&gt;).&lt;br&gt;• Identification relative (1,1) : clé primaire composée des clés étrangères + identifiant local → COLLAR_ASSIGNMENT, PET_VET_ACCESS, CONSENT.&lt;br&gt;&lt;br&gt;&lt;b&gt;Contraintes non représentables en MLD&lt;/b&gt; (MPD ou applicatif) :&lt;br&gt;• les races d&#39;un animal appartiennent à son espèce ; une seule race principale (is_primary) par animal&lt;br&gt;• à un instant donné : une seule affectation par animal et par collier, un seul accès actif par couple animal / véto, un seul consentement actif par type, un seul abonnement actif par collier&lt;br&gt;• une géozone ne surveille que les animaux de son créateur&lt;br&gt;• seul un vétérinaire partenaire (is_partner) peut recevoir un accès (PET_VET_ACCESS) ou une escalade&lt;br&gt;• données mesurées en continu (GPS, capteurs, batterie) : TimescaleDB, hors App-DB&lt;br&gt;&lt;br&gt;Règles de gestion complètes : fiche MCD (RG1 à RG72)." vertex="1">
+          <mxGeometry height="486" width="1120" x="-286" y="1514" as="geometry" />
+        </mxCell>
+        <mxCell id="DOC" parent="0" value="Documentation" />
+        <object label="SPECIES" tags="doc" id="CARD_SPECIES">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="184" width="300" x="2170" y="1300" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_SPECIES_t" parent="CARD_SPECIES" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Référentiel des espèces (chien, chat…).&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Un code immuable plutôt qu&#39;un libellé libre : pas de variantes de saisie.&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Codes uniques et immuables (RG1)&lt;br&gt;• L&#39;espèce d&#39;un animal est immuable (RG6)" vertex="1">
+          <mxGeometry height="156" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="BREED_TYPE" tags="doc" id="CARD_BREED_TYPE">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="170" width="300" x="2620" y="1600" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_BREED_TYPE_t" parent="CARD_BREED_TYPE" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Référentiel des types de race (groupes, catégories).&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Classe les races indépendamment de l&#39;espèce.&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Codes uniques et immuables (RG1)" vertex="1">
+          <mxGeometry height="142" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="BREED" tags="doc" id="CARD_BREED">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="198" width="300" x="2620" y="1300" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_BREED_t" parent="CARD_BREED" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Référentiel des races, rattachées à une espèce et à un type.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;#species_code permet de contrôler que les races d&#39;un animal appartiennent à son espèce (RG3).&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Codes uniques et immuables (RG1)&lt;br&gt;• Nom unique au sein d&#39;une espèce (RG2)" vertex="1">
+          <mxGeometry height="170" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="PET" tags="doc" id="CARD_PET">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#d5e8d4;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="270" width="300" x="1620" y="900" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_PET_t" parent="CARD_PET" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;L&#39;animal suivi, entité centrale du modèle.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Âge calculé depuis birth_date (RG7), poids historisé dans HEALTH_ENTRY (RG8) : valeur unique → PET, donnée datée → HEALTH_ENTRY (RG30).&lt;br&gt;#ordinal_number = vétérinaire traitant, facultatif (RG43).&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Espèce immuable (RG6)&lt;br&gt;• identification_number unique si renseigné (RG9)&lt;br&gt;• Supprimé avec son dernier propriétaire (RG16)" vertex="1">
+          <mxGeometry height="242" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="PET_BREED" tags="doc" id="CARD_PET_BREED">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#fff2cc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="212" width="300" x="1970" y="1470" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_PET_BREED_t" parent="CARD_PET_BREED" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Races d&#39;un animal (un croisement en a plusieurs).&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Table issue de l&#39;association N-N &lt;i&gt;avoir_race&lt;/i&gt;, qui porte is_primary.&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Races de l&#39;espèce de l&#39;animal (RG3)&lt;br&gt;• Au plus une race principale (RG4)&lt;br&gt;• Aucune ligne = race inconnue (RG5)" vertex="1">
+          <mxGeometry height="184" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="USER_ACCOUNT" tags="doc" id="CARD_USER_ACCOUNT">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="212" width="300" x="1620" y="250" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_USER_ACCOUNT_t" parent="CARD_USER_ACCOUNT" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Compte d&#39;un propriétaire.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;payment_customer_ref = client Stripe ; factures et paiements restent chez Stripe (RG63). La position n&#39;est jamais stockée (RG19).&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Email unique (RG10)&lt;br&gt;• CGU acceptées à l&#39;inscription (RG11)&lt;br&gt;• payment_customer_ref unique (RG64)" vertex="1">
+          <mxGeometry height="184" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="PET_OWNER" tags="doc" id="CARD_PET_OWNER">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#fff2cc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="226" width="300" x="1070" y="480" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_PET_OWNER_t" parent="CARD_PET_OWNER" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Propriétaires d&#39;un animal (plusieurs possibles).&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Table issue de l&#39;association N-N &lt;i&gt;posséder&lt;/i&gt;.&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Rôle chief / secondary ; exactement un chef par animal (RG15, RG73)&lt;br&gt;• Transfert du rôle de chef (RG74)&lt;br&gt;• Suppression d&#39;un compte : seul son lien disparaît ; dernier propriétaire supprimé → animal et données supprimés (RG16)" vertex="1">
+          <mxGeometry height="198" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="DEVICE" tags="doc" id="CARD_DEVICE">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="198" width="300" x="1020" y="40" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_DEVICE_t" parent="CARD_DEVICE" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Téléphone enregistré pour les notifications push.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Un utilisateur peut avoir plusieurs appareils ; chaque alerte part sur tous (RG50).&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• push_token unique (RG17)&lt;br&gt;• Token invalidé → appareil supprimé (RG18)" vertex="1">
+          <mxGeometry height="170" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="CONSENT" tags="doc" id="CARD_CONSENT">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="240" width="300" x="1020" y="250" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_CONSENT_t" parent="CARD_CONSENT" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Historique des consentements RGPD d&#39;un utilisateur.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Identification relative (utilisateur, type, date) : une révocation puis un nouvel accord donnent deux lignes, rien n&#39;est écrasé.&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Un seul consentement actif par type (RG12)&lt;br&gt;• Révocation datée, jamais supprimée (RG13)&lt;br&gt;• Types MVP : CGU/confidentialité, IA externe (RG14)" vertex="1">
+          <mxGeometry height="212" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="COLLAR" tags="doc" id="CARD_COLLAR">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="226" width="300" x="2820" y="945" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_COLLAR_t" parent="CARD_COLLAR" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Collier physique, identifié par son numéro de série.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Batterie et position sont des séries temporelles : TimescaleDB, hors App-DB (RG24).&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Seul un collier actif peut être affecté (RG23)&lt;br&gt;• Au plus un abonnement actif à la fois (RG60)" vertex="1">
+          <mxGeometry height="198" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="COLLAR_ASSIGNMENT" tags="doc" id="CARD_COLLAR_ASSIGNMENT">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="226" width="300" x="2170" y="975" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_COLLAR_ASSIGNMENT_t" parent="CARD_COLLAR_ASSIGNMENT" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Historique des affectations collier ↔ animal.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;assigned_at dans la clé : un même couple peut revenir, et chaque donnée capteur est rattachée au bon animal.&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Un collier par animal et un animal par collier à la fois (RG20, RG21)&lt;br&gt;• Jamais supprimée : clôturée par unassigned_at (RG22)" vertex="1">
+          <mxGeometry height="198" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="HEALTH_ENTRY" tags="doc" id="CARD_HEALTH_ENTRY">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="240" width="300" x="1080" y="1330" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_HEALTH_ENTRY_t" parent="CARD_HEALTH_ENTRY" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Carnet de santé : vaccins, traitements, pesées, allergies…&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Une table typée par entry_type plutôt qu&#39;une table par type. Le carnet est une vue PET + HEALTH_ENTRY (RG30).&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• 9 types d&#39;entrée (RG25)&lt;br&gt;• Champs remplis selon le type (RG26)&lt;br&gt;• Poids actuel = dernière pesée (RG27)&lt;br&gt;• next_due_date déclenche un rappel (RG28)" vertex="1">
+          <mxGeometry height="212" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="DOCUMENT" tags="doc" id="CARD_DOCUMENT">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="226" width="300" x="1620" y="1740" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_DOCUMENT_t" parent="CARD_DOCUMENT" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Pièce jointe (PDF, image) d&#39;une entrée de santé.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Fichier en stockage objet ; la base ne garde que storage_ref (RG71).&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• PDF et images uniquement (RG67)&lt;br&gt;• Ajout véto : accès actif requis (RG68)&lt;br&gt;• Supprimé avec son entrée (RG69)&lt;br&gt;• Inclus dans l&#39;export véto (RG70)" vertex="1">
+          <mxGeometry height="198" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="GEO_ZONE_SECURITY" tags="doc" id="CARD_GEO_ZONE_SECURITY">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="212" width="300" x="1480" y="500" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_GEO_ZONE_SECURITY_t" parent="CARD_GEO_ZONE_SECURITY" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Zone circulaire définie par un utilisateur.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Cercle centre + rayon (RG31). Zone sécurisée : alerte en sortie ; zone interdite : alerte en entrée (RG32).&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Ne surveille que les animaux de son créateur (RG33)&lt;br&gt;• Supprimée avec le compte (RG36)" vertex="1">
+          <mxGeometry height="184" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="PET_GEO_ZONE" tags="doc" id="CARD_PET_GEO_ZONE">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#fff2cc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="198" width="300" x="1900" y="790" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_PET_GEO_ZONE_t" parent="CARD_PET_GEO_ZONE" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Animaux surveillés par une zone.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Table issue de l&#39;association N-N &lt;i&gt;surveiller&lt;/i&gt;, qui porte is_active.&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Activation par animal et par zone (RG34)&lt;br&gt;• Alerte envoyée à tous les propriétaires (RG35)" vertex="1">
+          <mxGeometry height="170" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="VETERINARIAN" tags="doc" id="CARD_VETERINARIAN">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="226" width="300" x="470" y="1100" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_VETERINARIAN_t" parent="CARD_VETERINARIAN" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Annuaire des vétérinaires, partenaires ou non.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Numéro ordinal : unique et immuable, clé de correspondance avec la Vet-DB, sans FK entre les deux bases (RG37).&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Inscription au Portail → passe partenaire (RG38)&lt;br&gt;• Dispos et RDV lus via l&#39;API du Portail (RG42)" vertex="1">
+          <mxGeometry height="198" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="CLINIC" tags="doc" id="CARD_CLINIC">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="198" width="300" x="-80" y="1070" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_CLINIC_t" parent="CARD_CLINIC" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Lieu d&#39;exercice des vétérinaires.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Entité à part : en urgence on cherche un lieu, et l&#39;adresse n&#39;est pas répétée pour chaque véto du cabinet.&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Coordonnées comparées à la position du téléphone, non stockée (RG19)&lt;br&gt;• has_emergency_service filtre la recherche d&#39;urgence" vertex="1">
+          <mxGeometry height="170" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="VET_CLINIC" tags="doc" id="CARD_VET_CLINIC">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#fff2cc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="184" width="300" x="185" y="1140" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_VET_CLINIC_t" parent="CARD_VET_CLINIC" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Cliniques où exerce chaque vétérinaire.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Table issue de l&#39;association N-N &lt;i&gt;exercer&lt;/i&gt; : un véto peut exercer dans plusieurs cliniques.&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Tout véto exerce dans au moins une clinique (1,n)" vertex="1">
+          <mxGeometry height="156" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="PET_VET_ACCESS" tags="doc" id="CARD_PET_VET_ACCESS">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="240" width="300" x="1020" y="1250" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_PET_VET_ACCESS_t" parent="CARD_PET_VET_ACCESS" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Historique des accès d&#39;un véto partenaire aux données d&#39;un animal.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Un accès peut être accordé, révoqué puis ré-accordé : access_granted_at entre dans la clé.&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Véto partenaire uniquement (RG39)&lt;br&gt;• Source : propriétaire ou escalade IA, toujours validé par un propriétaire (RG40)&lt;br&gt;• Un seul accès actif ; révocation datée, jamais supprimée (RG41)" vertex="1">
+          <mxGeometry height="212" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="ALERT" tags="doc" id="CARD_ALERT">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="226" width="300" x="2420" y="560" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_ALERT_t" parent="CARD_ALERT" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Alerte déclenchée pour un animal.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;#id_geo_zone facultatif : seules les alertes de zone y sont reliées (RG48).&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• 5 types (RG46), 3 gravités (RG47)&lt;br&gt;• Jamais supprimée (RG49)&lt;br&gt;• explanation obligatoire (RG51)&lt;br&gt;• Acquittement partagé entre propriétaires (RG52)" vertex="1">
+          <mxGeometry height="198" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="CONVERSATION" tags="doc" id="CARD_CONVERSATION">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="212" width="300" x="1020" y="560" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_CONVERSATION_t" parent="CARD_CONVERSATION" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Fil de chat IA portant sur un animal.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Rattachée à l&#39;animal et au propriétaire qui l&#39;a ouverte.&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Visible par son initiateur uniquement (RG53)&lt;br&gt;• Au plus une escalade (RG54)&lt;br&gt;• Jamais supprimée, sauf avec le compte ou l&#39;animal (RG58)" vertex="1">
+          <mxGeometry height="184" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="MESSAGE" tags="doc" id="CARD_MESSAGE">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="212" width="300" x="470" y="600" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_MESSAGE_t" parent="CARD_MESSAGE" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Message d&#39;une conversation.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;model_version, sources et confidence_score tracent chaque réponse de l&#39;IA.&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• sender_role : propriétaire, IA ou véto ; champs IA pour l&#39;IA seulement (RG59)&lt;br&gt;• Message véto seulement si la conversation lui est escaladée (RG57)" vertex="1">
+          <mxGeometry height="184" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="ESCALATION" tags="doc" id="CARD_ESCALATION">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="254" width="300" x="1020" y="840" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_ESCALATION_t" parent="CARD_ESCALATION" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Passage d&#39;une conversation IA vers un véto partenaire.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;#id_conversation unique : au plus une escalade par conversation. #ordinal_number vide tant qu&#39;aucun véto ne l&#39;a prise en charge.&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Statuts : en attente, prise en charge, clôturée (RG55)&lt;br&gt;• Prise en charge → accès aux données, validé par le propriétaire (RG56)" vertex="1">
+          <mxGeometry height="226" width="300" y="28" as="geometry" />
+        </mxCell>
+        <object label="SUBSCRIPTION" tags="doc" id="CARD_SUBSCRIPTION">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="212" width="300" x="2320" y="250" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_SUBSCRIPTION_t" parent="CARD_SUBSCRIPTION" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Abonnement Stripe couvrant un collier.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;Un abonnement par collier ; factures et paiements sont consultés chez Stripe (RG63).&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Un seul abonnement actif par collier (RG60)&lt;br&gt;• Statut mis à jour par webhooks (RG62)&lt;br&gt;• Payé par le souscripteur (RG65)&lt;br&gt;• Période de grâce calculée, non stockée (RG66)" vertex="1">
+          <mxGeometry height="184" width="300" y="28" as="geometry" />
+        </mxCell>
+              <object label="INVITATION" link="data:action/json,{&quot;actions&quot;:[{&quot;toggle&quot;:{&quot;cells&quot;:[&quot;CARD_INVITATION&quot;]}}]}" id="INVITATION">
+          <mxCell parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1">
+            <mxGeometry height="174" width="200" x="1100" y="440" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="INVITATION_a" parent="INVITATION" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;" value="&lt;u&gt;id_invitation&lt;/u&gt;&lt;br&gt;invited_email&lt;br&gt;invitation_status&lt;br&gt;invited_at&lt;br&gt;responded_at&lt;br&gt;#id_pet&lt;br&gt;#id_user" vertex="1">
+          <mxGeometry height="148" width="200" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_invitation_user" edge="1" parent="1" source="INVITATION" style="rounded=1;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.9;entryDx=0;entryDy=0;edgeStyle=entityRelationEdgeStyle;curved=0;" target="USER_ACCOUNT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_invitation_pet" edge="1" parent="1" source="INVITATION" style="rounded=1;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.8;exitDx=0;exitDy=0;entryX=0;entryY=0.1;entryDx=0;entryDy=0;edgeStyle=entityRelationEdgeStyle;curved=0;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <object label="INVITATION" tags="doc" id="CARD_INVITATION">
+          <mxCell parent="DOC" style="swimlane;startSize=28;html=1;whiteSpace=wrap;rounded=1;arcSize=4;collapsible=0;fontStyle=1;fontColor=#333333;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#999999;shadow=1;align=left;spacingLeft=10;" vertex="1" visible="0">
+            <mxGeometry height="226" width="300" x="770" y="420" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="CARD_INVITATION_t" parent="CARD_INVITATION" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fontSize=11;fontColor=#333333;" value="&lt;b&gt;Rôle&lt;/b&gt;&lt;br&gt;Invitation d&#39;un co-propriétaire sur un animal, par e-mail.&lt;br&gt;&lt;br&gt;&lt;b&gt;Pourquoi&lt;/b&gt;&lt;br&gt;L&#39;invité peut ne pas avoir de compte : on ne peut pas créer de ligne PET_OWNER avant son acceptation.&lt;br&gt;&lt;br&gt;&lt;b&gt;Règles&lt;/b&gt;&lt;br&gt;• Une seule invitation en attente par animal et par e-mail (RG76)&lt;br&gt;• Acceptée → l&#39;invité devient propriétaire second (RG75)" vertex="1">
+          <mxGeometry height="198" width="300" y="28" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

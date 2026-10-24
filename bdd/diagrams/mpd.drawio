@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="Bk2zE9SZAsX8hI5EpD89">
+    <mxGraphModel dx="5427" dy="2142" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="SPECIES" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="species" vertex="1">
+          <mxGeometry height="74" width="290" x="2828" y="1300" as="geometry" />
+        </mxCell>
+        <mxCell id="SPECIES_a" parent="SPECIES" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; species_code : varchar(20)&lt;br&gt;species_name : varchar(250) &lt;b&gt;UQ&lt;/b&gt;" vertex="1">
+          <mxGeometry height="48" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="BREED_TYPE" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="breed_type" vertex="1">
+          <mxGeometry height="74" width="290" x="3480" y="1600" as="geometry" />
+        </mxCell>
+        <mxCell id="BREED_TYPE_a" parent="BREED_TYPE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; breed_type_code : varchar(20)&lt;br&gt;breed_type_name : varchar(250) &lt;b&gt;UQ&lt;/b&gt;" vertex="1">
+          <mxGeometry height="48" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="BREED" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="breed" vertex="1">
+          <mxGeometry height="114" width="290" x="3480" y="1300" as="geometry" />
+        </mxCell>
+        <mxCell id="BREED_a" parent="BREED" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; breed_code : varchar(20)&lt;br&gt;breed_name : varchar(250)&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; species_code : varchar(20)&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; breed_type_code : varchar(20)" vertex="1">
+          <mxGeometry height="88" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="PET" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="pet" vertex="1">
+          <mxGeometry height="234" width="290" x="2030" y="900" as="geometry" />
+        </mxCell>
+        <mxCell id="PET_a" parent="PET" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; id_pet : uuid&lt;br&gt;pet_name : varchar(100)&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;birth_date : date&lt;/font&gt;&lt;/i&gt;&lt;br&gt;sex : varchar(10)&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;is_sterilized : boolean&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;identification_number : varchar(20)&lt;/font&gt;&lt;/i&gt; &lt;b&gt;UQ&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;coat_color : varchar(50)&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;photo : varchar(500)&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; species_code : varchar(20)&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; &lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;ordinal_number : varchar(20)&lt;/font&gt;&lt;/i&gt;" vertex="1">
+          <mxGeometry height="208" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="PET_BREED" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="pet_breed" vertex="1">
+          <mxGeometry height="94" width="290" x="2538" y="1470" as="geometry" />
+        </mxCell>
+        <mxCell id="PET_BREED_a" parent="PET_BREED" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK, FK&lt;/b&gt; id_pet : uuid&lt;br&gt;&lt;b&gt;PK, FK&lt;/b&gt; breed_code : varchar(20)&lt;br&gt;is_primary : boolean" vertex="1">
+          <mxGeometry height="68" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="USER_ACCOUNT" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="user_account" vertex="1">
+          <mxGeometry height="214" width="290" x="2030" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="USER_ACCOUNT_a" parent="USER_ACCOUNT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; id_user : uuid&lt;br&gt;email : varchar(255) &lt;b&gt;UQ&lt;/b&gt;&lt;br&gt;password_hash : varchar(255)&lt;br&gt;first_name : varchar(100)&lt;br&gt;last_name : varchar(100)&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;phone_number : varchar(20)&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;email_verified_at : timestamptz&lt;/font&gt;&lt;/i&gt;&lt;br&gt;registration_date : timestamptz&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;payment_customer_ref : varchar(255)&lt;/font&gt;&lt;/i&gt; &lt;b&gt;UQ&lt;/b&gt;" vertex="1">
+          <mxGeometry height="188" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="PET_OWNER" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="pet_owner" vertex="1">
+          <mxGeometry height="94" width="290" x="2030" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="PET_OWNER_a" parent="PET_OWNER" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK, FK&lt;/b&gt; id_user : uuid&lt;br&gt;&lt;b&gt;PK, FK&lt;/b&gt; id_pet : uuid&lt;br&gt;owner_role : varchar(10)" vertex="1">
+          <mxGeometry height="68" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="DEVICE" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="device" vertex="1">
+          <mxGeometry height="134" width="290" x="1160" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="DEVICE_a" parent="DEVICE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; id_device : uuid&lt;br&gt;push_token : varchar(512) &lt;b&gt;UQ&lt;/b&gt;&lt;br&gt;platform : varchar(10)&lt;br&gt;last_active_at : timestamptz&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; id_user : uuid" vertex="1">
+          <mxGeometry height="108" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="CONSENT" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="consent" vertex="1">
+          <mxGeometry height="134" width="290" x="1160" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="CONSENT_a" parent="CONSENT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK, FK&lt;/b&gt; id_user : uuid&lt;br&gt;&lt;b&gt;PK&lt;/b&gt; consent_type : varchar(30)&lt;br&gt;&lt;b&gt;PK&lt;/b&gt; consent_granted_at : timestamptz&lt;br&gt;consent_version : varchar(20)&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;consent_revoked_at : timestamptz&lt;/font&gt;&lt;/i&gt;" vertex="1">
+          <mxGeometry height="108" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="COLLAR" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="collar" vertex="1">
+          <mxGeometry height="134" width="290" x="3770" y="945" as="geometry" />
+        </mxCell>
+        <mxCell id="COLLAR_a" parent="COLLAR" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; serial_number : varchar(50)&lt;br&gt;hardware_version : varchar(20)&lt;br&gt;firmware_version : varchar(20)&lt;br&gt;collar_status : varchar(20)&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;activated_at : timestamptz&lt;/font&gt;&lt;/i&gt;" vertex="1">
+          <mxGeometry height="108" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="COLLAR_ASSIGNMENT" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="collar_assignment" vertex="1">
+          <mxGeometry height="114" width="290" x="2828" y="975" as="geometry" />
+        </mxCell>
+        <mxCell id="COLLAR_ASSIGNMENT_a" parent="COLLAR_ASSIGNMENT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK, FK&lt;/b&gt; id_pet : uuid&lt;br&gt;&lt;b&gt;PK, FK&lt;/b&gt; serial_number : varchar(50)&lt;br&gt;&lt;b&gt;PK&lt;/b&gt; assigned_at : timestamptz&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;unassigned_at : timestamptz&lt;/font&gt;&lt;/i&gt;" vertex="1">
+          <mxGeometry height="88" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="HEALTH_ENTRY" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="health_entry" vertex="1">
+          <mxGeometry height="234" width="290" x="2030" y="1330" as="geometry" />
+        </mxCell>
+        <mxCell id="HEALTH_ENTRY_a" parent="HEALTH_ENTRY" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; id_health_entry : uuid&lt;br&gt;entry_type : varchar(30)&lt;br&gt;entry_date : date&lt;br&gt;label : varchar(150)&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;weight : numeric(5,2)&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;dosage : varchar(100)&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;end_date : date&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;next_due_date : date&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;notes : text&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; id_pet : uuid" vertex="1">
+          <mxGeometry height="208" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="GEO_ZONE_SECURITY" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="geo_zone_security" vertex="1">
+          <mxGeometry height="174" width="290" x="2610" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="GEO_ZONE_SECURITY_a" parent="GEO_ZONE_SECURITY" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; id_geo_zone : uuid&lt;br&gt;geo_zone_name : varchar(100)&lt;br&gt;zone_type : varchar(10)&lt;br&gt;center_latitude : numeric(9,6)&lt;br&gt;center_longitude : numeric(9,6)&lt;br&gt;radius : integer&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; id_user : uuid" vertex="1">
+          <mxGeometry height="148" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="PET_GEO_ZONE" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="pet_geo_zone" vertex="1">
+          <mxGeometry height="94" width="290" x="2436" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="PET_GEO_ZONE_a" parent="PET_GEO_ZONE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK, FK&lt;/b&gt; id_geo_zone : uuid&lt;br&gt;&lt;b&gt;PK, FK&lt;/b&gt; id_pet : uuid&lt;br&gt;is_active : boolean" vertex="1">
+          <mxGeometry height="68" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="VETERINARIAN" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="veterinarian" vertex="1">
+          <mxGeometry height="154" width="290" x="362" y="1100" as="geometry" />
+        </mxCell>
+        <mxCell id="VETERINARIAN_a" parent="VETERINARIAN" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; ordinal_number : varchar(20)&lt;br&gt;first_name : varchar(100)&lt;br&gt;last_name : varchar(100)&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;phone_number : varchar(20)&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;email : varchar(255)&lt;/font&gt;&lt;/i&gt;&lt;br&gt;is_partner : boolean" vertex="1">
+          <mxGeometry height="128" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="CLINIC" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="clinic" vertex="1">
+          <mxGeometry height="214" width="290" x="-435" y="1070" as="geometry" />
+        </mxCell>
+        <mxCell id="CLINIC_a" parent="CLINIC" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; id_clinic : uuid&lt;br&gt;clinic_name : varchar(150)&lt;br&gt;address : varchar(255)&lt;br&gt;postal_code : varchar(10)&lt;br&gt;city : varchar(100)&lt;br&gt;latitude : numeric(9,6)&lt;br&gt;longitude : numeric(9,6)&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;phone_number : varchar(20)&lt;/font&gt;&lt;/i&gt;&lt;br&gt;has_emergency_service : boolean" vertex="1">
+          <mxGeometry height="188" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="VET_CLINIC" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="vet_clinic" vertex="1">
+          <mxGeometry height="74" width="261" x="-22" y="1140" as="geometry" />
+        </mxCell>
+        <mxCell id="VET_CLINIC_a" parent="VET_CLINIC" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK, FK&lt;/b&gt; ordinal_number : varchar(20)&lt;br&gt;&lt;b&gt;PK, FK&lt;/b&gt; id_clinic : uuid" vertex="1">
+          <mxGeometry height="48" width="261" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="PET_VET_ACCESS" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="pet_vet_access" vertex="1">
+          <mxGeometry height="134" width="290" x="1160" y="1250" as="geometry" />
+        </mxCell>
+        <mxCell id="PET_VET_ACCESS_a" parent="PET_VET_ACCESS" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK, FK&lt;/b&gt; id_pet : uuid&lt;br&gt;&lt;b&gt;PK, FK&lt;/b&gt; ordinal_number : varchar(20)&lt;br&gt;&lt;b&gt;PK&lt;/b&gt; access_granted_at : timestamptz&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;access_revoked_at : timestamptz&lt;/font&gt;&lt;/i&gt;&lt;br&gt;access_source : varchar(20)" vertex="1">
+          <mxGeometry height="108" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="ALERT" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="alert" vertex="1">
+          <mxGeometry height="194" width="290" x="3190" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="ALERT_a" parent="ALERT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; id_alert : uuid&lt;br&gt;alert_type : varchar(30)&lt;br&gt;severity : varchar(10)&lt;br&gt;explanation : text&lt;br&gt;triggered_at : timestamptz&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;acknowledged_at : timestamptz&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; id_pet : uuid&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; &lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;id_geo_zone : uuid&lt;/font&gt;&lt;/i&gt;" vertex="1">
+          <mxGeometry height="168" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="CONVERSATION" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="conversation" vertex="1">
+          <mxGeometry height="114" width="290" x="1160" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="CONVERSATION_a" parent="CONVERSATION" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; id_conversation : uuid&lt;br&gt;started_at : timestamptz&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; id_pet : uuid&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; id_user : uuid" vertex="1">
+          <mxGeometry height="88" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="MESSAGE" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="message" vertex="1">
+          <mxGeometry height="194" width="290" x="362" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="MESSAGE_a" parent="MESSAGE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; id_message : uuid&lt;br&gt;sender_role : varchar(10)&lt;br&gt;content : text&lt;br&gt;sent_at : timestamptz&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;model_version : varchar(50)&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;sources : jsonb&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;confidence_score : numeric(4,3)&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; id_conversation : uuid" vertex="1">
+          <mxGeometry height="168" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="ESCALATION" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="escalation" vertex="1">
+          <mxGeometry height="194" width="290" x="1160" y="880" as="geometry" />
+        </mxCell>
+        <mxCell id="ESCALATION_a" parent="ESCALATION" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; id_escalation : uuid&lt;br&gt;escalation_reason : text&lt;br&gt;escalated_at : timestamptz&lt;br&gt;escalation_status : varchar(20)&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;preliminary_report : text&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;closed_at : timestamptz&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; id_conversation : uuid &lt;b&gt;UQ&lt;/b&gt;&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; &lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;ordinal_number : varchar(20)&lt;/font&gt;&lt;/i&gt;" vertex="1">
+          <mxGeometry height="168" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="SUBSCRIPTION" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="subscription" vertex="1">
+          <mxGeometry height="214" width="290" x="3045" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="SUBSCRIPTION_a" parent="SUBSCRIPTION" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; id_subscription : uuid&lt;br&gt;plan_code : varchar(50)&lt;br&gt;subscription_status : varchar(20)&lt;br&gt;started_at : timestamptz&lt;br&gt;current_period_end : timestamptz&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;canceled_at : timestamptz&lt;/font&gt;&lt;/i&gt;&lt;br&gt;payment_provider_ref : varchar(255) &lt;b&gt;UQ&lt;/b&gt;&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; id_user : uuid&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; serial_number : varchar(50)" vertex="1">
+          <mxGeometry height="188" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="DOCUMENT" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="document" vertex="1">
+          <mxGeometry height="174" width="290" x="2030" y="1740" as="geometry" />
+        </mxCell>
+        <mxCell id="DOCUMENT_a" parent="DOCUMENT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; id_document : uuid&lt;br&gt;file_name : varchar(255)&lt;br&gt;file_type : varchar(50)&lt;br&gt;storage_ref : varchar(500) &lt;b&gt;UQ&lt;/b&gt;&lt;br&gt;document_source : varchar(10)&lt;br&gt;uploaded_at : timestamptz&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; id_health_entry : uuid" vertex="1">
+          <mxGeometry height="148" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_breed_species" edge="1" parent="1" source="BREED" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=0;exitY=0.3;exitDx=0;exitDy=0;entryX=1;entryY=0.46;entryDx=0;entryDy=0;" target="SPECIES">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_breed_type" edge="1" parent="1" source="BREED" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="BREED_TYPE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_pet_species" edge="1" parent="1" source="PET" style="rounded=1;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=1;exitY=0.88;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=entityRelationEdgeStyle;curved=0;" target="SPECIES">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_pet_vet" edge="1" parent="1" source="PET" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERzeroToOne;endFill=0;startSize=10;endSize=10;exitX=0;exitY=0.949;exitDx=0;exitDy=0;entryX=1;entryY=0.143;entryDx=0;entryDy=0;" target="VETERINARIAN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_petbreed_pet" edge="1" parent="1" source="PET_BREED" style="rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.97;entryDx=0;entryDy=0;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_petbreed_breed" edge="1" parent="1" source="PET_BREED" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.8;entryDx=0;entryDy=0;curved=1;" target="BREED">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_owner_user" edge="1" parent="1" source="PET_OWNER" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="USER_ACCOUNT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_owner_pet" edge="1" parent="1" source="PET_OWNER" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERoneToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_device_user" edge="1" parent="1" source="DEVICE" style="rounded=1;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.15;entryDx=0;entryDy=0;edgeStyle=entityRelationEdgeStyle;curved=0;" target="USER_ACCOUNT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_consent_user" edge="1" parent="1" source="CONSENT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERoneToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.547;entryDx=0;entryDy=0;" target="USER_ACCOUNT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_ca_pet" edge="1" parent="1" source="COLLAR_ASSIGNMENT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.564;entryDx=0;entryDy=0;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_ca_collar" edge="1" parent="1" source="COLLAR_ASSIGNMENT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.649;entryDx=0;entryDy=0;" target="COLLAR">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_health_pet" edge="1" parent="1" source="HEALTH_ENTRY" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_doc_health" edge="1" parent="1" source="DOCUMENT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="HEALTH_ENTRY">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_zone_user" edge="1" parent="1" source="GEO_ZONE_SECURITY" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.9;entryDx=0;entryDy=0;curved=0;" target="USER_ACCOUNT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_pgz_zone" edge="1" parent="1" source="PET_GEO_ZONE" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=0.8;exitY=0;exitDx=0;exitDy=0;entryX=0.2;entryY=1;entryDx=0;entryDy=0;" target="GEO_ZONE_SECURITY">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_pgz_pet" edge="1" parent="1" source="PET_GEO_ZONE" style="rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.85;entryY=0;entryDx=0;entryDy=0;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_vc_vet" edge="1" parent="1" source="VET_CLINIC" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERoneToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="VETERINARIAN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_vc_clinic" edge="1" parent="1" source="VET_CLINIC" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="CLINIC">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_pva_pet" edge="1" parent="1" source="PET_VET_ACCESS" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0.2;entryY=1;entryDx=0;entryDy=0;curved=1;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_pva_vet" edge="1" parent="1" source="PET_VET_ACCESS" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.9;entryDx=0;entryDy=0;curved=0;" target="VETERINARIAN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_alert_pet" edge="1" parent="1" source="ALERT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.15;entryDx=0;entryDy=0;curved=1;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_alert_zone" edge="1" parent="1" source="ALERT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERzeroToOne;endFill=0;startSize=10;endSize=10;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.557;entryDx=0;entryDy=0;" target="GEO_ZONE_SECURITY">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_conv_user" edge="1" parent="1" source="CONVERSATION" style="rounded=1;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.8;entryDx=0;entryDy=0;edgeStyle=entityRelationEdgeStyle;curved=0;" target="USER_ACCOUNT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_conv_pet" edge="1" parent="1" source="CONVERSATION" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.2;entryDx=0;entryDy=0;curved=0;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_msg_conv" edge="1" parent="1" source="MESSAGE" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERoneToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="CONVERSATION">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_esc_conv" edge="1" parent="1" source="ESCALATION" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERzeroToOne;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="CONVERSATION">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_esc_vet" edge="1" parent="1" source="ESCALATION" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERzeroToOne;endFill=0;startSize=10;endSize=10;exitX=0;exitY=0.8;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" target="VETERINARIAN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_sub_user" edge="1" parent="1" source="SUBSCRIPTION" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=0;exitY=0.3;exitDx=0;exitDy=0;entryX=1;entryY=0.3;entryDx=0;entryDy=0;" target="USER_ACCOUNT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_sub_collar" edge="1" parent="1" source="SUBSCRIPTION" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=0;" target="COLLAR">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LEG" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#666666;dashed=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=4;fontSize=16;fontStyle=1;fontColor=#333333;" value="Légende — MPD App-DB (PostgreSQL)" vertex="1">
+          <mxGeometry height="330" width="1400" x="-435" y="1480" as="geometry" />
+        </mxCell>
+        <mxCell id="LEG_t" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#333333;" value="&lt;b&gt;PK&lt;/b&gt; = clé primaire · &lt;b&gt;FK&lt;/b&gt; = clé étrangère · &lt;b&gt;UQ&lt;/b&gt; = unique · &lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;gris italique&lt;/font&gt;&lt;/i&gt; = colonne facultative (NULL) ; toutes les autres sont NOT NULL&lt;br&gt;&lt;b&gt;Couleurs&lt;/b&gt; : &lt;span style=&quot;background-color:#dae8fc;&quot;&gt;&amp;nbsp;bleu&amp;nbsp;&lt;/span&gt; table issue d&#39;une entité · &lt;span style=&quot;background-color:#fff2cc;&quot;&gt;&amp;nbsp;jaune&amp;nbsp;&lt;/span&gt; table de liaison · &lt;span style=&quot;background-color:#d5e8d4;&quot;&gt;&amp;nbsp;vert&amp;nbsp;&lt;/span&gt; pet, entité pivot&lt;br&gt;&lt;br&gt;&lt;b&gt;Pattes d&#39;oie&lt;/b&gt;, lues de chaque côté du lien : &lt;b&gt;||&lt;/b&gt; exactement un · &lt;b&gt;o|&lt;/b&gt; zéro ou un · &lt;b&gt;o&amp;lt;&lt;/b&gt; zéro à plusieurs · &lt;b&gt;|&amp;lt;&lt;/b&gt; un à plusieurs&lt;br&gt;&lt;b&gt;|&amp;lt;&lt;/b&gt; (au moins un) n&#39;est pas garanti par une clé étrangère : il est assuré par l&#39;application (pet_owner, consent, message, vet_clinic).&lt;br&gt;&lt;br&gt;&lt;b&gt;Types&lt;/b&gt; : uuid générés par gen_random_uuid() · timestamptz pour les instants · date pour les dates calendaires · numeric pour poids et coordonnées · jsonb pour les sources IA · listes de valeurs en varchar + CHECK&lt;br&gt;&lt;br&gt;&lt;b&gt;Défini dans le script SQL, non visible ici&lt;/b&gt; : CHECK (listes de valeurs, cohérences RG26 / RG48 / RG59), index uniques partiels « un seul actif à la fois », comportements ON DELETE, triggers (RG16, RG23, RG33, RG39), index de performance.&lt;br&gt;Règles de gestion complètes : fiche MCD (RG1 à RG72)." vertex="1">
+          <mxGeometry height="286" width="1370" x="-421" y="1514" as="geometry" />
+        </mxCell>
+              <mxCell id="INVITATION" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="invitation" vertex="1">
+          <mxGeometry height="174" width="290" x="1600" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="INVITATION_a" parent="INVITATION" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;html=1;fontSize=11;" value="&lt;b&gt;PK&lt;/b&gt; id_invitation : uuid&lt;br&gt;invited_email : varchar(255)&lt;br&gt;invitation_status : varchar(10)&lt;br&gt;invited_at : timestamptz&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#8c8c8c&quot;&gt;responded_at : timestamptz&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; id_pet : uuid&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; id_user : uuid" vertex="1">
+          <mxGeometry height="148" width="290" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_invitation_user" edge="1" parent="1" source="INVITATION" style="rounded=1;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.9;entryDx=0;entryDy=0;edgeStyle=entityRelationEdgeStyle;curved=0;" target="USER_ACCOUNT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_invitation_pet" edge="1" parent="1" source="INVITATION" style="rounded=1;html=1;startArrow=ERzeroToMany;startFill=0;endArrow=ERmandOne;endFill=0;startSize=10;endSize=10;exitX=1;exitY=0.8;exitDx=0;exitDy=0;entryX=0;entryY=0.1;entryDx=0;entryDy=0;edgeStyle=entityRelationEdgeStyle;curved=0;" target="PET">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
