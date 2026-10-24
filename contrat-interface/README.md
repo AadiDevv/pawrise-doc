@@ -22,6 +22,7 @@ Les appels Notion / Confluence / MCP se font en fin de session uniquement. File 
 | --- | --- |
 | `README.md` | Où j'en suis + Kanban (à lire en revenant) |
 | `questions.md` | Registre des divergences et questions, avec hypothèses de travail |
+| `maquette-a-modifier.md` | Changements à proposer sur la maquette, une ligne par écran (M1, M2…) |
 | `conventions.md` | Règles communes à tous les endpoints (dates, ids, erreurs, pagination…) |
 | `ecrans.md` | Lien US / écran / overlay → données lues et écrites → endpoint (ordre du Figma) |
 | `openapi.yaml` | Le contrat (à créer, étape C3) |
