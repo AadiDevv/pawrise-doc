@@ -14,8 +14,8 @@ Une ligne = un changement à faire dans `pawrise-figma`. Le détail du débat es
 
 **Statuts** : `à proposer` · `proposé à l'équipe` · `accepté` · `refusé` · `fait`
 
-| # | Écran | Changement | Pourquoi | Écart | Statut |
+| Modif. | Écran | Changement | Pourquoi | Écart | Statut |
 | --- | --- | --- | --- | --- | --- |
-| M1 | S20 Inscription | Ajouter une case « J'accepte les CGU », obligatoire | Obligation légale (RG11) | D13 | à proposer |
-| M2 | S20 Inscription | Mot de passe : 8 caractères minimum au lieu de 6 | Recommandation ANSSI / NIST | D14 | à proposer |
-| M3 | S20 Inscription, S17 Mon profil | Séparer « Nom » en prénom + nom | La BDD stocke deux champs | D7 | à proposer |
+| M1 | [S20 Inscription](https://www.figma.com/design/oSH1BWg8ek3AtXc4DJ2LBx?node-id=5-1089) | Ajouter une case « J'accepte les CGU », obligatoire | Obligation légale ([RG11](../bdd/mcd-doc.md#RG11)) | [D13](questions.md#D13) | à proposer |
+| M2 | [S20 Inscription](https://www.figma.com/design/oSH1BWg8ek3AtXc4DJ2LBx?node-id=5-1089) | Mot de passe : 8 caractères minimum au lieu de 6 | Recommandation ANSSI / NIST | [D14](questions.md#D14) | à proposer |
+| M3 | [S20 Inscription](https://www.figma.com/design/oSH1BWg8ek3AtXc4DJ2LBx?node-id=5-1089), [S17 Mon profil](https://www.figma.com/design/oSH1BWg8ek3AtXc4DJ2LBx?node-id=5-1137) | Séparer « Nom » en prénom + nom | La BDD stocke deux champs | [D7](questions.md#D7) | à proposer |

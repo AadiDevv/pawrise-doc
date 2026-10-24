@@ -2,6 +2,8 @@
 
 Où est **défini** chaque code utilisé dans la doc. Un fichier qui ne fait que citer un code n'est pas listé ici.
 
+**Règle : toute référence citée est un lien.** `S` → lien Figma de l'écran (pris dans `FIGMA_DELIVERY.md`) ; `RG`, `T`, `D`, `Q` → ancre (`mcd-doc.md#RG11`, `questions.md#D13`).
+
 Vérifié le 2026-10-24 sur les fichiers locaux. Les liens Figma viennent de `FIGMA_DELIVERY.md` ; ils n'ont pas pu être ouverts depuis l'agent (pas d'accès au fichier).
 
 ```

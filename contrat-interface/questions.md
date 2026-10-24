@@ -8,25 +8,25 @@ Règle d'arbitrage BDD ↔ maquette : la maquette fait foi sur le fonctionnement
 
 | ID | Sujet | Hypothèse de travail | Bloquant | Statut | Où |
 | --- | --- | --- | --- | --- | --- |
-| T1 | Type de jeton d'auth | Un seul jeton, rôle `owner` / `vet` dans le payload | Non | Proposé, à valider (Yassine) | ci-dessous |
-| T2 | ORM de l'API-CORE | Prisma (fiche APP-DB du Figma d'architecture ; préférence d'Aaditya pour TypeScript / Node.js) | Non | À valider en équipe | — |
-| D1 | Co-propriété chef / seconds | Rôle sur `pet_owner`, un seul chef, transfert, entité INVITATION | Non | Tranché (maquette fait foi) → BDD en cours de mise à jour | ci-dessous |
-| D2 | Profil du chien : taille, infos médicales, sexe, race, espèce | API suit la maquette ; BDD à compléter (voir détail) | Non | À trancher | ci-dessous |
-| D3 | Rappels : objet autonome (maquette) vs `next_due_date` d'une entrée de carnet (BDD) | `/reminders` = vue sur `health_entry.next_due_date` ; « effectué » crée l'entrée réalisée | Non | À trancher | ci-dessous |
-| D4 | Notifications : alertes + rappels + véto, « lu » par personne (maquette) vs `alert` seul, acquittement partagé (BDD, RG52) | `/notifications` = vue agrégée ; « lu » = `acknowledged_at` partagé | Non | À trancher | ci-dessous |
-| D5 | Zones : emoji, zone interdite, zone par chien | API suit la BDD (lat/long, `zone_type` = `safe` par défaut, zone de l'utilisateur affectée aux chiens) ; emoji ignoré | Non | À trancher | ci-dessous |
-| D6 | Préférences : partage de localisation, notifications santé, données anonymisées | « Données anonymisées » = nouveau `consent_type` ; les deux autres = préférences du compte | Non | À trancher | ci-dessous |
-| D7 | Nom : un champ (maquette) vs `first_name` + `last_name` (BDD) | API en deux champs ; maquette à adapter | Non | À trancher | — |
-| D8 | Avancement de l'inscription (découverte, collier, terminé) | État local à l'app, hors API | Non | Hypothèse | — |
-| D9 | Code collier `PW-XXXXXX` vs `serial_number` ; qui crée le collier (❓ BDD) | Le code PW est le `serial_number` ; colliers créés par Pawrise avant vente | Non | À trancher | — |
-| D10 | Données hors App-DB : score, indicateurs, position, trajet, batterie, signal | Exposées par API-CORE (lecture TimescaleDB + Care Engine) | Non | Hypothèse | ci-dessous |
-| D11 | Chat → véto : prise de rendez-vous (maquette) vs escalade vers un véto partenaire dans la conversation (BDD, archi) | Sprint 1 : chat sans escalade ; escalade à trancher | Non | À trancher | ci-dessous |
-| D12 | Chat : un fil continu par chien, messages de contexte, suggestions de réponse (maquette) vs plusieurs `conversation` par chien et utilisateur, sans suggestions (BDD) | Une conversation active par chien et utilisateur ; le contexte est un message de Pawrise ; suggestions = champ du message IA, à stocker ou non | Non | À trancher | ci-dessous |
-| D13 | CGU à l'inscription : RG11 les rend obligatoires (même transaction), la maquette S20 n'a pas de case à cocher | `POST /auth/register` exige `acceptedTermsVersion` ; maquette à adapter (contrainte légale) | Non | À trancher | — |
-| D14 | Longueur du mot de passe : 6 caractères dans la maquette (S20) | 8 minimum (recommandation ANSSI / NIST pour un mot de passe seul) ; maquette à adapter | Non | À trancher | — |
-| Q1 | Données d'un animal à la suppression du compte (RGPD) | GPS + identité effacés ; métriques santé anonymisées gardées si consentement ; seconds conservent tout | Non | À trancher en équipe + avocate | Confluence (à publier) |
-| Q2 | Droits d'un propriétaire second | Mêmes droits que le chef, sauf transfert du rôle et suppression des données de l'animal | Non | À trancher en équipe | Confluence (à publier) |
-| Q3 | Acceptation d'une invitation | Invitation `pending` → acceptée par l'invité (crée un compte s'il n'en a pas) ; refus ou annulation possibles | Non | À trancher en équipe | Confluence (à publier) |
+| <a name="T1"></a>T1 | Type de jeton d'auth | Un seul jeton, rôle `owner` / `vet` dans le payload | Non | Proposé, à valider (Yassine) | ci-dessous |
+| <a name="T2"></a>T2 | ORM de l'API-CORE | Prisma (fiche APP-DB du Figma d'architecture ; préférence d'Aaditya pour TypeScript / Node.js) | Non | À valider en équipe | — |
+| <a name="D1"></a>D1 | Co-propriété chef / seconds | Rôle sur `pet_owner`, un seul chef, transfert, entité INVITATION | Non | Tranché (maquette fait foi) → BDD en cours de mise à jour | ci-dessous |
+| <a name="D2"></a>D2 | Profil du chien : taille, infos médicales, sexe, race, espèce | API suit la maquette ; BDD à compléter (voir détail) | Non | À trancher | ci-dessous |
+| <a name="D3"></a>D3 | Rappels : objet autonome (maquette) vs `next_due_date` d'une entrée de carnet (BDD) | `/reminders` = vue sur `health_entry.next_due_date` ; « effectué » crée l'entrée réalisée | Non | À trancher | ci-dessous |
+| <a name="D4"></a>D4 | Notifications : alertes + rappels + véto, « lu » par personne (maquette) vs `alert` seul, acquittement partagé (BDD, RG52) | `/notifications` = vue agrégée ; « lu » = `acknowledged_at` partagé | Non | À trancher | ci-dessous |
+| <a name="D5"></a>D5 | Zones : emoji, zone interdite, zone par chien | API suit la BDD (lat/long, `zone_type` = `safe` par défaut, zone de l'utilisateur affectée aux chiens) ; emoji ignoré | Non | À trancher | ci-dessous |
+| <a name="D6"></a>D6 | Préférences : partage de localisation, notifications santé, données anonymisées | « Données anonymisées » = nouveau `consent_type` ; les deux autres = préférences du compte | Non | À trancher | ci-dessous |
+| <a name="D7"></a>D7 | Nom : un champ (maquette) vs `first_name` + `last_name` (BDD) | API en deux champs ; maquette à adapter | Non | À trancher | — |
+| <a name="D8"></a>D8 | Avancement de l'inscription (découverte, collier, terminé) | État local à l'app, hors API | Non | Hypothèse | — |
+| <a name="D9"></a>D9 | Code collier `PW-XXXXXX` vs `serial_number` ; qui crée le collier (❓ BDD) | Le code PW est le `serial_number` ; colliers créés par Pawrise avant vente | Non | À trancher | — |
+| <a name="D10"></a>D10 | Données hors App-DB : score, indicateurs, position, trajet, batterie, signal | Exposées par API-CORE (lecture TimescaleDB + Care Engine) | Non | Hypothèse | ci-dessous |
+| <a name="D11"></a>D11 | Chat → véto : prise de rendez-vous (maquette) vs escalade vers un véto partenaire dans la conversation (BDD, archi) | Sprint 1 : chat sans escalade ; escalade à trancher | Non | À trancher | ci-dessous |
+| <a name="D12"></a>D12 | Chat : un fil continu par chien, messages de contexte, suggestions de réponse (maquette) vs plusieurs `conversation` par chien et utilisateur, sans suggestions (BDD) | Une conversation active par chien et utilisateur ; le contexte est un message de Pawrise ; suggestions = champ du message IA, à stocker ou non | Non | À trancher | ci-dessous |
+| <a name="D13"></a>D13 | CGU à l'inscription : RG11 les rend obligatoires (même transaction), la maquette S20 n'a pas de case à cocher | `POST /auth/register` exige `acceptedTermsVersion` ; maquette à adapter (contrainte légale) | Non | À trancher | — |
+| <a name="D14"></a>D14 | Longueur du mot de passe : 6 caractères dans la maquette (S20) | 8 minimum (recommandation ANSSI / NIST pour un mot de passe seul) ; maquette à adapter | Non | À trancher | — |
+| <a name="Q1"></a>Q1 | Données d'un animal à la suppression du compte (RGPD) | GPS + identité effacés ; métriques santé anonymisées gardées si consentement ; seconds conservent tout | Non | À trancher en équipe + avocate | Confluence (à publier) |
+| <a name="Q2"></a>Q2 | Droits d'un propriétaire second | Mêmes droits que le chef, sauf transfert du rôle et suppression des données de l'animal | Non | À trancher en équipe | Confluence (à publier) |
+| <a name="Q3"></a>Q3 | Acceptation d'une invitation | Invitation `pending` → acceptée par l'invité (crée un compte s'il n'en a pas) ; refus ou annulation possibles | Non | À trancher en équipe | Confluence (à publier) |
 
 ## T1 — Jeton d'auth
 
