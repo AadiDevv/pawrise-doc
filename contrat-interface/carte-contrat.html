@@ -142,7 +142,7 @@ const DOMAINS=[
   {v:["DELETE"],p:"/me",st:"written",sc:[["S25","Détruire le compte"],["S26","Confirmation"]],g:["Q1"],r:"par chien : mon rôle, code collier, chef ou seconds ; rendez-vous confirmés",w:"confirmer la destruction"}]},
  {name:"Animaux",code:"C4",s:"doing",eps:[
   {v:["GET"],p:"/pets",st:"written",sc:[["S05","Mes chiens"],["S25","Détruire le compte"]],g:[],r:"photo, nom, race ; chien actif",w:"chien actif (reste local à l'app)"},
-  {v:["POST"],p:"/pets",sc:[["S09","Ajouter un chien"]],g:["D2"],r:"photos d'exemple",w:"nom, naissance, sexe, race, poids, taille, infos santé"},
+  {v:["POST"],p:"/pets",st:"written",sc:[["S09","Ajouter un chien"]],g:["D2"],r:"photos d'exemple",w:"nom, naissance, sexe, race, poids, taille, infos santé"},
   {v:["POST"],p:"/pets/{id}/photo",sc:[["S09","Ajouter un chien"]],g:[],r:"rien",w:"photo (fichier de 1,5 Mo maximum, ou exemple)"},
   {v:["PATCH"],p:"/pets/{id}",sc:[["S05","Édition du chien"]],g:["D2"],r:"photo, nom, race, naissance, sexe, poids, taille, infos santé",w:"les mêmes champs"},
   {v:["GET"],p:"/breeds",sc:[["S09","Ajouter un chien"]],g:[],r:"liste des races avec recherche",w:"rien"}]},

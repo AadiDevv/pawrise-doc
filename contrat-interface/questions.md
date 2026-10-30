@@ -48,8 +48,8 @@ Un seul type de jeton, rôle `owner` / `vet` dans le payload. Les rôles propres
 
 | Champ maquette (S09) | BDD | Hypothèse |
 | --- | --- | --- |
-| Taille (cm) | absent | à ajouter (`pet.height` ou pesée-mesure dans `health_entry`) |
-| Infos médicales (texte libre) | absent ; allergies et maladies chroniques sont des `health_entry` | à ajouter (`pet.medical_notes`) ou découper en `health_entry` |
+| Taille (cm) | absent | nouvelle colonne `pet.height_cm` (validé 2026-10-30, BDD à mettre à jour) |
+| Infos médicales (texte libre) | absent ; allergies et maladies chroniques sont des `health_entry` | nouvelle colonne `pet.medical_notes`, texte libre (validé 2026-10-30, BDD à mettre à jour) |
 | Sexe : mâle / femelle, obligatoire | `male`, `female`, `unknown` | l'API accepte les trois ; la maquette n'envoie que deux |
 | Race : un seul choix, dont « Croisé » et « Je ne sais pas » | `pet_breed` n,n ; aucune ligne = inconnue | l'API accepte une liste de races ; « Je ne sais pas » = liste vide ; « Croisé » à trancher |
 | Poids | `health_entry` de type pesée (RG8) | l'API crée une pesée à l'ajout |

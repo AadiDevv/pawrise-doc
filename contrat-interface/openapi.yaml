@@ -404,6 +404,53 @@ paths:
           content:
             application/problem+json:
               schema: { $ref: '#/components/schemas/Problem' }
+    post:
+      tags: [Animaux]
+      operationId: createPet
+      summary: Ajouter un chien
+      description: |
+        Écran S09 Ajouter un chien (US-11), étapes nom → photo → naissance → sexe → race → poids → taille → infos santé → récapitulatif. L'app appelle cet endpoint à la fin du récapitulatif, puis enchaîne sur l'association du collier (`POST /pets/{id}/collar`) et la photo (`POST /pets/{id}/photo`). Si l'association échoue, le chien existe sans collier (`collarSerial: null`).
+
+        Règles appliquées :
+        - Le créateur devient propriétaire chef (RG73).
+        - Espèce `dog` par défaut (`species_code` obligatoire en BDD, absent de la maquette, D2).
+        - `weightKg` crée une pesée dans le carnet (`health_entry`, RG8).
+        - `heightCm` et `medicalNotes` : nouvelles colonnes `pet.height_cm` et `pet.medical_notes` (D2).
+        - `breedCodes` : liste vide = race inconnue (« Je ne sais pas ») ; le premier code est la race principale. « Croisé » à trancher (D2).
+        - Date de naissance dans le futur → 400 `BIRTH_DATE_IN_FUTURE`.
+      x-status: provisoire
+      x-depends-on: [T1, D2]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreatePetRequest' }
+            example:
+              name: Nala
+              birthDate: "2022-04-12"
+              sex: female
+              breedCodes: [golden_retriever]
+              weightKg: 27.4
+              heightCm: 56
+              medicalNotes: null
+      responses:
+        '201':
+          description: Chien créé (convention 9).
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Pet' }
+        '400':
+          description: "Données invalides (`VALIDATION_FAILED`). Codes par champ : `REQUIRED`, `BIRTH_DATE_IN_FUTURE`, `MUST_BE_POSITIVE`, `UNKNOWN_BREED`."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/ValidationProblem' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
 
 components:
   securitySchemes:
@@ -517,6 +564,26 @@ components:
         collarSerial:
           type: [string, 'null']
           description: Code du collier associé (`PW-XXXXXX` = `serial_number`, D9) ; `null` si aucun collier.
+
+    CreatePetRequest:
+      type: object
+      additionalProperties: false
+      required: [name, sex]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 100 }
+        birthDate: { type: [string, 'null'], format: date }
+        sex:
+          type: string
+          enum: [male, female, unknown]
+          description: La maquette exige mâle ou femelle ; l'API accepte aussi `unknown` (D2).
+        breedCodes:
+          type: array
+          default: []
+          items: { type: string }
+          description: Codes de `GET /breeds`, race principale en premier. Vide = race inconnue.
+        weightKg: { type: [number, 'null'], exclusiveMinimum: 0 }
+        heightCm: { type: [number, 'null'], exclusiveMinimum: 0 }
+        medicalNotes: { type: [string, 'null'], maxLength: 2000 }
 
     Breed:
       type: object
