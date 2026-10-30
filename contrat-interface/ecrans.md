@@ -14,7 +14,7 @@ Domaines : **Compte** · **Animaux** · **Colliers** · **Santé** · **Localisa
 | --- | --- | --- | --- | --- | --- |
 | 01 | S01 Santé | chien actif : nom, photo, race, âge ; score bien-être (0–100) et état ; message de synthèse ; 5 indicateurs : valeur affichée et état (bon, à surveiller, alerte) ; batterie ; collier connecté ou non (« dernières mesures reçues ») | — | `GET /pets/{id}/health` (Santé) | D10 |
 | 02 | ↳ S02 Détail indicateur | état, valeur, message simple, détail, série de points par période (aujourd'hui, 7 j, 30 j), plage normale ; fibrillation : vue dédiée sans période | — | `GET /pets/{id}/health/{indicator}?period=` (Santé) | D10 |
-| 03 | ↳ S02 → S04 « Demander à Pawrise » (si indicateur en alerte) | — | ouvre le chat avec un message de contexte (chien + alerte) | `POST /pets/{id}/conversation` avec contexte (Chat) | D12 |
+| 03 | ↳ S02 → S04 « Demander à Pawrise » (si indicateur en alerte) | — | ouvre le chat avec un message de contexte (chien + alerte) | `POST /pets/{id}/conversation/context` (Chat) | D12 |
 | 04 | ↳ S05 Mes chiens | liste : photo, nom, race ; chien actif | chien actif (local à l'app) | `GET /pets` (Animaux) | |
 | 14 | ↳ ↳ S05 Édition du chien | photo, nom, race (texte libre), naissance, sexe (dont « non renseigné »), poids, taille, infos santé | idem | `PATCH /pets/{id}` (Animaux) | D2 |
 | 13 | ↳ S11 Collier (depuis la pastille batterie de S01) | batterie, réseau (signal fort / déconnecté), code du collier, modèle | — | `GET /pets/{id}/collar` (Colliers) | D9, D10 |
@@ -22,9 +22,9 @@ Domaines : **Compte** · **Animaux** · **Colliers** · **Santé** · **Localisa
 | 25 | S01 bouton démo Tout va bien / Alerte | — | — | hors contrat (démo) | |
 | 05 | S06 Localisation | photo, nom ; collier connecté ; position ; heure de la dernière position (« il y a 30 s ») ; position obsolète après 3 min ; batterie ; code collier | — | `GET /pets/{id}/location` (Localisation) | D10 |
 | 06 | S06 contrôles carte | trajet récent (20 derniers points) | actualiser la position | `GET /pets/{id}/trail`, `GET /pets/{id}/location` (Localisation) | |
-| 09 | ↳ S06 Bannière « a quitté la zone » | alerte de sortie de zone : nom de la zone | ignorer ; toucher → chat avec contexte zone | `GET /notifications` ou alerte active (Notifications), `POST /pets/{id}/conversation` (Chat) | D4, D12 |
+| 09 | ↳ S06 Bannière « a quitté la zone » | alerte de sortie de zone : nom de la zone | ignorer ; toucher → chat avec contexte zone | `GET /notifications` ou alerte active (Notifications), `POST /pets/{id}/conversation/context` (Chat) | D4, D12 |
 | 07 | ↳ S07 Zones de sécurité | zones : emoji, nom, rayon (m), alertes de sortie actives ; chien dedans ou dehors | ajouter, renommer, régler le rayon, supprimer, activer les alertes | `GET/POST /pets/{id}/zones`, `PATCH/DELETE /zones/{id}` (Localisation) | D5 |
-| 08 | S04 Chat | en-tête : photo, nom, collier connecté ; messages (rôle, texte) ; suggestions de réponse sous un message de Pawrise ; « en train d'écrire » | message libre ou suggestion choisie | `GET /pets/{id}/conversation`, `POST .../messages` (Chat) | D12 |
+| 08 | S04 Chat | en-tête : photo, nom, collier connecté ; messages (rôle, texte) ; suggestions de réponse sous un message de Pawrise ; « en train d'écrire » | message libre ou suggestion choisie | `GET /pets/{id}/conversation/messages`, `POST .../messages` (Chat) | D12 |
 | 10 | S04 → S08 « Contacter un vétérinaire » | — | — | navigation seule | D11 |
 | 11 | S09 Ajouter un chien (étapes) | photos d'exemple ; liste des races (recherche) | photo (fichier ≤ 1,5 Mo ou exemple), nom, naissance, sexe, race, poids, taille, infos santé | `POST /pets`, `POST /pets/{id}/photo`, `GET /breeds` (Animaux) | D2 |
 | 12 | S10 Associer un collier | — | code `PW-XXXXXX` par QR ou saisie ; erreur si invalide ou déjà associé | `PUT /pets/{id}/collar` (Colliers) | D9 |

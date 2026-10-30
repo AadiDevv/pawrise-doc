@@ -23,6 +23,8 @@ tags:
     description: Position, trajet, zones de sécurité (C7)
   - name: Notifications
     description: Liste, lu / non lu (C8)
+  - name: Chat
+    description: Chat avec l'IA Pawrise (C9)
 
 paths:
   /auth/register:
@@ -1346,6 +1348,182 @@ paths:
             application/problem+json:
               schema: { $ref: '#/components/schemas/Problem' }
 
+  /pets/{petId}/conversation/messages:
+    parameters:
+      - { name: petId, in: path, required: true, schema: { type: string, format: uuid } }
+    get:
+      tags: [Chat]
+      operationId: listMessages
+      summary: Lire mon fil de chat pour ce chien
+      description: |
+        Écran S04 Chat (US-08) : messages et suggestions de réponse. Paginé par curseur, du plus récent au plus ancien ; l'app charge les plus anciens en remontant le fil (convention 5).
+
+        Règles appliquées (D12 tranché : un fil par chien et par propriétaire) :
+        - Mon fil pour ce chien : la conversation la plus récente dont je suis l'initiateur (RG53). Les autres propriétaires ont leur propre fil, invisible pour moi.
+        - Créé automatiquement au premier message ou au premier contexte d'alerte.
+        - Pas d'escalade vers un vétérinaire au sprint 1 (D11) ; `role: vet` réservé.
+        - Aucun fil encore : liste vide.
+      x-status: provisoire
+      x-depends-on: [T1, D11, D12]
+      security:
+        - bearerAuth: []
+      parameters:
+        - { name: limit, in: query, required: false, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+        - { name: cursor, in: query, required: false, schema: { type: string } }
+      responses:
+        '200':
+          description: Page de messages.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items, nextCursor]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/ChatMessage' }
+                  nextCursor: { type: [string, 'null'] }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Chien inexistant ou d'un autre compte.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: PET_NOT_FOUND, title: Pet not found }
+    post:
+      tags: [Chat]
+      operationId: sendMessage
+      summary: Envoyer un message à Pawrise
+      description: |
+        Écran S04 Chat : message libre, ou suggestion de réponse touchée (US-08). Réponse synchrone : le message envoyé et la réponse de l'IA.
+
+        Règles appliquées (D12 tranché : un fil par chien et par propriétaire) :
+        - Mon fil pour ce chien : la conversation la plus récente dont je suis l'initiateur (RG53). Les autres propriétaires ont leur propre fil, invisible pour moi.
+        - Créé automatiquement au premier message ou au premier contexte d'alerte.
+        - Pas d'escalade vers un vétérinaire au sprint 1 (D11) ; `role: vet` réservé.
+        - Réponse de l'IA : IA-ENGINE (I5, LLM + RAG). Conseil, pas un diagnostic (le MVP n'est pas un dispositif médical).
+        - IA-ENGINE indisponible → 503 `AI_UNAVAILABLE` ; le message envoyé reste enregistré.
+      x-status: provisoire
+      x-depends-on: [T1, D11, D12]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [content]
+              properties:
+                content: { type: string, minLength: 1, maxLength: 2000, description: Texte saisi ou suggestion choisie. }
+            example: { content: "Est-ce grave s'il boit beaucoup ?" }
+      responses:
+        '201':
+          description: Message enregistré et réponse de l'IA.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [sent, reply]
+                properties:
+                  sent: { $ref: '#/components/schemas/ChatMessage' }
+                  reply: { $ref: '#/components/schemas/ChatMessage' }
+        '400':
+          description: "Message vide ou trop long (`VALIDATION_FAILED`, codes `REQUIRED`, `TOO_LONG`)."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/ValidationProblem' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Chien inexistant ou d'un autre compte.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: PET_NOT_FOUND, title: Pet not found }
+        '503':
+          description: IA-ENGINE indisponible. Le message de l'utilisateur est enregistré ; l'app propose de réessayer.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 503, code: AI_UNAVAILABLE, title: AI unavailable }
+
+  /pets/{petId}/conversation/context:
+    parameters:
+      - { name: petId, in: path, required: true, schema: { type: string, format: uuid } }
+    post:
+      tags: [Chat]
+      operationId: addChatContext
+      summary: Ouvrir le chat sur une alerte
+      description: |
+        S02 « Demander à Pawrise » (indicateur en alerte, US-03) et bannière « a quitté la zone » de S06 (US-09) : ajoute dans mon fil un message de Pawrise qui pose le contexte (chien + alerte), avec des suggestions de réponse ; l'app bascule ensuite sur S04.
+
+        Règles appliquées (D12 tranché : un fil par chien et par propriétaire) :
+        - Mon fil pour ce chien : la conversation la plus récente dont je suis l'initiateur (RG53). Les autres propriétaires ont leur propre fil, invisible pour moi.
+        - Créé automatiquement au premier message ou au premier contexte d'alerte.
+        - Pas d'escalade vers un vétérinaire au sprint 1 (D11) ; `role: vet` réservé.
+        - Un seul des deux champs : `alertId` (alerte de santé ou de zone) ou `indicator` (indicateur à surveiller sans alerte).
+        - Alerte d'un autre chien ou inconnue → 404 `ALERT_NOT_FOUND`.
+      x-status: provisoire
+      x-depends-on: [T1, D11, D12]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              minProperties: 1
+              maxProperties: 1
+              properties:
+                alertId: { type: string, format: uuid }
+                indicator: { $ref: '#/components/schemas/IndicatorCode' }
+            example: { alertId: 7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d }
+      responses:
+        '201':
+          description: Message de contexte ajouté.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ChatMessage' }
+              example:
+                id: 1d2e3f4a-5b6c-7d8e-9f0a-1b2c3d4e5f6a
+                role: ai
+                content: "Nala a quitté la zone Maison il y a 2 minutes. Voulez-vous que je vous aide ?"
+                sentAt: "2026-10-30T09:16:00Z"
+                quickReplies: ["Où est-elle ?", "Que dois-je faire ?"]
+        '400':
+          description: "Aucun ou deux champs (`VALIDATION_FAILED`, code `REQUIRED`)."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/ValidationProblem' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Chien inexistant ou d'un autre compte.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: PET_NOT_FOUND, title: Pet not found }
+        '503':
+          description: IA-ENGINE indisponible. Le message de l'utilisateur est enregistré ; l'app propose de réessayer.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 503, code: AI_UNAVAILABLE, title: AI unavailable }
+
 components:
   securitySchemes:
     bearerAuth:
@@ -1483,6 +1661,19 @@ components:
         weightKg: { type: [number, 'null'], exclusiveMinimum: 0 }
         heightCm: { type: [number, 'null'], exclusiveMinimum: 0 }
         medicalNotes: { type: [string, 'null'], maxLength: 2000 }
+
+    ChatMessage:
+      type: object
+      required: [id, role, content, sentAt, quickReplies]
+      properties:
+        id: { type: string, format: uuid }
+        role: { type: string, enum: [owner, ai, vet], description: "`message.sender_role` ; `vet` réservé à l'escalade (hors sprint 1)." }
+        content: { type: string }
+        sentAt: { type: string, format: date-time }
+        quickReplies:
+          type: array
+          items: { type: string }
+          description: Suggestions de réponse proposées par l'IA (vide sinon) ; nouvelle colonne `message.quick_replies` (D12).
 
     Notification:
       type: object

@@ -127,7 +127,7 @@ aside section{display:grid;gap:10px}
 const STEPS=[
   ["C1","Écrans → données","done","ecrans.md"],["C2","Conventions","done","conventions.md"],["C3","Compte et auth","done","openapi.yaml"],["C4","Animaux","done","openapi.yaml"],
   ["C5","Colliers","done","openapi.yaml"],["C6","Santé","done","openapi.yaml"],["C7","Localisation","done","openapi.yaml"],["C8","Notifications","done","openapi.yaml"],
-  ["C9","Chat IA","doing","openapi.yaml"],["C10","Partage","todo","openapi.yaml"],["C11","Relecture équipe","todo"]];
+  ["C9","Chat IA","done","openapi.yaml"],["C10","Partage","doing","openapi.yaml"],["C11","Relecture équipe","todo"]];
 const GH="https://github.com/AadiDevv/pawrise-doc/blob/main/contrat-interface/";
 const LABEL={done:"fait",doing:"en cours",todo:"à faire",open:"à trancher",written:"écrit, provisoire"};
 
@@ -163,11 +163,11 @@ const DOMAINS=[
   {v:["GET"],p:"/notifications",st:"written",sc:[["S13","Notifications"],["S06","Bannière de sortie de zone"]],g:["D4"],r:"chien, titre, type, lue ou non, date",w:"rien"},
   {v:["PATCH"],p:"/notifications/{id}",st:"written",sc:[["S13","Notifications"]],g:["D4"],r:"rien",w:"marquer lue"},
   {v:["POST"],p:"/notifications/read-all",st:"written",sc:[["S13","Notifications"]],g:["D4"],r:"rien",w:"tout marquer lu"}]},
- {name:"Chat IA",code:"C9",s:"doing",eps:[
-  {v:["GET"],p:"/pets/{id}/conversation",sc:[["S04","Chat"]],g:["D12"],r:"messages (rôle, texte), suggestions de réponse",w:"rien"},
-  {v:["POST"],p:"/pets/{id}/conversation",sc:[["S02","Demander à Pawrise"],["S06","Bannière de sortie de zone"]],g:["D12"],r:"rien",w:"ouvre le chat avec un message de contexte (chien + alerte)"},
-  {v:["POST"],p:"/pets/{id}/conversation/messages",sc:[["S04","Chat"]],g:["D12"],r:"rien",w:"message libre ou suggestion choisie"}]},
- {name:"Partage",code:"C10",s:"todo",eps:[
+ {name:"Chat IA",code:"C9",s:"done",eps:[
+  {v:["GET"],p:"/pets/{id}/conversation/messages",st:"written",sc:[["S04","Chat"]],g:["D12"],r:"messages (rôle, texte), suggestions de réponse",w:"rien"},
+  {v:["POST"],p:"/pets/{id}/conversation/context",st:"written",sc:[["S02","Demander à Pawrise"],["S06","Bannière de sortie de zone"]],g:["D12"],r:"rien",w:"ouvre le chat avec un message de contexte (chien + alerte)"},
+  {v:["POST"],p:"/pets/{id}/conversation/messages",st:"written",sc:[["S04","Chat"]],g:["D12"],r:"rien",w:"message libre ou suggestion choisie"}]},
+ {name:"Partage",code:"C10",s:"doing",eps:[
   {v:["GET"],p:"/pets/{id}/owners",sc:[["S18","Propriétaires et partage"],["S25","Détruire le compte"]],g:[],r:"nom, e-mail, rôle (chef, second, en attente), vous",w:"rien"},
   {v:["POST"],p:"/pets/{id}/owners/{userId}/chief",sc:[["S22","Rôle de chef"]],g:[],r:"propriétaire cible, conséquences",w:"donner le rôle de chef"},
   {v:["POST"],p:"/pets/{id}/invitations",sc:[["S18","Inviter un propriétaire"]],g:["Q3"],r:"chiens, propriétaires déjà associés",w:"chien, e-mail"}]},
@@ -189,7 +189,7 @@ const Q=[
  ["D7","Nom en un champ ou deux","open","Deux champs, maquette à adapter"],
  ["D9","Code collier et création des colliers","done","Tranché : colliers enregistrés avant la vente"],
  ["D10","Données hors App-DB (score, position…)","doing","Tranché : mesures lues dans TimescaleDB, score par l'IA-ENGINE ; à confirmer (Yassine)"],
- ["D12","Chat : fil unique, suggestions","open","Une conversation active par chien"],
+ ["D12","Chat : fil unique, suggestions","done","Tranché : un fil par chien et par propriétaire"],
  ["D13","CGU à l'inscription absentes de la maquette","open","acceptedTermsVersion exigé (RG11)"],
  ["D14","Mot de passe : 6 caractères dans la maquette","open","8 minimum"],
  ["D15","Sessions : pas de stockage des jetons en BDD","doing","Tranché : table refresh_token ; BDD à mettre à jour"],

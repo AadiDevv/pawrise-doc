@@ -118,6 +118,7 @@ Format : standard *Problem Details* (RFC 9457, `Content-Type: application/proble
 | 413 | fichier trop lourd | photo du chien de plus de 1,5 Mo |
 | 429 | trop de requêtes ; `Retry-After` donne le délai en secondes | trop d'essais de connexion ratés |
 | 500 | erreur interne | — |
+| 503 | service dépendant indisponible | IA-ENGINE en panne pendant un message du chat |
 
 Pourquoi 404 et pas 403 pour la ressource d'un autre : ne pas révéler qu'elle existe. Même esprit que dans Horas : la requête est filtrée sur l'utilisateur, la ressource d'un tiers est simplement introuvable.
 
