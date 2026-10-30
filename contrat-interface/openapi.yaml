@@ -816,6 +816,165 @@ paths:
               schema: { $ref: '#/components/schemas/Problem' }
               example: { status: 404, code: PET_NOT_FOUND, title: Pet not found }
 
+  /pets/{petId}/reminders:
+    parameters:
+      - { name: petId, in: path, required: true, schema: { type: string, format: uuid } }
+    get:
+      tags: [Santé]
+      operationId: listReminders
+      summary: Lister les rappels du chien
+      description: |
+        Écran S12 Rappels (US-15). Liste non paginée (convention 5), triée par échéance croissante.
+
+        Règles appliquées (D3 tranché : table `reminder`) :
+        - Tout propriétaire du chien, chef ou second (hypothèse Q2).
+        - `status` calculé par l'API : `done` si `doneAt` renseigné, sinon `overdue` si l'échéance est passée, sinon `upcoming`.
+        - Chien inexistant ou d'un autre compte → 404 `PET_NOT_FOUND`.
+      x-status: provisoire
+      x-depends-on: [T1, D3, Q2]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Rappels du chien.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/Reminder' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Chien inexistant ou d'un autre compte.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: PET_NOT_FOUND, title: Pet not found }
+    post:
+      tags: [Santé]
+      operationId: createReminder
+      summary: Créer un rappel
+      description: |
+        Écran S12 Rappels → « Ajouter un rappel » (US-15) : type de soin, nom, échéance.
+
+        Règles appliquées (D3 tranché : table `reminder`) :
+        - Tout propriétaire du chien, chef ou second (hypothèse Q2).
+        - `status` calculé par l'API : `done` si `doneAt` renseigné, sinon `overdue` si l'échéance est passée, sinon `upcoming`.
+        - Une échéance passée est acceptée (le rappel est alors `overdue`).
+        - Les notifications d'échéance proche (US-16) sont traitées en C8.
+      x-status: provisoire
+      x-depends-on: [T1, D3, Q2]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateReminderRequest' }
+            example: { kind: vaccine, title: Rappel rage, dueAt: "2026-11-15T09:00:00Z" }
+      responses:
+        '201':
+          description: Rappel créé.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Reminder' }
+        '400':
+          description: "Données invalides (`VALIDATION_FAILED`). Codes par champ : `REQUIRED`, `INVALID_DATE`."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/ValidationProblem' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Chien inexistant ou d'un autre compte.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: PET_NOT_FOUND, title: Pet not found }
+
+  /reminders/{reminderId}:
+    parameters:
+      - { name: reminderId, in: path, required: true, schema: { type: string, format: uuid } }
+    patch:
+      tags: [Santé]
+      operationId: updateReminder
+      summary: Modifier, marquer effectué ou rouvrir un rappel
+      description: |
+        Écran S12 Rappels : « Modifier », « Marquer effectué », « Rouvrir » (US-15). Seuls les champs envoyés changent (convention 9).
+
+        Règles appliquées (D3 tranché : table `reminder`) :
+        - Tout propriétaire du chien, chef ou second (hypothèse Q2).
+        - `status` calculé par l'API : `done` si `doneAt` renseigné, sinon `overdue` si l'échéance est passée, sinon `upcoming`.
+        - `done: true` renseigne `doneAt` (maintenant) ; `done: false` le remet à `null` (« Rouvrir »).
+        - Marquer effectué ne crée pas d'entrée dans le carnet : aucun écran de carnet dans la maquette.
+        - Rappel inexistant ou d'un chien d'un autre compte → 404 `REMINDER_NOT_FOUND`.
+      x-status: provisoire
+      x-depends-on: [T1, D3, Q2]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateReminderRequest' }
+            example: { done: true }
+      responses:
+        '200':
+          description: Rappel mis à jour.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Reminder' }
+        '400':
+          description: "Données invalides (`VALIDATION_FAILED`). Codes par champ : `REQUIRED`, `INVALID_DATE`."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/ValidationProblem' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Rappel introuvable.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: REMINDER_NOT_FOUND, title: Reminder not found }
+    delete:
+      tags: [Santé]
+      operationId: deleteReminder
+      summary: Supprimer un rappel
+      description: |
+        Écran S12 Rappels → « Supprimer » (US-15). Les notifications liées à ce rappel sont supprimées aussi.
+      x-status: provisoire
+      x-depends-on: [T1, D3, Q2]
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Rappel supprimé.
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Rappel introuvable.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: REMINDER_NOT_FOUND, title: Reminder not found }
+
 components:
   securitySchemes:
     bearerAuth:
@@ -953,6 +1112,42 @@ components:
         weightKg: { type: [number, 'null'], exclusiveMinimum: 0 }
         heightCm: { type: [number, 'null'], exclusiveMinimum: 0 }
         medicalNotes: { type: [string, 'null'], maxLength: 2000 }
+
+    ReminderKind:
+      type: string
+      enum: [vaccine, treatment, other]
+      description: "« Vaccin », « Traitement », « Autre soin »."
+
+    Reminder:
+      type: object
+      required: [id, petId, kind, title, dueAt, doneAt, status]
+      properties:
+        id: { type: string, format: uuid }
+        petId: { type: string, format: uuid }
+        kind: { $ref: '#/components/schemas/ReminderKind' }
+        title: { type: string, maxLength: 100 }
+        dueAt: { type: string, format: date-time, description: Échéance (date et heure, comme la maquette). }
+        doneAt: { type: [string, 'null'], format: date-time }
+        status: { type: string, enum: [upcoming, overdue, done], description: Calculé par l'API. }
+
+    CreateReminderRequest:
+      type: object
+      additionalProperties: false
+      required: [kind, title, dueAt]
+      properties:
+        kind: { $ref: '#/components/schemas/ReminderKind' }
+        title: { type: string, minLength: 1, maxLength: 100 }
+        dueAt: { type: string, format: date-time }
+
+    UpdateReminderRequest:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        kind: { $ref: '#/components/schemas/ReminderKind' }
+        title: { type: string, minLength: 1, maxLength: 100 }
+        dueAt: { type: string, format: date-time }
+        done: { type: boolean, description: "`true` = marquer effectué ; `false` = rouvrir." }
 
     IndicatorCode:
       type: string

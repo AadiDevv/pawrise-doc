@@ -126,7 +126,7 @@ aside section{display:grid;gap:10px}
 <script>
 const STEPS=[
   ["C1","Écrans → données","done","ecrans.md"],["C2","Conventions","done","conventions.md"],["C3","Compte et auth","done","openapi.yaml"],["C4","Animaux","done","openapi.yaml"],
-  ["C5","Colliers","done","openapi.yaml"],["C6","Santé","doing","openapi.yaml"],["C7","Localisation","todo","openapi.yaml"],["C8","Notifications","todo","openapi.yaml"],
+  ["C5","Colliers","done","openapi.yaml"],["C6","Santé","done","openapi.yaml"],["C7","Localisation","doing","openapi.yaml"],["C8","Notifications","todo","openapi.yaml"],
   ["C9","Chat IA","todo","openapi.yaml"],["C10","Partage","todo","openapi.yaml"],["C11","Relecture équipe","todo"]];
 const GH="https://github.com/AadiDevv/pawrise-doc/blob/main/contrat-interface/";
 const LABEL={done:"fait",doing:"en cours",todo:"à faire",open:"à trancher",written:"écrit, provisoire"};
@@ -149,12 +149,12 @@ const DOMAINS=[
  {name:"Colliers",code:"C5",s:"done",eps:[
   {v:["GET"],p:"/pets/{id}/collar",st:"written",sc:[["S11","Collier"]],g:["D9","D10"],r:"batterie, réseau, code du collier, modèle",w:"rien"},
   {v:["PUT"],p:"/pets/{id}/collar",st:"written",sc:[["S10","Associer un collier"],["S11","Remplacer le collier"]],g:["D9"],r:"rien",w:"nouveau code ; l'ancien est dissocié ; une notification est créée"}]},
- {name:"Santé",code:"C6",s:"doing",eps:[
+ {name:"Santé",code:"C6",s:"done",eps:[
   {v:["GET"],p:"/pets/{id}/health",st:"written",sc:[["S01","Santé"]],g:["D10"],r:"score bien-être, état, synthèse, 5 indicateurs, batterie, collier connecté",w:"rien"},
   {v:["GET"],p:"/pets/{id}/health/{indicator}?period=",st:"written",sc:[["S02","Détail indicateur"]],g:["D10"],r:"état, valeur, message, série de points par période, plage normale",w:"rien"},
-  {v:["GET","POST"],p:"/pets/{id}/reminders",sc:[["S12","Rappels"]],g:["D3"],r:"type, nom, échéance, état (à venir, en retard, effectué)",w:"créer un rappel"},
-  {v:["PATCH","DELETE"],p:"/reminders/{id}",sc:[["S12","Rappels"]],g:["D3"],r:"rien",w:"modifier, marquer effectué ou rouvrir, supprimer"}]},
- {name:"Localisation",code:"C7",s:"todo",eps:[
+  {v:["GET","POST"],p:"/pets/{id}/reminders",st:"written",sc:[["S12","Rappels"]],g:["D3"],r:"type, nom, échéance, état (à venir, en retard, effectué)",w:"créer un rappel"},
+  {v:["PATCH","DELETE"],p:"/reminders/{id}",st:"written",sc:[["S12","Rappels"]],g:["D3"],r:"rien",w:"modifier, marquer effectué ou rouvrir, supprimer"}]},
+ {name:"Localisation",code:"C7",s:"doing",eps:[
   {v:["GET"],p:"/pets/{id}/location",sc:[["S06","Localisation"]],g:["D10"],r:"position, heure de la dernière position, collier connecté, batterie",w:"actualiser la position"},
   {v:["GET"],p:"/pets/{id}/trail",sc:[["S06","Localisation"]],g:[],r:"trajet récent (20 derniers points)",w:"rien"},
   {v:["GET","POST"],p:"/pets/{id}/zones",sc:[["S07","Zones de sécurité"]],g:["D5"],r:"emoji, nom, rayon, alertes actives, chien dedans ou dehors",w:"ajouter une zone"},
@@ -182,7 +182,7 @@ const Q=[
  ["T1","Type de jeton d'auth","open","Un seul jeton, rôle owner ou vet dedans"],
  ["D1","Co-propriété chef / seconds","done","Tranché : rôle sur pet_owner, un seul chef"],
  ["D2","Profil du chien (taille, infos médicales, race)","open","L'API suit la maquette"],
- ["D3","Rappels : objet autonome ou next_due_date","open","Vue sur health_entry.next_due_date"],
+ ["D3","Rappels : objet autonome ou next_due_date","done","Tranché : table reminder"],
  ["D4","Notifications : lu par personne ou partagé","open","Vue agrégée, lu partagé"],
  ["D5","Zones : emoji, zone interdite, par chien","open","L'API suit la BDD"],
  ["D6","Préférences de confidentialité","open","Localisation = téléphone ; consent_type + préférences du compte"],
