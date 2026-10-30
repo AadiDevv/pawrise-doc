@@ -115,6 +115,7 @@ Format : standard *Problem Details* (RFC 9457, `Content-Type: application/proble
 | 403 | connecté mais pas le droit, sur une ressource qu'on a le droit de voir | un second tente de donner le rôle de chef |
 | 404 | ressource inexistante **ou appartenant à quelqu'un d'autre** | `GET /pets/{id}` sur le chien d'un autre compte |
 | 409 | conflit avec l'état actuel | e-mail déjà utilisé, collier déjà associé, invitation déjà en attente (RG76) |
+| 413 | fichier trop lourd | photo du chien de plus de 1,5 Mo |
 | 429 | trop de requêtes ; `Retry-After` donne le délai en secondes | trop d'essais de connexion ratés |
 | 500 | erreur interne | — |
 

@@ -391,6 +391,7 @@ paths:
                   - id: 3f6c2a1e-8b4d-4c1a-9f2e-1d2c3b4a5e6f
                     name: Nala
                     photoUrl: https://cdn.pawrise.example/pets/3f6c2a1e.jpg
+                    photoSample: null
                     birthDate: "2022-04-12"
                     sex: female
                     breeds: [{ code: golden_retriever, name: Golden Retriever }]
@@ -451,6 +452,67 @@ paths:
           content:
             application/problem+json:
               schema: { $ref: '#/components/schemas/Problem' }
+
+  /pets/{petId}/photo:
+    parameters:
+      - { name: petId, in: path, required: true, schema: { type: string, format: uuid } }
+    post:
+      tags: [Animaux]
+      operationId: setPetPhoto
+      summary: Changer la photo du chien
+      description: |
+        Écran S09 Ajouter un chien, étape photo, et S05 Édition du chien. Deux formes, selon le `Content-Type` :
+        - `multipart/form-data` : ma propre photo (champ `file`, JPEG ou PNG, 1,5 Mo maximum). Stockée par Pawrise, renvoyée dans `photoUrl`.
+        - `application/json` : une photo d'exemple, par sa clé (`sample`). Les images d'exemple sont embarquées dans l'app ; l'API ne stocke que la clé, renvoyée dans `photoSample`.
+
+        Règles appliquées :
+        - La nouvelle photo remplace l'ancienne (l'ancien fichier est supprimé).
+        - Tout propriétaire du chien, chef ou second, peut la changer (hypothèse Q2).
+        - Chien inexistant ou d'un autre compte → 404 `PET_NOT_FOUND` (convention 4).
+      x-status: provisoire
+      x-depends-on: [T1, Q2]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file: { type: string, format: binary, description: "JPEG ou PNG, 1,5 Mo maximum." }
+          application/json:
+            schema: { $ref: '#/components/schemas/SamplePhotoRequest' }
+            example: { sample: sample_2 }
+      responses:
+        '200':
+          description: Photo changée.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Pet' }
+        '400':
+          description: "Fichier ou clé invalide (`VALIDATION_FAILED`). Codes par champ : `REQUIRED`, `UNSUPPORTED_FORMAT`, `UNKNOWN_SAMPLE`."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/ValidationProblem' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Chien inexistant ou d'un autre compte.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: PET_NOT_FOUND, title: Pet not found }
+        '413':
+          description: Fichier de plus de 1,5 Mo.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 413, code: FILE_TOO_LARGE, title: File too large }
 
 components:
   securitySchemes:
@@ -540,11 +602,16 @@ components:
 
     Pet:
       type: object
-      required: [id, name, photoUrl, birthDate, sex, breeds, weightKg, heightCm, medicalNotes, myRole, collarSerial]
+      required: [id, name, photoUrl, photoSample, birthDate, sex, breeds, weightKg, heightCm, medicalNotes, myRole, collarSerial]
       properties:
         id: { type: string, format: uuid }
         name: { type: string, maxLength: 100 }
-        photoUrl: { type: [string, 'null'], format: uri }
+        photoUrl: { type: [string, 'null'], format: uri, description: "Ma propre photo, hébergée par Pawrise. `null` si photo d'exemple ou aucune photo." }
+        photoSample:
+          oneOf:
+            - { $ref: '#/components/schemas/SamplePhotoKey' }
+            - { type: 'null' }
+          description: "Clé de la photo d'exemple embarquée dans l'app. `photoUrl` et `photoSample` à `null` : l'app affiche `sample_1`."
         birthDate: { type: [string, 'null'], format: date }
         sex:
           type: string
@@ -584,6 +651,18 @@ components:
         weightKg: { type: [number, 'null'], exclusiveMinimum: 0 }
         heightCm: { type: [number, 'null'], exclusiveMinimum: 0 }
         medicalNotes: { type: [string, 'null'], maxLength: 2000 }
+
+    SamplePhotoKey:
+      type: string
+      enum: [sample_1, sample_2, sample_3, sample_4]
+      description: "Photos d'exemple embarquées dans l'app (`pawrise-figma/src/data/mock.ts`, `samplePhotos`, dans l'ordre). Stockée telle quelle dans `pet.photo`. Ajouter un exemple = nouvelle version de l'app + ce enum."
+
+    SamplePhotoRequest:
+      type: object
+      additionalProperties: false
+      required: [sample]
+      properties:
+        sample: { $ref: '#/components/schemas/SamplePhotoKey' }
 
     Breed:
       type: object
