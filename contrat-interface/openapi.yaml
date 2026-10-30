@@ -453,6 +453,57 @@ paths:
             application/problem+json:
               schema: { $ref: '#/components/schemas/Problem' }
 
+  /pets/{petId}:
+    parameters:
+      - { name: petId, in: path, required: true, schema: { type: string, format: uuid } }
+    patch:
+      tags: [Animaux]
+      operationId: updatePet
+      summary: Modifier le profil du chien
+      description: |
+        Écran S05 Mes chiens → fiche d'édition du chien (US-14), bouton « Enregistrer ». Seuls les champs envoyés changent (convention 9). La photo se change à part (`POST /pets/{petId}/photo`).
+
+        Règles appliquées :
+        - Tout propriétaire du chien, chef ou second, peut le modifier (hypothèse Q2).
+        - `breedCodes` remplace toute la liste ; codes de `GET /breeds` uniquement (la fiche d'édition de la maquette saisit la race en texte libre : M5).
+        - `weightKg` ajoute une pesée datée de maintenant dans le carnet (`health_entry`, RG8) ; l'historique n'est pas réécrit. `null` refusé (400).
+        - `name` et `sex` ne peuvent pas valoir `null` ; `birthDate`, `heightCm`, `medicalNotes` à `null` sont effacés.
+        - Chien inexistant ou d'un autre compte → 404 `PET_NOT_FOUND`.
+      x-status: provisoire
+      x-depends-on: [T1, D2, Q2]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdatePetRequest' }
+            example:
+              weightKg: 28.1
+              medicalNotes: "Allergie au poulet."
+      responses:
+        '200':
+          description: Chien mis à jour.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Pet' }
+        '400':
+          description: "Données invalides (`VALIDATION_FAILED`). Codes par champ : `REQUIRED`, `BIRTH_DATE_IN_FUTURE`, `MUST_BE_POSITIVE`, `UNKNOWN_BREED`."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/ValidationProblem' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Chien inexistant ou d'un autre compte.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: PET_NOT_FOUND, title: Pet not found }
+
   /pets/{petId}/photo:
     parameters:
       - { name: petId, in: path, required: true, schema: { type: string, format: uuid } }
@@ -649,6 +700,19 @@ components:
           items: { type: string }
           description: Codes de `GET /breeds`, race principale en premier. Vide = race inconnue.
         weightKg: { type: [number, 'null'], exclusiveMinimum: 0 }
+        heightCm: { type: [number, 'null'], exclusiveMinimum: 0 }
+        medicalNotes: { type: [string, 'null'], maxLength: 2000 }
+
+    UpdatePetRequest:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        name: { type: string, minLength: 1, maxLength: 100 }
+        birthDate: { type: [string, 'null'], format: date }
+        sex: { type: string, enum: [male, female, unknown] }
+        breedCodes: { type: array, items: { type: string }, description: Remplace toute la liste ; race principale en premier ; vide = race inconnue. }
+        weightKg: { type: number, exclusiveMinimum: 0, description: Ajoute une pesée. }
         heightCm: { type: [number, 'null'], exclusiveMinimum: 0 }
         medicalNotes: { type: [string, 'null'], maxLength: 2000 }
 
