@@ -14,7 +14,7 @@ Règle d'arbitrage BDD ↔ maquette : la maquette fait foi sur le fonctionnement
 | <a name="D2"></a>D2 | Profil du chien : taille, infos médicales, sexe, race, espèce | API suit la maquette ; BDD à compléter (voir détail) | Non | À trancher | ci-dessous |
 | <a name="D3"></a>D3 | Rappels : objet autonome (maquette) vs `next_due_date` d'une entrée de carnet (BDD) | Nouvelle table `reminder` (`id_pet`, type `vaccine`/`treatment`/`other`, nom, échéance, `done_at`) ; RG28 à réécrire ; « effectué » ne crée pas d'entrée de carnet | Non | Tranché (2026-10-30) → BDD à mettre à jour | ci-dessous |
 | <a name="D4"></a>D4 | Notifications : alertes + rappels + véto, « lu » par personne (maquette) vs `alert` seul, acquittement partagé (BDD, RG52) | `/notifications` = vue agrégée ; « lu » = `acknowledged_at` partagé | Non | À trancher | ci-dessous |
-| <a name="D5"></a>D5 | Zones : emoji, zone interdite, zone par chien | API suit la BDD (lat/long, `zone_type` = `safe` par défaut, zone de l'utilisateur affectée aux chiens) ; emoji ignoré | Non | À trancher | ci-dessous |
+| <a name="D5"></a>D5 | Zones : emoji, zone interdite, zone par chien | Zone du chien (voir détail) ; emoji ajouté ; zone interdite non exposée | Non | Tranché (2026-10-30) → BDD à mettre à jour | ci-dessous |
 | <a name="D6"></a>D6 | Préférences : partage de localisation, notifications santé, données anonymisées | « Données anonymisées » = nouveau `consent_type` ; les deux autres = préférences du compte | Non | À trancher | ci-dessous |
 | <a name="D7"></a>D7 | Nom : un champ (maquette) vs `first_name` + `last_name` (BDD) | API en deux champs ; maquette à adapter | Non | À trancher | — |
 | <a name="D8"></a>D8 | Avancement de l'inscription (découverte, collier, terminé) | État local à l'app, hors API | Non | Hypothèse | — |
@@ -70,6 +70,8 @@ La maquette crée aussi des notifications que la BDD ne connaît pas : « Soin �
 - Emoji de la zone : absent en BDD.
 - Zone interdite (`forbidden`, RG32) : absente de la maquette.
 - Maquette : zones listées par chien. BDD : zone de l'utilisateur, affectée à un ou plusieurs animaux (`pet_geo_zone`).
+
+**Tranché (2026-10-30)** : la zone appartient au chien. `geo_zone_security.id_user` → `id_pet` ; `pet_geo_zone` supprimée ; `is_active` devient `alerts_enabled` sur la zone ; nouvelle colonne `emoji`. Tous les propriétaires du chien gèrent ses zones (ferme le ❓ RG33 / RG15). `zone_type` reste en BDD, l'API n'expose que `safe`. RG33 et RG34 à réécrire. BDD à mettre à jour.
 
 ## D6 — Préférences de confidentialité
 

@@ -1069,6 +1069,166 @@ paths:
             application/problem+json:
               schema: { $ref: '#/components/schemas/Problem' }
 
+  /pets/{petId}/zones:
+    parameters:
+      - { name: petId, in: path, required: true, schema: { type: string, format: uuid } }
+    get:
+      tags: [Localisation]
+      operationId: listZones
+      summary: Lister les zones de sécurité du chien
+      description: |
+        Feuille S07 Zones de sécurité, ouverte depuis S06 (US-07) : emoji, nom, rayon, alertes actives, chien dedans ou dehors. Liste non paginée (convention 5).
+
+        Règles appliquées (D5 tranché : la zone appartient au chien) :
+        - Zone = cercle, centre + rayon (RG31) ; zone sécurisée uniquement, alerte en sortie (RG32 ; zone interdite absente de la maquette, non exposée).
+        - Tous les propriétaires du chien, chef ou second, voient et gèrent ses zones ; une alerte de sortie va à tous les propriétaires (RG35, C8).
+        - `petInside` calculé par l'API à partir de la dernière position (TimescaleDB, D10) ; `null` sans position.
+        - « Afficher / masquer » une zone sur la carte reste local à l'app.
+      x-status: provisoire
+      x-depends-on: [T1, D5, D10]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Zones du chien.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/Zone' }
+              example:
+                items:
+                  - { id: 9b1e4c2a-1f0d-4e8b-a1c3-5d6e7f8a9b0c, petId: 3f6c2a1e-8b4d-4c1a-9f2e-1d2c3b4a5e6f, name: Maison, emoji: "🏡", latitude: 48.856613, longitude: 2.352222, radiusM: 80, alertsEnabled: true, petInside: true }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Chien inexistant ou d'un autre compte.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: PET_NOT_FOUND, title: Pet not found }
+    post:
+      tags: [Localisation]
+      operationId: createZone
+      summary: Ajouter une zone de sécurité
+      description: |
+        Feuille S07 → « Ajouter une zone » (US-07). L'app envoie le centre choisi sur la carte.
+
+        Règles appliquées (D5 tranché : la zone appartient au chien) :
+        - Zone = cercle, centre + rayon (RG31) ; zone sécurisée uniquement, alerte en sortie (RG32 ; zone interdite absente de la maquette, non exposée).
+        - Tous les propriétaires du chien, chef ou second, voient et gèrent ses zones ; une alerte de sortie va à tous les propriétaires (RG35, C8).
+        - Valeurs par défaut de la maquette : `emoji` 📍, `alertsEnabled` vrai.
+      x-status: provisoire
+      x-depends-on: [T1, D5]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateZoneRequest' }
+            example: { name: Parc, latitude: 48.858000, longitude: 2.350000, radiusM: 120 }
+      responses:
+        '201':
+          description: Zone créée.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Zone' }
+        '400':
+          description: "Données invalides (`VALIDATION_FAILED`). Codes par champ : `REQUIRED`, `OUT_OF_RANGE`."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/ValidationProblem' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Chien inexistant ou d'un autre compte.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: PET_NOT_FOUND, title: Pet not found }
+
+  /zones/{zoneId}:
+    parameters:
+      - { name: zoneId, in: path, required: true, schema: { type: string, format: uuid } }
+    patch:
+      tags: [Localisation]
+      operationId: updateZone
+      summary: Renommer, redimensionner, déplacer une zone ou régler ses alertes
+      description: |
+        Feuille S07 : nom, emoji, rayon, interrupteur « Alertes de sortie » (US-07). Seuls les champs envoyés changent (convention 9).
+
+        Règles appliquées (D5 tranché : la zone appartient au chien) :
+        - Zone = cercle, centre + rayon (RG31) ; zone sécurisée uniquement, alerte en sortie (RG32 ; zone interdite absente de la maquette, non exposée).
+        - Tous les propriétaires du chien, chef ou second, voient et gèrent ses zones ; une alerte de sortie va à tous les propriétaires (RG35, C8).
+        - Zone inexistante ou d'un chien d'un autre compte → 404 `ZONE_NOT_FOUND`.
+      x-status: provisoire
+      x-depends-on: [T1, D5]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateZoneRequest' }
+            example: { radiusM: 150, alertsEnabled: false }
+      responses:
+        '200':
+          description: Zone mise à jour.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Zone' }
+        '400':
+          description: "Données invalides (`VALIDATION_FAILED`). Codes par champ : `REQUIRED`, `OUT_OF_RANGE`."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/ValidationProblem' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Zone introuvable.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: ZONE_NOT_FOUND, title: Zone not found }
+    delete:
+      tags: [Localisation]
+      operationId: deleteZone
+      summary: Supprimer une zone
+      description: |
+        Feuille S07 → corbeille (US-07). Supprime la zone pour tous les propriétaires du chien.
+      x-status: provisoire
+      x-depends-on: [T1, D5]
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Zone supprimée.
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Zone introuvable.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: ZONE_NOT_FOUND, title: Zone not found }
+
 components:
   securitySchemes:
     bearerAuth:
@@ -1206,6 +1366,44 @@ components:
         weightKg: { type: [number, 'null'], exclusiveMinimum: 0 }
         heightCm: { type: [number, 'null'], exclusiveMinimum: 0 }
         medicalNotes: { type: [string, 'null'], maxLength: 2000 }
+
+    Zone:
+      type: object
+      required: [id, petId, name, emoji, latitude, longitude, radiusM, alertsEnabled, petInside]
+      properties:
+        id: { type: string, format: uuid }
+        petId: { type: string, format: uuid }
+        name: { type: string, maxLength: 100 }
+        emoji: { type: string, maxLength: 8 }
+        latitude: { type: number, description: Centre, degrés WGS84. }
+        longitude: { type: number }
+        radiusM: { type: integer, minimum: 20, maximum: 2000 }
+        alertsEnabled: { type: boolean, description: Alerte de sortie active. }
+        petInside: { type: [boolean, 'null'], description: "Chien dans la zone à sa dernière position ; `null` sans position." }
+
+    CreateZoneRequest:
+      type: object
+      additionalProperties: false
+      required: [name, latitude, longitude, radiusM]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 100 }
+        emoji: { type: string, maxLength: 8, default: "📍" }
+        latitude: { type: number, minimum: -90, maximum: 90 }
+        longitude: { type: number, minimum: -180, maximum: 180 }
+        radiusM: { type: integer, minimum: 20, maximum: 2000 }
+        alertsEnabled: { type: boolean, default: true }
+
+    UpdateZoneRequest:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        name: { type: string, minLength: 1, maxLength: 100 }
+        emoji: { type: string, maxLength: 8 }
+        latitude: { type: number, minimum: -90, maximum: 90 }
+        longitude: { type: number, minimum: -180, maximum: 180 }
+        radiusM: { type: integer, minimum: 20, maximum: 2000 }
+        alertsEnabled: { type: boolean }
 
     GeoPoint:
       type: object
