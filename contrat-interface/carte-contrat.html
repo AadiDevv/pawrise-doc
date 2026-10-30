@@ -125,14 +125,14 @@ aside section{display:grid;gap:10px}
 
 <script>
 const STEPS=[
-  ["C1","Écrans → données","done","ecrans.md"],["C2","Conventions","done","conventions.md"],["C3","Compte et auth","doing","openapi.yaml"],["C4","Animaux","todo","openapi.yaml"],
+  ["C1","Écrans → données","done","ecrans.md"],["C2","Conventions","done","conventions.md"],["C3","Compte et auth","done","openapi.yaml"],["C4","Animaux","doing","openapi.yaml"],
   ["C5","Colliers","todo","openapi.yaml"],["C6","Santé","todo","openapi.yaml"],["C7","Localisation","todo","openapi.yaml"],["C8","Notifications","todo","openapi.yaml"],
   ["C9","Chat IA","todo","openapi.yaml"],["C10","Partage","todo","openapi.yaml"],["C11","Relecture équipe","todo"]];
 const GH="https://github.com/AadiDevv/pawrise-doc/blob/main/contrat-interface/";
 const LABEL={done:"fait",doing:"en cours",todo:"à faire",open:"à trancher",written:"écrit, provisoire"};
 
 const DOMAINS=[
- {name:"Compte",code:"C3",s:"doing",eps:[
+ {name:"Compte",code:"C3",s:"done",eps:[
   {v:["POST"],p:"/auth/register",st:"written",sc:[["S20","Inscription"]],g:["T1","D7","D13","D14"],r:"rien",w:"nom, e-mail, téléphone, mot de passe (6 caractères minimum) ; e-mail déjà utilisé : erreur"},
   {v:["POST"],p:"/auth/login",st:"written",sc:[["S19","Connexion"]],g:["T1"],r:"rien",w:"e-mail, mot de passe"},
   {v:["POST"],p:"/auth/logout",st:"written",sc:[["S17","Se déconnecter"]],g:["T1","D15"],r:"rien",w:"fermeture de session sur l'appareil"},
@@ -140,8 +140,8 @@ const DOMAINS=[
   {v:["GET","PATCH"],p:"/me",st:"written",sc:[["S17","Mon profil"]],g:["D7"],r:"initiales, nom, e-mail, téléphone",w:"nom, e-mail, téléphone"},
   {v:["GET","PATCH"],p:"/me/preferences",st:"written",sc:[["S17","Confidentialité"]],g:["D6"],r:"partage de la position du téléphone, notifications santé, données anonymisées",w:"les trois interrupteurs"},
   {v:["DELETE"],p:"/me",st:"written",sc:[["S25","Détruire le compte"],["S26","Confirmation"]],g:["Q1"],r:"par chien : mon rôle, code collier, chef ou seconds ; rendez-vous confirmés",w:"confirmer la destruction"}]},
- {name:"Animaux",code:"C4",s:"todo",eps:[
-  {v:["GET"],p:"/pets",sc:[["S05","Mes chiens"],["S25","Détruire le compte"]],g:[],r:"photo, nom, race ; chien actif",w:"chien actif (reste local à l'app)"},
+ {name:"Animaux",code:"C4",s:"doing",eps:[
+  {v:["GET"],p:"/pets",st:"written",sc:[["S05","Mes chiens"],["S25","Détruire le compte"]],g:[],r:"photo, nom, race ; chien actif",w:"chien actif (reste local à l'app)"},
   {v:["POST"],p:"/pets",sc:[["S09","Ajouter un chien"]],g:["D2"],r:"photos d'exemple",w:"nom, naissance, sexe, race, poids, taille, infos santé"},
   {v:["POST"],p:"/pets/{id}/photo",sc:[["S09","Ajouter un chien"]],g:[],r:"rien",w:"photo (fichier de 1,5 Mo maximum, ou exemple)"},
   {v:["PATCH"],p:"/pets/{id}",sc:[["S05","Édition du chien"]],g:["D2"],r:"photo, nom, race, naissance, sexe, poids, taille, infos santé",w:"les mêmes champs"},

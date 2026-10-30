@@ -13,6 +13,8 @@ servers:
 tags:
   - name: Compte
     description: Inscription, connexion, profil, suppression (C3)
+  - name: Animaux
+    description: Liste, ajout, édition des chiens (C4)
 
 paths:
   /auth/register:
@@ -356,6 +358,53 @@ paths:
             application/problem+json:
               schema: { $ref: '#/components/schemas/Problem' }
 
+  /pets:
+    get:
+      tags: [Animaux]
+      operationId: listPets
+      summary: Lister mes chiens
+      description: |
+        Écran S05 Mes chiens (liste) ; sert aussi l'en-tête de S01 Santé, l'édition du chien (S05) et S25 Détruire le compte. Le chien actif est choisi et gardé par l'app (local).
+        Chaque chien est complet : pas de `GET /pets/{id}` tant qu'aucun écran n'en a besoin. Liste non paginée (convention 5).
+
+        Règles appliquées :
+        - Seuls les chiens dont je suis propriétaire, chef ou second (lien *posséder*, RG15).
+        - `weightKg` = dernière pesée du carnet (`health_entry`, RG8).
+      x-status: provisoire
+      x-depends-on: [T1, D2, D9]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Mes chiens.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/Pet' }
+              example:
+                items:
+                  - id: 3f6c2a1e-8b4d-4c1a-9f2e-1d2c3b4a5e6f
+                    name: Nala
+                    photoUrl: https://cdn.pawrise.example/pets/3f6c2a1e.jpg
+                    birthDate: "2022-04-12"
+                    sex: female
+                    breeds: [{ code: golden_retriever, name: Golden Retriever }]
+                    weightKg: 27.4
+                    heightCm: 56
+                    medicalNotes: null
+                    myRole: chief
+                    collarSerial: PW-C28A4F
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+
 components:
   securitySchemes:
     bearerAuth:
@@ -441,6 +490,40 @@ components:
         deviceLocationSharing: { type: boolean }
         healthNotifications: { type: boolean }
         anonymizedDataSharing: { type: boolean }
+
+    Pet:
+      type: object
+      required: [id, name, photoUrl, birthDate, sex, breeds, weightKg, heightCm, medicalNotes, myRole, collarSerial]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string, maxLength: 100 }
+        photoUrl: { type: [string, 'null'], format: uri }
+        birthDate: { type: [string, 'null'], format: date }
+        sex:
+          type: string
+          enum: [male, female, unknown]
+          description: "`unknown` = « non renseigné » dans la maquette (D2)."
+        breeds:
+          type: array
+          description: Race principale en premier (`pet_breed.is_primary`). Liste vide = race inconnue (D2).
+          items: { $ref: '#/components/schemas/Breed' }
+        weightKg: { type: [number, 'null'], description: Dernière pesée. }
+        heightCm: { type: [number, 'null'], description: Absent de la BDD (D2). }
+        medicalNotes: { type: [string, 'null'], description: Infos santé en texte libre ; absent de la BDD (D2). }
+        myRole:
+          type: string
+          enum: [chief, secondary]
+          description: Mon rôle sur ce chien (RG15, `pet_owner.owner_role`).
+        collarSerial:
+          type: [string, 'null']
+          description: Code du collier associé (`PW-XXXXXX` = `serial_number`, D9) ; `null` si aucun collier.
+
+    Breed:
+      type: object
+      required: [code, name]
+      properties:
+        code: { type: string, description: "`breed_code`." }
+        name: { type: string }
 
     AuthTokens:
       type: object

@@ -4,9 +4,10 @@ Mission sprint 1 : contrat REST entre l'app propriétaire et l'API-CORE. Le Port
 
 ## Où j'en suis
 
-- **Fait (2026-10-24 → 30)** : C2 validé. `openapi.yaml` créé : `POST /auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout`, `GET/PATCH /me`, `GET/PATCH /me/preferences`, `DELETE /me` (provisoires) : C3 écrit. Écarts D13, D14, D15 ajoutés ; D15 tranché (table `refresh_token`, BDD à mettre à jour) ; `maquette-a-modifier.md` (M1–M4) ; sommaire `../context/references.md`.
-- **Question en cours** : `DELETE /me`, chef avec un second actif → 409 `CHIEF_TRANSFER_REQUIRED` (transfert d'abord, M4) : à confirmer.
-- **Ensuite** : C4 Animaux (`GET/POST /pets`, `PATCH /pets/{id}`, photo, `/breeds`).
+- **Fait (2026-10-24 → 30)** : C2 validé. `openapi.yaml` créé : `POST /auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout`, `GET/PATCH /me`, `GET/PATCH /me/preferences`, `DELETE /me` (provisoires) : C3 écrit. C4 : `GET /pets`. Écarts D13, D14, D15 ajoutés ; D15 tranché (table `refresh_token`, BDD à mettre à jour) ; `maquette-a-modifier.md` (M1–M4) ; sommaire `../context/references.md`.
+- **Question en cours** : C4, `POST /pets` (S09 Ajouter un chien, D2).
+- Validé 2026-10-30 : `DELETE /me`, chef avec un second actif → 409 `CHIEF_TRANSFER_REQUIRED` (transfert d'abord, M4).
+- **Ensuite** : C4 suite → `POST /pets`, `POST /pets/{id}/photo`, `PATCH /pets/{id}`, `GET /breeds`. Puis C5 Colliers.
 - **Méthode** : un endpoint à la fois ; à chaque avancée, mettre à jour `openapi.yaml`, `questions.md`, la carte (`carte-contrat.html`, puis republier l'artifact avec son URL), puis commit + push (github.com/AadiDevv/pawrise-doc).
 - **En attente de l'équipe** : T1, Q1, Q2, Q3 (voir `questions.md`).
 
@@ -43,8 +44,6 @@ Sources croisées pour chaque sujet : BDD `../bdd/`, maquette `../pawrise-figma/
 
 ### À faire
 
-- [ ] **C3** OpenAPI — Compte & auth (inscription, connexion, profil, suppression)
-- [ ] **C4** OpenAPI — Animaux (ajout, édition, liste)
 - [ ] **C5** OpenAPI — Colliers (association QR / code, état, remplacement)
 - [ ] **C6** OpenAPI — Santé (indicateurs, périodes, score, rappels)
 - [ ] **C7** OpenAPI — Localisation & géozones
@@ -56,6 +55,7 @@ Sources croisées pour chaque sujet : BDD `../bdd/`, maquette `../pawrise-figma/
 
 ### En cours
 
+- [ ] **C4** OpenAPI — Animaux (ajout, édition, liste)
 - [ ] **B1** BDD co-propriété (D1) : local fait (`mcd-doc.md`, `mld-doc.md`, `.drawio`, `schema.md`, SQL) ; Notion en fin de session
 
 ### En attente de l'équipe
@@ -71,6 +71,8 @@ Sources croisées pour chaque sujet : BDD `../bdd/`, maquette `../pawrise-figma/
 - Contrat Portail Vet → API-CORE
 
 ### Fait
+
+- [x] **C3** OpenAPI — Compte & auth, écrit en provisoire (2026-10-30)
 
 - [x] **C2** Conventions transverses validées (`conventions.md`, 9 sujets)
 
