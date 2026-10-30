@@ -13,7 +13,7 @@ Règle d'arbitrage BDD ↔ maquette : la maquette fait foi sur le fonctionnement
 | <a name="D1"></a>D1 | Co-propriété chef / seconds | Rôle sur `pet_owner`, un seul chef, transfert, entité INVITATION | Non | Tranché (maquette fait foi) → BDD en cours de mise à jour | ci-dessous |
 | <a name="D2"></a>D2 | Profil du chien : taille, infos médicales, sexe, race, espèce | API suit la maquette ; BDD à compléter (voir détail) | Non | À trancher | ci-dessous |
 | <a name="D3"></a>D3 | Rappels : objet autonome (maquette) vs `next_due_date` d'une entrée de carnet (BDD) | Nouvelle table `reminder` (`id_pet`, type `vaccine`/`treatment`/`other`, nom, échéance, `done_at`) ; RG28 à réécrire ; « effectué » ne crée pas d'entrée de carnet | Non | Tranché (2026-10-30) → BDD à mettre à jour | ci-dessous |
-| <a name="D4"></a>D4 | Notifications : alertes + rappels + véto, « lu » par personne (maquette) vs `alert` seul, acquittement partagé (BDD, RG52) | `/notifications` = vue agrégée ; « lu » = `acknowledged_at` partagé | Non | À trancher | ci-dessous |
+| <a name="D4"></a>D4 | Notifications : alertes + rappels + véto, « lu » par personne (maquette) vs `alert` seul, acquittement partagé (BDD, RG52) | Table `notification`, une ligne par destinataire, « lu » par personne (voir détail) | Non | Tranché (2026-10-30) → BDD à mettre à jour | ci-dessous |
 | <a name="D5"></a>D5 | Zones : emoji, zone interdite, zone par chien | Zone du chien (voir détail) ; emoji ajouté ; zone interdite non exposée | Non | Tranché (2026-10-30) → BDD à mettre à jour | ci-dessous |
 | <a name="D6"></a>D6 | Préférences : partage de localisation, notifications santé, données anonymisées | « Données anonymisées » = nouveau `consent_type` ; les deux autres = préférences du compte | Non | À trancher | ci-dessous |
 | <a name="D7"></a>D7 | Nom : un champ (maquette) vs `first_name` + `last_name` (BDD) | API en deux champs ; maquette à adapter | Non | À trancher | — |
@@ -64,6 +64,8 @@ La maquette gère un rappel comme un objet : type (vaccin, traitement, autre), n
 La maquette affiche dans une seule liste les alertes santé et carte, les rappels et les messages véto, chacun lu ou non lu par la personne. La BDD n'a que `alert` (santé, zone, batterie, déconnexion), avec un acquittement partagé entre tous les propriétaires (RG52).
 
 La maquette crée aussi des notifications que la BDD ne connaît pas : « Soin à prévoir » (échéance < 24 h) et « Nouveau collier associé ».
+
+**Tranché (2026-10-30)** : nouvelle table `notification` (`id_user` destinataire, `id_pet`, type `health`/`map`/`reminder`/`vet`, titre, `created_at`, `read_at`, `id_alert` et `id_reminder` facultatifs). Une ligne par propriétaire ; « lu » par personne. `alert` reste l'événement (RG51, RG52). BDD à mettre à jour.
 
 ## D5 — Zones
 

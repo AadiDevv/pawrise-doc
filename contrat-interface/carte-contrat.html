@@ -126,8 +126,8 @@ aside section{display:grid;gap:10px}
 <script>
 const STEPS=[
   ["C1","Écrans → données","done","ecrans.md"],["C2","Conventions","done","conventions.md"],["C3","Compte et auth","done","openapi.yaml"],["C4","Animaux","done","openapi.yaml"],
-  ["C5","Colliers","done","openapi.yaml"],["C6","Santé","done","openapi.yaml"],["C7","Localisation","done","openapi.yaml"],["C8","Notifications","doing","openapi.yaml"],
-  ["C9","Chat IA","todo","openapi.yaml"],["C10","Partage","todo","openapi.yaml"],["C11","Relecture équipe","todo"]];
+  ["C5","Colliers","done","openapi.yaml"],["C6","Santé","done","openapi.yaml"],["C7","Localisation","done","openapi.yaml"],["C8","Notifications","done","openapi.yaml"],
+  ["C9","Chat IA","doing","openapi.yaml"],["C10","Partage","todo","openapi.yaml"],["C11","Relecture équipe","todo"]];
 const GH="https://github.com/AadiDevv/pawrise-doc/blob/main/contrat-interface/";
 const LABEL={done:"fait",doing:"en cours",todo:"à faire",open:"à trancher",written:"écrit, provisoire"};
 
@@ -159,11 +159,11 @@ const DOMAINS=[
   {v:["GET"],p:"/pets/{id}/trail",st:"written",sc:[["S06","Localisation"]],g:[],r:"trajet récent (20 derniers points)",w:"rien"},
   {v:["GET","POST"],p:"/pets/{id}/zones",st:"written",sc:[["S07","Zones de sécurité"]],g:["D5"],r:"emoji, nom, rayon, alertes actives, chien dedans ou dehors",w:"ajouter une zone"},
   {v:["PATCH","DELETE"],p:"/zones/{id}",st:"written",sc:[["S07","Zones de sécurité"]],g:["D5"],r:"rien",w:"renommer, régler le rayon, activer les alertes, supprimer"}]},
- {name:"Notifications",code:"C8",s:"doing",eps:[
-  {v:["GET"],p:"/notifications",sc:[["S13","Notifications"],["S06","Bannière de sortie de zone"]],g:["D4"],r:"chien, titre, type, lue ou non, date",w:"rien"},
-  {v:["PATCH"],p:"/notifications/{id}",sc:[["S13","Notifications"]],g:["D4"],r:"rien",w:"marquer lue"},
-  {v:["POST"],p:"/notifications/read-all",sc:[["S13","Notifications"]],g:["D4"],r:"rien",w:"tout marquer lu"}]},
- {name:"Chat IA",code:"C9",s:"todo",eps:[
+ {name:"Notifications",code:"C8",s:"done",eps:[
+  {v:["GET"],p:"/notifications",st:"written",sc:[["S13","Notifications"],["S06","Bannière de sortie de zone"]],g:["D4"],r:"chien, titre, type, lue ou non, date",w:"rien"},
+  {v:["PATCH"],p:"/notifications/{id}",st:"written",sc:[["S13","Notifications"]],g:["D4"],r:"rien",w:"marquer lue"},
+  {v:["POST"],p:"/notifications/read-all",st:"written",sc:[["S13","Notifications"]],g:["D4"],r:"rien",w:"tout marquer lu"}]},
+ {name:"Chat IA",code:"C9",s:"doing",eps:[
   {v:["GET"],p:"/pets/{id}/conversation",sc:[["S04","Chat"]],g:["D12"],r:"messages (rôle, texte), suggestions de réponse",w:"rien"},
   {v:["POST"],p:"/pets/{id}/conversation",sc:[["S02","Demander à Pawrise"],["S06","Bannière de sortie de zone"]],g:["D12"],r:"rien",w:"ouvre le chat avec un message de contexte (chien + alerte)"},
   {v:["POST"],p:"/pets/{id}/conversation/messages",sc:[["S04","Chat"]],g:["D12"],r:"rien",w:"message libre ou suggestion choisie"}]},
@@ -183,7 +183,7 @@ const Q=[
  ["D1","Co-propriété chef / seconds","done","Tranché : rôle sur pet_owner, un seul chef"],
  ["D2","Profil du chien (taille, infos médicales, race)","open","L'API suit la maquette"],
  ["D3","Rappels : objet autonome ou next_due_date","done","Tranché : table reminder"],
- ["D4","Notifications : lu par personne ou partagé","open","Vue agrégée, lu partagé"],
+ ["D4","Notifications : lu par personne ou partagé","done","Tranché : table notification, lu par personne"],
  ["D5","Zones : emoji, zone interdite, par chien","done","Tranché : la zone appartient au chien"],
  ["D6","Préférences de confidentialité","open","Localisation = téléphone ; consent_type + préférences du compte"],
  ["D7","Nom en un champ ou deux","open","Deux champs, maquette à adapter"],

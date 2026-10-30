@@ -21,6 +21,8 @@ tags:
     description: Score, indicateurs, séries, rappels (C6)
   - name: Localisation
     description: Position, trajet, zones de sécurité (C7)
+  - name: Notifications
+    description: Liste, lu / non lu (C8)
 
 paths:
   /auth/register:
@@ -1229,6 +1231,121 @@ paths:
               schema: { $ref: '#/components/schemas/Problem' }
               example: { status: 404, code: ZONE_NOT_FOUND, title: Zone not found }
 
+  /notifications:
+    get:
+      tags: [Notifications]
+      operationId: listNotifications
+      summary: Lister mes notifications
+      description: |
+        Feuille S13 Notifications (US-17), ouverte depuis la cloche ; sert aussi la bannière « a quitté la zone » de S06. Tous mes chiens confondus, du plus récent au plus ancien, paginée par curseur (convention 5).
+
+        Règles appliquées (D4 tranché : table `notification`, une ligne par destinataire) :
+        - « Lu » propre à chaque personne (`read_at`) ; lire une notification ne la marque pas lue pour les autres propriétaires.
+        - `alert` reste l'événement (cause obligatoire RG51, acquittement RG52) ; chaque alerte crée une notification par propriétaire du chien (RG35, RG50).
+        - Types créés : alerte santé, batterie, déconnexion (`health`) ; sortie de zone (`map`) ; échéance de rappel à moins de 24 h et nouveau collier (`reminder`, `health`, US-16) ; message véto (`vet`, hors sprint).
+        - `unreadCount` : total de mes non lues, pour le badge de la cloche.
+        - Préférence `healthNotifications` désactivée (`/me/preferences`) : pas d'envoi push pour les alertes santé ; la notification reste dans la liste.
+        - Toucher une notification : l'app ouvre l'écran selon `kind` (et `reminderId`, `alertId`), puis la marque lue.
+      x-status: provisoire
+      x-depends-on: [T1, D4]
+      security:
+        - bearerAuth: []
+      parameters:
+        - { name: unread, in: query, required: false, schema: { type: boolean, default: false }, description: "« Afficher les non lues »." }
+        - { name: limit, in: query, required: false, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+        - { name: cursor, in: query, required: false, schema: { type: string } }
+      responses:
+        '200':
+          description: Page de notifications.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items, nextCursor, unreadCount]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/Notification' }
+                  nextCursor: { type: [string, 'null'] }
+                  unreadCount: { type: integer, minimum: 0 }
+              example:
+                items:
+                  - { id: 5c1d2e3f-4a5b-6c7d-8e9f-0a1b2c3d4e5f, petId: 3f6c2a1e-8b4d-4c1a-9f2e-1d2c3b4a5e6f, kind: map, title: "Nala a quitté la zone Maison", createdAt: "2026-10-30T09:14:00Z", read: false, alertId: 7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d, reminderId: null }
+                nextCursor: null
+                unreadCount: 1
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+
+  /notifications/{notificationId}:
+    parameters:
+      - { name: notificationId, in: path, required: true, schema: { type: string, format: uuid } }
+    patch:
+      tags: [Notifications]
+      operationId: updateNotification
+      summary: Marquer une notification lue ou non lue
+      description: |
+        Feuille S13 : toucher une notification la marque lue (US-17).
+
+        Règles appliquées (D4 tranché : table `notification`, une ligne par destinataire) :
+        - « Lu » propre à chaque personne (`read_at`) ; lire une notification ne la marque pas lue pour les autres propriétaires.
+        - `alert` reste l'événement (cause obligatoire RG51, acquittement RG52) ; chaque alerte crée une notification par propriétaire du chien (RG35, RG50).
+        - Notification d'un autre destinataire → 404 `NOTIFICATION_NOT_FOUND`.
+      x-status: provisoire
+      x-depends-on: [T1, D4]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [read]
+              properties:
+                read: { type: boolean }
+            example: { read: true }
+      responses:
+        '200':
+          description: Notification mise à jour.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Notification' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Notification introuvable.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: NOTIFICATION_NOT_FOUND, title: Notification not found }
+
+  /notifications/read-all:
+    post:
+      tags: [Notifications]
+      operationId: readAllNotifications
+      summary: Tout marquer comme lu
+      description: |
+        Feuille S13 → « Tout marquer comme lu » (US-17). Mes notifications seulement ; idempotent.
+      x-status: provisoire
+      x-depends-on: [T1, D4]
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Toutes mes notifications sont lues.
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+
 components:
   securitySchemes:
     bearerAuth:
@@ -1366,6 +1483,22 @@ components:
         weightKg: { type: [number, 'null'], exclusiveMinimum: 0 }
         heightCm: { type: [number, 'null'], exclusiveMinimum: 0 }
         medicalNotes: { type: [string, 'null'], maxLength: 2000 }
+
+    Notification:
+      type: object
+      required: [id, petId, kind, title, createdAt, read, alertId, reminderId]
+      properties:
+        id: { type: string, format: uuid }
+        petId: { type: string, format: uuid }
+        kind:
+          type: string
+          enum: [health, map, reminder, vet]
+          description: Écran à ouvrir au toucher (Santé, Localisation, Rappels, Rendez-vous).
+        title: { type: string, description: Texte affiché, en français (généré par l'API). }
+        createdAt: { type: string, format: date-time }
+        read: { type: boolean }
+        alertId: { type: [string, 'null'], format: uuid, description: Alerte à l'origine de la notification. }
+        reminderId: { type: [string, 'null'], format: uuid, description: Rappel concerné. }
 
     Zone:
       type: object

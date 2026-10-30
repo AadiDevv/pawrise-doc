@@ -4,11 +4,11 @@ Mission sprint 1 : contrat REST entre l'app propriétaire et l'API-CORE. Le Port
 
 ## Où j'en suis
 
-- **Fait (2026-10-24 → 30)** : C2 validé. `openapi.yaml` créé : `POST /auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout`, `GET/PATCH /me`, `GET/PATCH /me/preferences`, `DELETE /me` (provisoires) : C3 écrit. C4 : `GET /pets`, `POST /pets`, `POST /pets/{id}/photo` (photos d'exemple embarquées dans l'app, clé stockée), `PATCH /pets/{id}`, `GET /breeds` : C4 écrit. C5 : `GET/PUT /pets/{id}/collar` (un seul PUT pour associer et remplacer). C6 : `GET /pets/{id}/health`, `GET /pets/{id}/health/{indicator}`, rappels `GET/POST /pets/{id}/reminders`, `PATCH/DELETE /reminders/{id}` : C6 écrit. C7 : `GET /pets/{id}/location`, `GET /pets/{id}/trail`, zones `GET/POST /pets/{id}/zones`, `PATCH/DELETE /zones/{id}` : C7 écrit. Écarts D13, D14, D15 ajoutés ; D15 tranché (table `refresh_token`, BDD à mettre à jour) ; D9 tranché (colliers enregistrés avant la vente) ; D3 tranché (table `reminder`) ; D5 tranché (zone du chien) ; D10 tranché (API-CORE lit TimescaleDB en lecture seule, score par l'IA-ENGINE ; `context/architecture.md` mis à jour, à confirmer avec Yassine) ; `maquette-a-modifier.md` (M1–M5) ; sommaire `../context/references.md`.
-- **Question en cours** : C8 Notifications (D4 : « lu » par personne ou partagé).
-- **BDD à mettre à jour** (local `bdd/` + `.drawio`, puis Notion) : table `refresh_token` (D15), colonnes `pet.height_cm` et `pet.medical_notes` (D2), race `mixed` « Croisé » dans les données de `breed` (D2), `mcd-doc.md` ❓ « Qui crée un collier » → Pawrise avant la vente + script de colliers de départ (D9), table `reminder` et RG28 réécrite (D3), zone du chien : `geo_zone_security.id_pet`, `emoji`, `alerts_enabled`, suppression de `pet_geo_zone`, RG33–RG34 réécrites (D5).
+- **Fait (2026-10-24 → 30)** : C2 validé. `openapi.yaml` créé : `POST /auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout`, `GET/PATCH /me`, `GET/PATCH /me/preferences`, `DELETE /me` (provisoires) : C3 écrit. C4 : `GET /pets`, `POST /pets`, `POST /pets/{id}/photo` (photos d'exemple embarquées dans l'app, clé stockée), `PATCH /pets/{id}`, `GET /breeds` : C4 écrit. C5 : `GET/PUT /pets/{id}/collar` (un seul PUT pour associer et remplacer). C6 : `GET /pets/{id}/health`, `GET /pets/{id}/health/{indicator}`, rappels `GET/POST /pets/{id}/reminders`, `PATCH/DELETE /reminders/{id}` : C6 écrit. C7 : `GET /pets/{id}/location`, `GET /pets/{id}/trail`, zones `GET/POST /pets/{id}/zones`, `PATCH/DELETE /zones/{id}` : C7 écrit. C8 : `GET /notifications`, `PATCH /notifications/{id}`, `POST /notifications/read-all` : C8 écrit. Écarts D13, D14, D15 ajoutés ; D15 tranché (table `refresh_token`, BDD à mettre à jour) ; D9 tranché (colliers enregistrés avant la vente) ; D3 tranché (table `reminder`) ; D5 tranché (zone du chien) ; D4 tranché (table `notification`) ; D10 tranché (API-CORE lit TimescaleDB en lecture seule, score par l'IA-ENGINE ; `context/architecture.md` mis à jour, à confirmer avec Yassine) ; `maquette-a-modifier.md` (M1–M5) ; sommaire `../context/references.md`.
+- **Question en cours** : C9 Chat IA (D12 : fil unique par chien, suggestions ; D11 : escalade).
+- **BDD à mettre à jour** (local `bdd/` + `.drawio`, puis Notion) : table `refresh_token` (D15), colonnes `pet.height_cm` et `pet.medical_notes` (D2), race `mixed` « Croisé » dans les données de `breed` (D2), `mcd-doc.md` ❓ « Qui crée un collier » → Pawrise avant la vente + script de colliers de départ (D9), table `reminder` et RG28 réécrite (D3), zone du chien : `geo_zone_security.id_pet`, `emoji`, `alerts_enabled`, suppression de `pet_geo_zone`, RG33–RG34 réécrites (D5), table `notification` (D4).
 - Validé 2026-10-30 : `DELETE /me`, chef avec un second actif → 409 `CHIEF_TRANSFER_REQUIRED` (transfert d'abord, M4).
-- **Ensuite** : C8 Notifications → `GET /notifications`, `PATCH /notifications/{id}`, `POST /notifications/read-all`. Puis C9 Chat IA.
+- **Ensuite** : C9 Chat IA → conversation, messages. Puis C10 Partage.
 - **Méthode** : un endpoint à la fois ; à chaque avancée, mettre à jour `openapi.yaml`, `questions.md`, la carte (`carte-contrat.html`, puis republier l'artifact avec son URL), puis commit + push (github.com/AadiDevv/pawrise-doc).
 - **En attente de l'équipe** : T1, Q1, Q2, Q3 (voir `questions.md`).
 
@@ -45,14 +45,13 @@ Sources croisées pour chaque sujet : BDD `../bdd/`, maquette `../pawrise-figma/
 
 ### À faire
 
-- [ ] **C9** OpenAPI — Chat IA & escalade
 - [ ] **C10** OpenAPI — Partage & co-propriété (invitation, rôles, transfert)
 - [ ] **C11** Relecture équipe (Yassine : archi ; Ibrahim, Adam : app)
 - [ ] **B2** Publier Q1–Q3 sur Confluence
 
 ### En cours
 
-- [ ] **C8** OpenAPI — Alertes & notifications
+- [ ] **C9** OpenAPI — Chat IA & escalade
 - [ ] **B1** BDD co-propriété (D1) : local fait (`mcd-doc.md`, `mld-doc.md`, `.drawio`, `schema.md`, SQL) ; Notion en fin de session
 
 ### En attente de l'équipe
@@ -69,6 +68,7 @@ Sources croisées pour chaque sujet : BDD `../bdd/`, maquette `../pawrise-figma/
 
 ### Fait
 
+- [x] **C8** OpenAPI — Notifications, écrit en provisoire (2026-10-30)
 - [x] **C7** OpenAPI — Localisation, écrit en provisoire (2026-10-30)
 - [x] **C6** OpenAPI — Santé, écrit en provisoire (2026-10-30)
 - [x] **C5** OpenAPI — Colliers, écrit en provisoire (2026-10-30)
