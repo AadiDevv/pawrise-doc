@@ -7,7 +7,7 @@ Mission sprint 1 : contrat REST entre l'app propriétaire et l'API-CORE. Le Port
 - **Fait (2026-10-24 → 30)** : C2 validé. `openapi.yaml` créé : `POST /auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout` (provisoires). Écarts D13, D14, D15 ajoutés ; `maquette-a-modifier.md` (M1–M3) ; sommaire `../context/references.md`.
 - **Question en cours** : D15 — stocker les jetons de rafraîchissement en BDD (table `refresh_token`, révocation possible) ou JWT sans état (pas de table, aucune session révocable) ? Recommandation : table, pour les seuls jetons de rafraîchissement.
 - **Ensuite** : C3 suite → `GET/PATCH /me` (S17 Mon profil), `GET/PATCH /me/preferences`, `DELETE /me`. Puis C4 Animaux.
-- **Méthode** : un endpoint à la fois ; à chaque avancée, mettre à jour `openapi.yaml`, `questions.md`, la carte (artifact, republier par son URL), puis commit + push (github.com/AadiDevv/pawrise-doc).
+- **Méthode** : un endpoint à la fois ; à chaque avancée, mettre à jour `openapi.yaml`, `questions.md`, la carte (`carte-contrat.html`, puis republier l'artifact avec son URL), puis commit + push (github.com/AadiDevv/pawrise-doc).
 - **En attente de l'équipe** : T1, Q1, Q2, Q3 (voir `questions.md`).
 
 ## À synchroniser en fin de session
@@ -28,7 +28,7 @@ Les appels Notion / Confluence / MCP se font en fin de session uniquement. File 
 | `conventions.md` | Règles communes à tous les endpoints (dates, ids, erreurs, pagination…) |
 | `ecrans.md` | Lien US / écran / overlay → données lues et écrites → endpoint (ordre du Figma) |
 | `openapi.yaml` | Le contrat (à créer, étape C3) |
-| Carte visuelle | https://claude.ai/artifact/D2uBEcXosYW5a7KR8ZNcAz : avancement, endpoints par domaine ↔ écrans, registre. À republier (par son URL) à chaque avancée |
+| `carte-contrat.html` | Source de la carte visuelle (avancement, endpoints ↔ écrans, registre). Modifier ce fichier puis le publier sur l'artifact https://claude.ai/artifact/D2uBEcXosYW5a7KR8ZNcAz (passer cette URL en `url`) |
 
 Sources croisées pour chaque sujet : BDD `../bdd/`, maquette `../pawrise-figma/` (`src/`, `docs/USER_STORIES_FIGMA.md`), architecture `../context/architecture.md`.
 

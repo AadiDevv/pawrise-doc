@@ -1,0 +1,234 @@
+<title>Contrat app Pawrise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout : en-tête + frise des étapes, puis endpoints par domaine (colonne principale) et registre (colonne latérale). Tokens repris de pawrise-figma/src/index.css. */
+:root{
+  --bg:#f4f8fb; --surface:#ffffff; --ink:#123044; --muted:#5a7082; --action:#0a5c78; --lime:#14a3a8;
+  --line:#d5e3ec; --line-strong:#c1d4e0; --subtle:rgb(18 48 68 / 6%);
+  --good:#0e7c74; --good-bg:#e4f6f4; --watch:#8a5a00; --watch-bg:#fff4d8; --alert:#b4233a; --alert-bg:#fdecee;
+  --todo:#5a7082; --todo-bg:#eef5f8;
+  --display:'Bricolage Grotesque',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'DM Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0c1a24; --surface:#122633; --ink:#e3eef4; --muted:#93a9b8; --action:#5fc4dd; --lime:#3cc6c9;
+  --line:#1f3a4a; --line-strong:#2b4d60; --subtle:rgb(227 238 244 / 6%);
+  --good:#5fd3c6; --good-bg:#0f3532; --watch:#f0c35a; --watch-bg:#3a2e10; --alert:#f08a9a; --alert-bg:#3d1a21;
+  --todo:#93a9b8; --todo-bg:#18303f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1a24; --surface:#122633; --ink:#e3eef4; --muted:#93a9b8; --action:#5fc4dd; --lime:#3cc6c9;
+  --line:#1f3a4a; --line-strong:#2b4d60; --subtle:rgb(227 238 244 / 6%);
+  --good:#5fd3c6; --good-bg:#0f3532; --watch:#f0c35a; --watch-bg:#3a2e10; --alert:#f08a9a; --alert-bg:#3d1a21;
+  --todo:#93a9b8; --todo-bg:#18303f; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);padding-inline:16px;padding-block:28px 48px}
+.wrap{max-width:1180px;margin:0 auto;display:grid;gap:28px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-0.01em}
+h1{font-size:clamp(26px,4vw,34px)}
+h2{font-size:20px}
+h3{font-size:16px}
+p{margin:0}
+.meta{color:var(--muted);font-size:13px}
+header{display:grid;gap:6px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.step{display:grid;gap:4px;padding:10px 12px;border-radius:10px;background:var(--surface);border:1px solid var(--line)}
+a.step{text-decoration:none;color:inherit}
+a.step:hover{border-color:var(--action)}
+a.doc,a.id{color:inherit;text-decoration-color:var(--line-strong);text-underline-offset:3px}
+a.doc:hover,a.id:hover{color:var(--action)}
+.step b{font-family:var(--mono);font-weight:500;font-size:12px;color:var(--muted)}
+.step span{font-size:14px;font-weight:500}
+.step[data-s="done"]{border-color:var(--good)}
+.step[data-s="doing"]{border-color:var(--watch)}
+.chip{display:inline-flex;align-items:center;font-size:12px;font-weight:500;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.s-done{background:var(--good-bg);color:var(--good)}
+.s-doing{background:var(--watch-bg);color:var(--watch)}
+.s-todo{background:var(--todo-bg);color:var(--todo)}
+.s-written{background:var(--watch-bg);color:var(--watch)}
+.s-open{background:var(--alert-bg);color:var(--alert)}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:28px;align-items:start}
+@media (max-width:900px){.cols{grid-template-columns:minmax(0,1fr)}}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-block:12px 4px}
+.filters button{font:500 13px var(--body);color:var(--ink);background:transparent;border:1px solid var(--line-strong);border-radius:999px;padding:5px 12px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.filters button:focus-visible,summary:focus-visible{outline:2px solid var(--action);outline-offset:2px}
+.domain{display:grid;gap:4px;padding-block:18px 6px;border-top:1px solid var(--line)}
+.domain-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 12px}
+.domain-head .code{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.ep{border-radius:8px}
+.ep summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:9px 10px;border-radius:8px}
+.ep summary::-webkit-details-marker{display:none}
+.ep summary:hover,.ep[open] summary{background:var(--subtle)}
+.verbs{display:flex;gap:4px}
+.verb{font:500 11px var(--mono);padding:2px 6px;border-radius:4px;background:var(--surface);border:1px solid var(--line-strong);color:var(--action)}
+.path{font-family:var(--mono);font-size:13.5px;overflow-wrap:anywhere}
+.screens{grid-column:2/4;display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;color:var(--muted)}
+.screens strong{font-weight:600;color:var(--ink);font-family:var(--mono);font-size:12px;margin-right:4px}
+.gaps{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.gap{font:500 11px var(--mono);padding:2px 6px;border-radius:4px;background:var(--alert-bg);color:var(--alert)}
+.detail{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;padding:4px 10px 14px 10px;font-size:14px}
+.detail dt{color:var(--muted);font-size:13px}
+.detail dd{margin:0}
+aside{display:grid;gap:28px}
+aside section{display:grid;gap:10px}
+.reg{display:grid;gap:2px}
+.row{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:start;padding:7px 0;border-top:1px solid var(--line);font-size:14px}
+.row:first-child{border-top:0}
+.row .id{font:500 12px var(--mono);color:var(--muted);padding-top:2px}
+.row.hl{background:var(--alert-bg);border-radius:6px}
+.decisions{display:grid;gap:8px;font-size:14px;padding-left:18px;margin:0}
+.offsprint{color:var(--muted);font-size:13px;padding:6px 10px}
+@media (max-width:560px){.ep summary{grid-template-columns:minmax(0,1fr)}.screens{grid-column:1}.gaps{justify-content:flex-start}}
+@media (prefers-reduced-motion:no-preference){.ep summary{transition:background .15s}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Contrat app mobile ↔ API-CORE</h1>
+    <p class="meta">Pawrise Care, sprint 1. Sources : <a class="doc" href="https://github.com/AadiDevv/pawrise-doc/tree/main/contrat-interface" target="_blank" rel="noopener">contrat-interface/ sur GitHub</a>. Clique une étape pour ouvrir son document. Mis à jour le 24 octobre 2026.</p>
+  </header>
+
+  <section aria-labelledby="t-steps" style="display:grid;gap:10px">
+    <h2 id="t-steps">Avancement</h2>
+    <div class="steps" id="steps"></div>
+  </section>
+
+  <div class="cols">
+    <main>
+      <h2>Endpoints par domaine</h2>
+      <p class="meta" style="margin-top:4px">Chaque endpoint indique les écrans de la maquette qu'il sert. Ouvre une ligne pour voir ce que l'écran lit et écrit. Sans étiquette, un endpoint est encore un brouillon de C1 ; « écrit » veut dire qu'il est dans openapi.yaml.</p>
+      <div class="filters" id="filters" role="group" aria-label="Filtrer par domaine"></div>
+      <div id="domains"></div>
+    </main>
+
+    <aside>
+      <section aria-labelledby="t-conv">
+        <h2 id="t-conv"><a class="doc" href="https://github.com/AadiDevv/pawrise-doc/blob/main/contrat-interface/conventions.md" target="_blank" rel="noopener">Conventions (C2)</a></h2>
+        <div class="reg" id="conv"></div>
+      </section>
+      <section aria-labelledby="t-q">
+        <h2 id="t-q"><a class="doc" href="https://github.com/AadiDevv/pawrise-doc/blob/main/contrat-interface/questions.md" target="_blank" rel="noopener">Écarts et questions</a></h2>
+        <p class="meta">Le code rouge sur un endpoint renvoie ici. Un écart ne bloque pas : l'endpoint avance sur l'hypothèse et reste provisoire.</p>
+        <div class="reg" id="questions"></div>
+      </section>
+      <section aria-labelledby="t-d">
+        <h2 id="t-d">Socle décidé</h2>
+        <ul class="decisions">
+          <li>Seul API-CORE accède à l'App-DB. Il ne sert que l'app mobile ; le Portail Vet aura sa base plus tard.</li>
+          <li>ORM : Prisma, en partant de la base. Le script SQL reste la seule source des migrations.</li>
+          <li>Architecture : vertical slice autour d'un domaine pur.</li>
+        </ul>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<script>
+const STEPS=[
+  ["C1","Écrans → données","done","ecrans.md"],["C2","Conventions","done","conventions.md"],["C3","Compte et auth","doing","openapi.yaml"],["C4","Animaux","todo","openapi.yaml"],
+  ["C5","Colliers","todo","openapi.yaml"],["C6","Santé","todo","openapi.yaml"],["C7","Localisation","todo","openapi.yaml"],["C8","Notifications","todo","openapi.yaml"],
+  ["C9","Chat IA","todo","openapi.yaml"],["C10","Partage","todo","openapi.yaml"],["C11","Relecture équipe","todo"]];
+const GH="https://github.com/AadiDevv/pawrise-doc/blob/main/contrat-interface/";
+const LABEL={done:"fait",doing:"en cours",todo:"à faire",open:"à trancher",written:"écrit, provisoire"};
+
+const DOMAINS=[
+ {name:"Compte",code:"C3",s:"doing",eps:[
+  {v:["POST"],p:"/auth/register",st:"written",sc:[["S20","Inscription"]],g:["T1","D7","D13","D14"],r:"rien",w:"nom, e-mail, téléphone, mot de passe (6 caractères minimum) ; e-mail déjà utilisé : erreur"},
+  {v:["POST"],p:"/auth/login",st:"written",sc:[["S19","Connexion"]],g:["T1"],r:"rien",w:"e-mail, mot de passe"},
+  {v:["POST"],p:"/auth/logout",st:"written",sc:[["S17","Se déconnecter"]],g:["T1","D15"],r:"rien",w:"fermeture de session sur l'appareil"},
+  {v:["POST"],p:"/auth/refresh",st:"written",sc:[],g:["T1","D15"],r:"rien (appel automatique quand le jeton expire)",w:"jeton de rafraîchissement"},
+  {v:["GET","PATCH"],p:"/me",sc:[["S17","Mon profil"]],g:["D7"],r:"initiales, nom, e-mail, téléphone",w:"nom, e-mail, téléphone"},
+  {v:["GET","PATCH"],p:"/me/preferences",sc:[["S17","Confidentialité"]],g:["D6"],r:"partage de localisation, notifications santé, données anonymisées",w:"les trois interrupteurs"},
+  {v:["DELETE"],p:"/me",sc:[["S25","Détruire le compte"],["S26","Confirmation"]],g:["Q1"],r:"par chien : mon rôle, code collier, chef ou seconds ; rendez-vous confirmés",w:"confirmer la destruction"}]},
+ {name:"Animaux",code:"C4",s:"todo",eps:[
+  {v:["GET"],p:"/pets",sc:[["S05","Mes chiens"],["S25","Détruire le compte"]],g:[],r:"photo, nom, race ; chien actif",w:"chien actif (reste local à l'app)"},
+  {v:["POST"],p:"/pets",sc:[["S09","Ajouter un chien"]],g:["D2"],r:"photos d'exemple",w:"nom, naissance, sexe, race, poids, taille, infos santé"},
+  {v:["POST"],p:"/pets/{id}/photo",sc:[["S09","Ajouter un chien"]],g:[],r:"rien",w:"photo (fichier de 1,5 Mo maximum, ou exemple)"},
+  {v:["PATCH"],p:"/pets/{id}",sc:[["S05","Édition du chien"]],g:["D2"],r:"photo, nom, race, naissance, sexe, poids, taille, infos santé",w:"les mêmes champs"},
+  {v:["GET"],p:"/breeds",sc:[["S09","Ajouter un chien"]],g:[],r:"liste des races avec recherche",w:"rien"}]},
+ {name:"Colliers",code:"C5",s:"todo",eps:[
+  {v:["GET"],p:"/pets/{id}/collar",sc:[["S11","Collier"]],g:["D9","D10"],r:"batterie, réseau, code du collier, modèle",w:"rien"},
+  {v:["POST"],p:"/pets/{id}/collar",sc:[["S10","Associer un collier"]],g:["D9"],r:"rien",w:"code PW-XXXXXX par QR ou saisie ; erreur si invalide ou déjà associé"},
+  {v:["PUT"],p:"/pets/{id}/collar",sc:[["S11","Remplacer le collier"]],g:["D9"],r:"rien",w:"nouveau code ; l'ancien est dissocié ; une notification est créée"}]},
+ {name:"Santé",code:"C6",s:"todo",eps:[
+  {v:["GET"],p:"/pets/{id}/health",sc:[["S01","Santé"]],g:["D10"],r:"score bien-être, état, synthèse, 5 indicateurs, batterie, collier connecté",w:"rien"},
+  {v:["GET"],p:"/pets/{id}/health/{indicator}?period=",sc:[["S02","Détail indicateur"]],g:["D10"],r:"état, valeur, message, série de points par période, plage normale",w:"rien"},
+  {v:["GET","POST"],p:"/pets/{id}/reminders",sc:[["S12","Rappels"]],g:["D3"],r:"type, nom, échéance, état (à venir, en retard, effectué)",w:"créer un rappel"},
+  {v:["PATCH","DELETE"],p:"/reminders/{id}",sc:[["S12","Rappels"]],g:["D3"],r:"rien",w:"modifier, marquer effectué ou rouvrir, supprimer"}]},
+ {name:"Localisation",code:"C7",s:"todo",eps:[
+  {v:["GET"],p:"/pets/{id}/location",sc:[["S06","Localisation"]],g:["D10"],r:"position, heure de la dernière position, collier connecté, batterie",w:"actualiser la position"},
+  {v:["GET"],p:"/pets/{id}/trail",sc:[["S06","Localisation"]],g:[],r:"trajet récent (20 derniers points)",w:"rien"},
+  {v:["GET","POST"],p:"/pets/{id}/zones",sc:[["S07","Zones de sécurité"]],g:["D5"],r:"emoji, nom, rayon, alertes actives, chien dedans ou dehors",w:"ajouter une zone"},
+  {v:["PATCH","DELETE"],p:"/zones/{id}",sc:[["S07","Zones de sécurité"]],g:["D5"],r:"rien",w:"renommer, régler le rayon, activer les alertes, supprimer"}]},
+ {name:"Notifications",code:"C8",s:"todo",eps:[
+  {v:["GET"],p:"/notifications",sc:[["S13","Notifications"],["S06","Bannière de sortie de zone"]],g:["D4"],r:"chien, titre, type, lue ou non, date",w:"rien"},
+  {v:["PATCH"],p:"/notifications/{id}",sc:[["S13","Notifications"]],g:["D4"],r:"rien",w:"marquer lue"},
+  {v:["POST"],p:"/notifications/read-all",sc:[["S13","Notifications"]],g:["D4"],r:"rien",w:"tout marquer lu"}]},
+ {name:"Chat IA",code:"C9",s:"todo",eps:[
+  {v:["GET"],p:"/pets/{id}/conversation",sc:[["S04","Chat"]],g:["D12"],r:"messages (rôle, texte), suggestions de réponse",w:"rien"},
+  {v:["POST"],p:"/pets/{id}/conversation",sc:[["S02","Demander à Pawrise"],["S06","Bannière de sortie de zone"]],g:["D12"],r:"rien",w:"ouvre le chat avec un message de contexte (chien + alerte)"},
+  {v:["POST"],p:"/pets/{id}/conversation/messages",sc:[["S04","Chat"]],g:["D12"],r:"rien",w:"message libre ou suggestion choisie"}]},
+ {name:"Partage",code:"C10",s:"todo",eps:[
+  {v:["GET"],p:"/pets/{id}/owners",sc:[["S18","Propriétaires et partage"],["S25","Détruire le compte"]],g:[],r:"nom, e-mail, rôle (chef, second, en attente), vous",w:"rien"},
+  {v:["POST"],p:"/pets/{id}/owners/{userId}/chief",sc:[["S22","Rôle de chef"]],g:[],r:"propriétaire cible, conséquences",w:"donner le rôle de chef"},
+  {v:["POST"],p:"/pets/{id}/invitations",sc:[["S18","Inviter un propriétaire"]],g:["Q3"],r:"chiens, propriétaires déjà associés",w:"chien, e-mail"}]},
+ {name:"Vétos",code:"hors sprint",s:"todo",off:"Rendez-vous et créneaux (S14, S15, S15b) dépendent de l'API du Portail.",eps:[
+  {v:["GET"],p:"/clinics",sc:[["S08","Vétérinaires"]],g:[],r:"véto, clinique, adresse, téléphone, distance, partenaire, urgence",w:"rien"},
+  {v:["GET"],p:"/clinics/{id}",sc:[["S16","Clinique hors réseau"]],g:[],r:"adresse, téléphone",w:"rien"}]}
+];
+
+const CONV=[["1","Dates et heures","done"],["2","Identifiants","done"],["3","Nommage des champs JSON","done"],["4","Format des erreurs","done"],["5","Pagination","done"],["6","En-têtes (auth, langue)","done"],["7","Versioning","done"],["8","Unités et valeurs énumérées","done"],["9","Champs vides, PATCH, forme des réponses","done"]];
+
+const Q=[
+ ["T1","Type de jeton d'auth","open","Un seul jeton, rôle owner ou vet dedans"],
+ ["D1","Co-propriété chef / seconds","done","Tranché : rôle sur pet_owner, un seul chef"],
+ ["D2","Profil du chien (taille, infos médicales, race)","open","L'API suit la maquette"],
+ ["D3","Rappels : objet autonome ou next_due_date","open","Vue sur health_entry.next_due_date"],
+ ["D4","Notifications : lu par personne ou partagé","open","Vue agrégée, lu partagé"],
+ ["D5","Zones : emoji, zone interdite, par chien","open","L'API suit la BDD"],
+ ["D6","Préférences de confidentialité","open","Nouveau consent_type + préférences du compte"],
+ ["D7","Nom en un champ ou deux","open","Deux champs, maquette à adapter"],
+ ["D9","Code collier et création des colliers","open","Code PW = serial_number"],
+ ["D10","Données hors App-DB (score, position…)","open","Exposées par API-CORE"],
+ ["D12","Chat : fil unique, suggestions","open","Une conversation active par chien"],
+ ["D13","CGU à l'inscription absentes de la maquette","open","acceptedTermsVersion exigé (RG11)"],
+ ["D14","Mot de passe : 6 caractères dans la maquette","open","8 minimum"],
+ ["D15","Sessions : pas de stockage des jetons en BDD","open","Table refresh_token, après T1"],
+ ["Q1","Données à la suppression du compte","open","Équipe + avocate"],
+ ["Q2","Droits d'un second","open","Mêmes droits que le chef sauf transfert"],
+ ["Q3","Acceptation d'une invitation","open","Pending puis acceptée par l'invité"]];
+
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.textContent=h;return e};
+const chip=s=>el("span","chip s-"+s,LABEL[s]);
+
+const steps=document.getElementById("steps");
+STEPS.forEach(([c,n,s,doc])=>{const d=el(doc?"a":"div","step");if(doc){d.href=GH+doc;d.target="_blank";d.rel="noopener"}d.dataset.s=s;d.append(el("b",null,c),el("span",null,n),chip(s));steps.append(d)});
+
+const conv=document.getElementById("conv");
+CONV.forEach(([i,n,s])=>{const r=el("div","row");r.append(el("span","id",i),el("span",null,n),chip(s==="done"?"done":"doing"));r.lastChild.textContent=s==="done"?"validé":"proposé";conv.append(r)});
+
+const qs=document.getElementById("questions");
+Q.forEach(([i,n,s,h])=>{const r=el("div","row");r.id="q-"+i;const t=el("div");t.append(el("div",null,n),el("div","meta",h));const a=el("a","id",i);a.href=GH+"questions.md#"+i;a.target="_blank";a.rel="noopener";r.append(a,t,chip(s));qs.append(r)});
+
+const doms=document.getElementById("domains");
+DOMAINS.forEach(d=>{
+  const sec=el("section","domain");sec.dataset.name=d.name;
+  const head=el("div","domain-head");head.append(el("h3",null,d.name),el("span","code",d.code),chip(d.s));sec.append(head);
+  if(d.off)sec.append(el("p","offsprint",d.off));
+  d.eps.forEach(e=>{
+    const det=el("details","ep"),sum=el("summary");
+    const verbs=el("span","verbs");e.v.forEach(v=>verbs.append(el("span","verb",v)));
+    const gaps=el("span","gaps");e.g.forEach(g=>{const b=el("span","gap",g);b.title="Voir "+g+" dans le registre";gaps.append(b)});
+    const scr=el("span","screens");e.sc.forEach(([c,n])=>{const s=el("span");s.append(el("strong",null,c),document.createTextNode(n));scr.append(s)});
+    const pth=el("span","path",e.p);if(e.st){pth.append(" ");pth.append(chip(e.st))}
+    sum.append(verbs,pth,gaps,scr);
+    const dl=el("dl","detail");dl.append(el("dt",null,"Lit"),el("dd",null,e.r),el("dt",null,"Écrit"),el("dd",null,e.w));
+    det.append(sum,dl);
+    det.addEventListener("toggle",()=>{document.querySelectorAll(".row.hl").forEach(x=>x.classList.remove("hl"));if(det.open)e.g.forEach(g=>{const q=document.getElementById("q-"+g);if(q)q.classList.add("hl")})});
+    sec.append(det)});
+  doms.append(sec)});
+
+const f=document.getElementById("filters");
+["Tous",...DOMAINS.map(d=>d.name)].forEach((n,i)=>{const b=el("button",null,n);b.type="button";b.id="f-"+i;b.setAttribute("aria-pressed",i===0);
+  b.onclick=()=>{f.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));document.querySelectorAll(".domain").forEach(s=>s.hidden=!(n==="Tous"||s.dataset.name===n))};f.append(b)});
+</script>

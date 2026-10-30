@@ -12,6 +12,7 @@ Document mère → documents filles. En revenant sur le projet, lire de haut en 
 
 ```
 Carte du contrat (artifact, vue d'ensemble) ......... https://claude.ai/artifact/D2uBEcXosYW5a7KR8ZNcAz
+│                                                       source : contrat-interface/carte-contrat.html
 └── contrat-interface/README.md ...................... où j'en suis, kanban C1–C11
     ├── ecrans.md ............ C1  écran → données → endpoint
     ├── conventions.md ....... C2  règles communes à tous les endpoints
