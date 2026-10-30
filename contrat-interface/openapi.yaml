@@ -19,6 +19,8 @@ tags:
     description: Association, état, remplacement du collier (C5)
   - name: Santé
     description: Score, indicateurs, séries, rappels (C6)
+  - name: Localisation
+    description: Position, trajet, zones de sécurité (C7)
 
 paths:
   /auth/register:
@@ -975,6 +977,98 @@ paths:
               schema: { $ref: '#/components/schemas/Problem' }
               example: { status: 404, code: REMINDER_NOT_FOUND, title: Reminder not found }
 
+  /pets/{petId}/location:
+    parameters:
+      - { name: petId, in: path, required: true, schema: { type: string, format: uuid } }
+    get:
+      tags: [Localisation]
+      operationId: getPetLocation
+      summary: Dernière position du chien
+      description: |
+        Écran S06 Localisation (US-05) : position sur la carte, heure de la dernière position (« il y a 30 s »), collier connecté, batterie, code du collier. Le bouton « actualiser » rappelle cet endpoint.
+
+        Règles appliquées (D10) :
+        - Lu par API-CORE dans TimescaleDB (lecture seule) : dernière position reçue du collier actuel.
+        - `stale` calculé par l'API : dernière position de plus de 3 min (seuil de la maquette). L'app compte elle-même les secondes depuis `recordedAt`.
+        - « Actualiser » relit la dernière position reçue ; il ne demande pas de position au collier (pas de commande descendante au MVP).
+        - Collier jamais connecté : 200 avec `latitude`, `longitude`, `recordedAt` à `null`.
+        - Chien sans collier → 404 `COLLAR_NOT_ASSIGNED` ; chien inexistant ou d'un autre compte → 404 `PET_NOT_FOUND`.
+      x-status: provisoire
+      x-depends-on: [T1, D10]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Dernière position connue.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PetLocation' }
+              example:
+                latitude: 48.856613
+                longitude: 2.352222
+                recordedAt: "2026-10-30T09:12:04Z"
+                stale: false
+                connected: true
+                batteryPct: 72
+                collarSerial: PW-C28A4F
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Chien introuvable (`PET_NOT_FOUND`) ou sans collier (`COLLAR_NOT_ASSIGNED`).
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+
+  /pets/{petId}/trail:
+    parameters:
+      - { name: petId, in: path, required: true, schema: { type: string, format: uuid } }
+    get:
+      tags: [Localisation]
+      operationId: getPetTrail
+      summary: Trajet récent du chien
+      description: |
+        Écran S06 Localisation, trace « Afficher / Masquer le trajet » (US-06) : derniers points GPS, du plus ancien au plus récent. Liste bornée par `limit`, sans curseur (convention 5).
+
+        Règles appliquées (D10) :
+        - Lu par API-CORE dans TimescaleDB (lecture seule), pour le collier actuel du chien.
+        - 20 points par défaut (maquette), 100 au maximum ; seulement les points des dernières 24 h.
+        - Chien sans collier → 404 `COLLAR_NOT_ASSIGNED` ; chien inexistant ou d'un autre compte → 404 `PET_NOT_FOUND`.
+      x-status: provisoire
+      x-depends-on: [T1, D10]
+      security:
+        - bearerAuth: []
+      parameters:
+        - { name: limit, in: query, required: false, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+      responses:
+        '200':
+          description: Points du trajet (liste vide si aucun point sur 24 h).
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/GeoPoint' }
+              example:
+                items:
+                  - { latitude: 48.856100, longitude: 2.351800, recordedAt: "2026-10-30T09:02:04Z" }
+                  - { latitude: 48.856613, longitude: 2.352222, recordedAt: "2026-10-30T09:12:04Z" }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Chien introuvable (`PET_NOT_FOUND`) ou sans collier (`COLLAR_NOT_ASSIGNED`).
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+
 components:
   securitySchemes:
     bearerAuth:
@@ -1112,6 +1206,26 @@ components:
         weightKg: { type: [number, 'null'], exclusiveMinimum: 0 }
         heightCm: { type: [number, 'null'], exclusiveMinimum: 0 }
         medicalNotes: { type: [string, 'null'], maxLength: 2000 }
+
+    GeoPoint:
+      type: object
+      required: [latitude, longitude, recordedAt]
+      properties:
+        latitude: { type: number, description: Degrés WGS84 (convention 8). }
+        longitude: { type: number }
+        recordedAt: { type: string, format: date-time }
+
+    PetLocation:
+      type: object
+      required: [latitude, longitude, recordedAt, stale, connected, batteryPct, collarSerial]
+      properties:
+        latitude: { type: [number, 'null'] }
+        longitude: { type: [number, 'null'] }
+        recordedAt: { type: [string, 'null'], format: date-time, description: Heure de la dernière position reçue. }
+        stale: { type: boolean, description: Position de plus de 3 min. }
+        connected: { type: boolean }
+        batteryPct: { type: [integer, 'null'], minimum: 0, maximum: 100 }
+        collarSerial: { type: string }
 
     ReminderKind:
       type: string

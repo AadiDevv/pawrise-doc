@@ -155,8 +155,8 @@ const DOMAINS=[
   {v:["GET","POST"],p:"/pets/{id}/reminders",st:"written",sc:[["S12","Rappels"]],g:["D3"],r:"type, nom, échéance, état (à venir, en retard, effectué)",w:"créer un rappel"},
   {v:["PATCH","DELETE"],p:"/reminders/{id}",st:"written",sc:[["S12","Rappels"]],g:["D3"],r:"rien",w:"modifier, marquer effectué ou rouvrir, supprimer"}]},
  {name:"Localisation",code:"C7",s:"doing",eps:[
-  {v:["GET"],p:"/pets/{id}/location",sc:[["S06","Localisation"]],g:["D10"],r:"position, heure de la dernière position, collier connecté, batterie",w:"actualiser la position"},
-  {v:["GET"],p:"/pets/{id}/trail",sc:[["S06","Localisation"]],g:[],r:"trajet récent (20 derniers points)",w:"rien"},
+  {v:["GET"],p:"/pets/{id}/location",st:"written",sc:[["S06","Localisation"]],g:["D10"],r:"position, heure de la dernière position, collier connecté, batterie",w:"actualiser (relit la dernière position)"},
+  {v:["GET"],p:"/pets/{id}/trail",st:"written",sc:[["S06","Localisation"]],g:[],r:"trajet récent (20 derniers points)",w:"rien"},
   {v:["GET","POST"],p:"/pets/{id}/zones",sc:[["S07","Zones de sécurité"]],g:["D5"],r:"emoji, nom, rayon, alertes actives, chien dedans ou dehors",w:"ajouter une zone"},
   {v:["PATCH","DELETE"],p:"/zones/{id}",sc:[["S07","Zones de sécurité"]],g:["D5"],r:"rien",w:"renommer, régler le rayon, activer les alertes, supprimer"}]},
  {name:"Notifications",code:"C8",s:"todo",eps:[
