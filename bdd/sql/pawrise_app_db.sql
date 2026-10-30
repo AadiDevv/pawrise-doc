@@ -2,6 +2,9 @@
 -- Pawrise Care — App-DB — MPD PostgreSQL
 -- Dérivé du MLD Merise. Les références RGxx renvoient à la fiche MCD.
 -- Prérequis : PostgreSQL 13+ (gen_random_uuid() natif).
+-- /!\ Modifié le 2026-10-30 (contrat d'interface : refresh_token, reminder, notification,
+--     zone du chien, préférences, pet.height / medical_notes, message.quick_replies).
+--     draw.io cloud pas à jour ; les .drawio locaux le sont.
 -- =====================================================================
 
 BEGIN;
@@ -41,7 +44,9 @@ CREATE TABLE user_account (
     phone_number          varchar(20),
     email_verified_at     timestamptz,
     registration_date     timestamptz  NOT NULL DEFAULT now(),
-    payment_customer_ref  varchar(255) UNIQUE               -- RG64 : client Stripe
+    payment_customer_ref  varchar(255) UNIQUE,              -- RG64 : client Stripe
+    location_sharing      boolean      NOT NULL DEFAULT true,  -- préférence : position du téléphone envoyée à Pawrise
+    health_notifications  boolean      NOT NULL DEFAULT true   -- RG84 : push des alertes santé
 );
 -- RG10 : email unique, insensible à la casse
 CREATE UNIQUE INDEX uq_user_account_email ON user_account (lower(email));
@@ -62,11 +67,23 @@ CREATE TABLE consent (
     consent_version     varchar(20) NOT NULL,
     consent_revoked_at  timestamptz,                        -- RG13 : révocation datée, jamais supprimée
     PRIMARY KEY (id_user, consent_type, consent_granted_at),
-    CONSTRAINT ck_consent_type  CHECK (consent_type IN ('terms_privacy', 'external_ai_processing')),  -- RG14
+    CONSTRAINT ck_consent_type  CHECK (consent_type IN ('terms_privacy', 'external_ai_processing', 'anonymized_data')),  -- RG14
     CONSTRAINT ck_consent_dates CHECK (consent_revoked_at IS NULL OR consent_revoked_at >= consent_granted_at)
 );
 -- RG12 : un seul consentement actif par type et par utilisateur
 CREATE UNIQUE INDEX uq_consent_active ON consent (id_user, consent_type) WHERE consent_revoked_at IS NULL;
+
+CREATE TABLE refresh_token (
+    id_refresh_token  uuid         PRIMARY KEY DEFAULT gen_random_uuid(),
+    token_hash        varchar(255) NOT NULL UNIQUE,          -- RG77 : haché, jamais en clair
+    family_id         uuid         NOT NULL,                 -- RG78 : session d'un appareil (chaîne des rotations)
+    issued_at         timestamptz  NOT NULL DEFAULT now(),
+    expires_at        timestamptz  NOT NULL,
+    used_at           timestamptz,                           -- RG77 : usage unique
+    revoked_at        timestamptz,                           -- RG78, RG79
+    id_user           uuid         NOT NULL REFERENCES user_account (id_user) ON DELETE CASCADE,
+    CONSTRAINT ck_refresh_token_dates CHECK (expires_at > issued_at)
+);
 
 -- =====================================================================
 -- 3. Annuaire vétérinaire
@@ -113,10 +130,13 @@ CREATE TABLE pet (
     is_sterilized          boolean,                             -- RG29 : NULL = inconnu
     identification_number  varchar(20)  UNIQUE,                 -- RG9 : facultatif, unique si renseigné
     coat_color             varchar(50),
-    photo                  varchar(500),                        -- référence en stockage objet
+    photo                  varchar(500),                        -- RG80 : référence en stockage objet ou clé d'exemple (sample_1…)
+    height                 numeric(5,1),                        -- cm
+    medical_notes          text,                                -- infos santé en texte libre
     species_code           varchar(20)  NOT NULL REFERENCES species (species_code) ON DELETE RESTRICT,
     ordinal_number         varchar(20)  REFERENCES veterinarian (ordinal_number) ON DELETE SET NULL,  -- RG43 : véto traitant
-    CONSTRAINT ck_pet_sex CHECK (sex IN ('male', 'female', 'unknown'))
+    CONSTRAINT ck_pet_sex CHECK (sex IN ('male', 'female', 'unknown')),
+    CONSTRAINT ck_pet_height CHECK (height > 0)
 );
 
 CREATE TABLE pet_breed (
@@ -160,7 +180,7 @@ CREATE TABLE collar (
     serial_number     varchar(50) PRIMARY KEY,
     hardware_version  varchar(20) NOT NULL,
     firmware_version  varchar(20) NOT NULL,
-    collar_status     varchar(20) NOT NULL DEFAULT 'inactive',
+    collar_status     varchar(20) NOT NULL DEFAULT 'inactive',  -- RG81 : créé par Pawrise avant la vente, activé à l'association
     activated_at      timestamptz,
     CONSTRAINT ck_collar_status CHECK (collar_status IN ('inactive', 'active', 'retired'))
 );
@@ -189,7 +209,7 @@ CREATE TABLE health_entry (
     weight           numeric(5,2),                          -- kg
     dosage           varchar(100),
     end_date         date,
-    next_due_date    date,                                  -- RG28 : génère un rappel
+    next_due_date    date,                                  -- informatif ; les rappels sont dans reminder (RG28)
     notes            text,
     id_pet           uuid         NOT NULL REFERENCES pet (id_pet) ON DELETE CASCADE,
     -- RG25 : types d'entrée
@@ -216,6 +236,16 @@ CREATE TABLE document (
     CONSTRAINT ck_document_source    CHECK (document_source IN ('owner', 'vet'))   -- RG72
 );
 
+CREATE TABLE reminder (
+    id_reminder    uuid         PRIMARY KEY DEFAULT gen_random_uuid(),
+    reminder_type  varchar(20)  NOT NULL,
+    label          varchar(100) NOT NULL,
+    due_at         timestamptz  NOT NULL,
+    done_at        timestamptz,                             -- RG28 : NULL = à faire
+    id_pet         uuid         NOT NULL REFERENCES pet (id_pet) ON DELETE CASCADE,
+    CONSTRAINT ck_reminder_type CHECK (reminder_type IN ('vaccine', 'treatment', 'other'))  -- RG28
+);
+
 -- =====================================================================
 -- 7. Géozones
 -- =====================================================================
@@ -227,18 +257,13 @@ CREATE TABLE geo_zone_security (
     center_latitude   numeric(9,6) NOT NULL,
     center_longitude  numeric(9,6) NOT NULL,
     radius            integer      NOT NULL,                -- mètres (RG31)
-    id_user           uuid         NOT NULL REFERENCES user_account (id_user) ON DELETE CASCADE,  -- RG36
+    emoji             varchar(8)   NOT NULL DEFAULT '📍',
+    alerts_enabled    boolean      NOT NULL DEFAULT true,   -- RG34
+    id_pet            uuid         NOT NULL REFERENCES pet (id_pet) ON DELETE CASCADE,  -- RG33, RG36
     CONSTRAINT ck_geo_zone_type      CHECK (zone_type IN ('safe', 'forbidden')),  -- RG32
     CONSTRAINT ck_geo_zone_radius    CHECK (radius > 0),
     CONSTRAINT ck_geo_zone_latitude  CHECK (center_latitude  BETWEEN -90  AND 90),
     CONSTRAINT ck_geo_zone_longitude CHECK (center_longitude BETWEEN -180 AND 180)
-);
-
-CREATE TABLE pet_geo_zone (
-    id_geo_zone  uuid    NOT NULL REFERENCES geo_zone_security (id_geo_zone) ON DELETE CASCADE,
-    id_pet       uuid    NOT NULL REFERENCES pet (id_pet) ON DELETE CASCADE,
-    is_active    boolean NOT NULL DEFAULT true,             -- RG34
-    PRIMARY KEY (id_geo_zone, id_pet)
 );
 
 -- =====================================================================
@@ -278,6 +303,19 @@ CREATE TABLE alert (
     CONSTRAINT ck_alert_zone     CHECK (id_geo_zone IS NULL OR alert_type IN ('zone_exit', 'zone_entry'))
 );
 
+CREATE TABLE notification (
+    id_notification    uuid         PRIMARY KEY DEFAULT gen_random_uuid(),
+    notification_type  varchar(10)  NOT NULL,
+    title              varchar(200) NOT NULL,
+    created_at         timestamptz  NOT NULL DEFAULT now(),
+    read_at            timestamptz,                         -- RG83 : lu par ce destinataire seulement
+    id_user            uuid         NOT NULL REFERENCES user_account (id_user) ON DELETE CASCADE,  -- destinataire
+    id_pet             uuid         NOT NULL REFERENCES pet (id_pet) ON DELETE CASCADE,
+    id_alert           uuid         REFERENCES alert (id_alert) ON DELETE CASCADE,
+    id_reminder        uuid         REFERENCES reminder (id_reminder) ON DELETE CASCADE,
+    CONSTRAINT ck_notification_type CHECK (notification_type IN ('health', 'map', 'reminder', 'vet'))  -- RG83
+);
+
 -- =====================================================================
 -- 10. Chat IA et escalade
 -- =====================================================================
@@ -297,10 +335,11 @@ CREATE TABLE message (
     model_version     varchar(50),
     sources           jsonb,
     confidence_score  numeric(4,3),
+    quick_replies     jsonb,                                -- RG59 : suggestions de réponse de l'IA
     id_conversation   uuid        NOT NULL REFERENCES conversation (id_conversation) ON DELETE CASCADE,
     CONSTRAINT ck_message_sender_role CHECK (sender_role IN ('owner', 'ai', 'vet')),
     -- RG59 : champs IA renseignés pour les messages de l'IA uniquement
-    CONSTRAINT ck_message_ai_fields   CHECK (sender_role = 'ai' OR (model_version IS NULL AND sources IS NULL AND confidence_score IS NULL)),
+    CONSTRAINT ck_message_ai_fields   CHECK (sender_role = 'ai' OR (model_version IS NULL AND sources IS NULL AND confidence_score IS NULL AND quick_replies IS NULL)),
     CONSTRAINT ck_message_confidence  CHECK (confidence_score BETWEEN 0 AND 1)
 );
 
@@ -351,16 +390,23 @@ CREATE INDEX ix_pet_breed_breed              ON pet_breed (breed_code);
 CREATE INDEX ix_pet_owner_pet                ON pet_owner (id_pet);
 CREATE INDEX ix_invitation_user               ON invitation (id_user);
 CREATE INDEX ix_device_user                  ON device (id_user);
+CREATE INDEX ix_refresh_token_user           ON refresh_token (id_user);
+CREATE INDEX ix_refresh_token_family         ON refresh_token (family_id);
 CREATE INDEX ix_vet_clinic_clinic            ON vet_clinic (id_clinic);
 CREATE INDEX ix_collar_assignment_collar     ON collar_assignment (serial_number);
 CREATE INDEX ix_health_entry_pet_date        ON health_entry (id_pet, entry_date DESC);
-CREATE INDEX ix_health_entry_due             ON health_entry (next_due_date) WHERE next_due_date IS NOT NULL;  -- rappels
+CREATE INDEX ix_reminder_pet_due             ON reminder (id_pet, due_at);
+CREATE INDEX ix_reminder_pending_due         ON reminder (due_at) WHERE done_at IS NULL;  -- échéances proches (US-16)
 CREATE INDEX ix_document_health_entry        ON document (id_health_entry);
-CREATE INDEX ix_geo_zone_user                ON geo_zone_security (id_user);
-CREATE INDEX ix_pet_geo_zone_pet             ON pet_geo_zone (id_pet);
+CREATE INDEX ix_geo_zone_pet                 ON geo_zone_security (id_pet);
 CREATE INDEX ix_pet_vet_access_vet           ON pet_vet_access (ordinal_number);
 CREATE INDEX ix_alert_pet_time               ON alert (id_pet, triggered_at DESC);
 CREATE INDEX ix_alert_zone                   ON alert (id_geo_zone) WHERE id_geo_zone IS NOT NULL;
+CREATE INDEX ix_notification_user_time       ON notification (id_user, created_at DESC);
+CREATE INDEX ix_notification_user_unread     ON notification (id_user) WHERE read_at IS NULL;
+CREATE INDEX ix_notification_pet             ON notification (id_pet);
+CREATE INDEX ix_notification_alert           ON notification (id_alert) WHERE id_alert IS NOT NULL;
+CREATE INDEX ix_notification_reminder        ON notification (id_reminder) WHERE id_reminder IS NOT NULL;
 CREATE INDEX ix_conversation_pet             ON conversation (id_pet);
 CREATE INDEX ix_conversation_user            ON conversation (id_user);
 CREATE INDEX ix_message_conversation_time    ON message (id_conversation, sent_at);
@@ -405,26 +451,6 @@ CREATE TRIGGER trg_collar_assignment_check_active
 BEFORE INSERT ON collar_assignment
 FOR EACH ROW EXECUTE FUNCTION fn_check_collar_active();
 
--- RG33 : une zone ne surveille que les animaux de son créateur
-CREATE FUNCTION fn_check_zone_owner() RETURNS trigger
-LANGUAGE plpgsql AS $$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1
-        FROM geo_zone_security z
-        JOIN pet_owner po ON po.id_user = z.id_user
-        WHERE z.id_geo_zone = NEW.id_geo_zone AND po.id_pet = NEW.id_pet
-    ) THEN
-        RAISE EXCEPTION 'RG33 : l''animal % n''appartient pas au créateur de la zone %', NEW.id_pet, NEW.id_geo_zone;
-    END IF;
-    RETURN NEW;
-END;
-$$;
-
-CREATE TRIGGER trg_pet_geo_zone_check_owner
-BEFORE INSERT OR UPDATE OF id_geo_zone, id_pet ON pet_geo_zone
-FOR EACH ROW EXECUTE FUNCTION fn_check_zone_owner();
-
 -- RG39 / RG56 : seul un véto partenaire reçoit un accès ou prend en charge une escalade
 CREATE FUNCTION fn_check_vet_partner() RETURNS trigger
 LANGUAGE plpgsql AS $$
@@ -459,6 +485,12 @@ FOR EACH ROW EXECUTE FUNCTION fn_check_vet_partner();
 -- RG57 : message véto seulement dans une conversation escaladée vers ce véto
 -- RG66 : période de grâce calculée à partir de current_period_end
 -- RG68 : ajout de document par un véto conditionné à un accès actif
+-- RG78 : jeton de rafraîchissement déjà utilisé présenté à nouveau → révocation de toute sa famille
+-- RG81 : activation du collier à l'association ; l'ancien collier remplacé repasse inactive
+-- RG82 : un chef avec un second actif transfère son rôle avant de supprimer son compte
+-- RG83 : une notification par propriétaire destinataire (fan-out à la création de l'alerte ou du rappel)
+-- RG84 : health_notifications = false → pas de push santé, la notification reste dans la liste
+-- RG85 : la race « Croisé » (mixed) fait partie du référentiel de races (données de départ)
 -- Séries temporelles (GPS, capteurs, batterie) : TimescaleDB, base séparée (RG24)
 
 COMMIT;

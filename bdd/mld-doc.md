@@ -4,23 +4,28 @@
 
 > /!\ Modifié le 2026-10-18 (PET_OWNER.owner_role, table INVITATION) : schéma draw.io cloud pas à jour. Les `.drawio` locaux le sont.
 
+> /!\ Modifié le 2026-10-30 (REFRESH_TOKEN, REMINDER, NOTIFICATION ; zone du chien : PET_GEO_ZONE supprimée) : draw.io cloud et Notion pas à jour. Les `.drawio` locaux le sont.
+
 ## Règles de passage MCD → MLD appliquées
 
 - Association binaire (0,n / 1,1) : la clé primaire côté n migre en clé étrangère côté 1,1.
-- Association binaire (0,n / 0,1) : clé étrangère facultative côté 0,1 → `PET.#ordinal_number` (véto traitant, *suivre*), `ALERT.#id_geo_zone` (*provoquer*), `ESCALATION.#ordinal_number` (véto en charge, *prendre_en_charge*).
+- Association binaire (0,n / 0,1) : clé étrangère facultative côté 0,1 → `PET.#ordinal_number` (véto traitant, *suivre*), `ALERT.#id_geo_zone` (*provoquer*), `ESCALATION.#ordinal_number` (véto en charge, *prendre_en_charge*), `NOTIFICATION.#id_alert` (*notifier*), `NOTIFICATION.#id_reminder` (*échoir*).
 - Association (1,1 / 0,1) *aboutir* : `ESCALATION.#id_conversation`, clé étrangère unique.
-- Association N-N : nouvelle table, PK = FK + attributs portés → `PET_BREED` (*avoir_race*), `PET_OWNER` (*posséder*, porte owner_role), `PET_GEO_ZONE` (*surveiller*), `VET_CLINIC` (*exercer*).
+- Association N-N : nouvelle table, PK = FK + attributs portés → `PET_BREED` (*avoir_race*), `PET_OWNER` (*posséder*, porte owner_role), `VET_CLINIC` (*exercer*). `PET_GEO_ZONE` (*surveiller*) supprimée le 2026-10-30 : la zone porte `#id_pet` (*protéger*, 1,1).
 - Identification relative (1,1) : PK composée des FK + identifiant local → `COLLAR_ASSIGNMENT`, `PET_VET_ACCESS`, `CONSENT`.
 
 ## Contraintes non représentables en MLD (MPD ou applicatif)
 
 - Les races d'un animal appartiennent à son espèce ; une seule race principale (`is_primary`) par animal.
 - À un instant donné : une seule affectation par animal et par collier, un seul accès actif par couple animal / véto, un seul consentement actif par type, un seul abonnement actif par collier.
-- Une géozone ne surveille que les animaux de son créateur.
+- Un jeton de rafraîchissement ne sert qu'une fois ; sa réutilisation révoque sa famille (RG77, RG78).
+- Une notification par propriétaire destinataire (RG83).
 - Seul un vétérinaire partenaire (`is_partner`) peut recevoir un accès (`PET_VET_ACCESS`) ou une escalade.
 - Données mesurées en continu (GPS, capteurs, batterie) : TimescaleDB, hors App-DB.
 
-## PET_GEO_ZONE : pourquoi une table de liaison
+## PET_GEO_ZONE : pourquoi une table de liaison (révisé le 2026-10-30)
+
+> **Décision révisée** (`../contrat-interface/questions.md` D5) : la zone appartient au chien, `PET_GEO_ZONE` est supprimée. Les avantages ci-dessous (zone partagée par plusieurs chiens) restent vrais ; ils ont été jugés moins importants que : (1) la maquette gère les zones par chien ; (2) tous les propriétaires d'un chien doivent voir et gérer ses zones, ce que la zone « du créateur » rendait ambigu (RG33 contre RG15). Contrepartie assumée : une zone « Maison » par chien. Argumentaire d'origine conservé pour la relecture d'équipe.
 | Cas | `GEozone` + `GEozone_Pet` | `GEozone` avec FK `pet_id` , sans `GEozone_Pet` |
 | --- | --- | --- |
 | **1 géozone partagée par 3 pets** | 1 zone + 3 associations | 3 zones identiques |

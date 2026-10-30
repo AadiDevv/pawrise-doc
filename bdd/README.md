@@ -1,13 +1,13 @@
 # BDD — App-DB
 
-Base relationnelle (PostgreSQL / Neon) de l'app mobile propriétaire. 25 tables.
+Base relationnelle (PostgreSQL / Neon) de l'app mobile propriétaire. 27 tables.
 
 ## Fichiers
 
 | Besoin | Fichier |
 | --- | --- |
 | Tables, colonnes, types, clés, relations | `schema.md` (lire en premier) |
-| Règles de gestion RG1–RG72, justifications, points ouverts | `mcd-doc.md` |
+| Règles de gestion RG1–RG85, justifications, points ouverts | `mcd-doc.md` |
 | Passage MCD → MLD, choix des liaisons | `mld-doc.md` |
 | Script SQL de création | `sql/pawrise_app_db.sql` |
 | Diagrammes (sources de vérité) | `diagrams/mcd.drawio`, `diagrams/mld.drawio`, `diagrams/mpd.drawio` |

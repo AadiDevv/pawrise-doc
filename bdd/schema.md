@@ -2,11 +2,13 @@
 
 Généré depuis `diagrams/mpd.drawio` (source de vérité). À régénérer après chaque modification du diagramme.
 
+> /!\ Modifié le 2026-10-30 (contrat d'interface : refresh_token, reminder, notification, zone du chien, préférences, pet.height / medical_notes, message.quick_replies) : draw.io cloud pas à jour. Les `.drawio` locaux le sont.
+
 Légende : PK clé primaire · FK clé étrangère · UQ unique · Null = colonne facultative (sinon NOT NULL).
 
-Types : uuid via `gen_random_uuid()`, timestamptz pour les instants, date pour les dates calendaires, numeric pour poids et coordonnées, jsonb pour les sources IA, listes de valeurs en varchar + CHECK.
+Types : uuid via `gen_random_uuid()`, timestamptz pour les instants, date pour les dates calendaires, numeric pour poids, taille et coordonnées, jsonb pour les sources et suggestions IA, listes de valeurs en varchar + CHECK.
 
-Hors diagramme (script SQL) : CHECK (listes de valeurs, RG26 / RG48 / RG59), index uniques partiels « un seul actif à la fois » (dont RG73, RG76), ON DELETE, triggers (RG16, RG23, RG33, RG39), index de performance.
+Hors diagramme (script SQL) : CHECK (listes de valeurs, RG26 / RG48 / RG59), index uniques partiels « un seul actif à la fois » (dont RG73, RG76), ON DELETE, triggers (RG16, RG23, RG39), index de performance.
 
 ## species
 
@@ -43,6 +45,8 @@ Hors diagramme (script SQL) : CHECK (listes de valeurs, RG26 / RG48 / RG59), ind
 | identification_number | varchar(20) | UQ | oui |
 | coat_color | varchar(50) |  | oui |
 | photo | varchar(500) |  | oui |
+| height | numeric(5,1) |  | oui |
+| medical_notes | text |  | oui |
 | species_code | varchar(20) | FK |  |
 | ordinal_number | varchar(20) | FK | oui |
 
@@ -67,6 +71,8 @@ Hors diagramme (script SQL) : CHECK (listes de valeurs, RG26 / RG48 / RG59), ind
 | email_verified_at | timestamptz |  | oui |
 | registration_date | timestamptz |  |  |
 | payment_customer_ref | varchar(255) | UQ | oui |
+| location_sharing | boolean |  |  |
+| health_notifications | boolean |  |  |
 
 ## pet_owner (liaison)
 
@@ -107,6 +113,19 @@ Hors diagramme (script SQL) : CHECK (listes de valeurs, RG26 / RG48 / RG59), ind
 | consent_granted_at | timestamptz | PK |  |
 | consent_version | varchar(20) |  |  |
 | consent_revoked_at | timestamptz |  | oui |
+
+## refresh_token
+
+| Colonne | Type | Clés | Null |
+| --- | --- | --- | --- |
+| id_refresh_token | uuid | PK |  |
+| token_hash | varchar(255) | UQ |  |
+| family_id | uuid |  |  |
+| issued_at | timestamptz |  |  |
+| expires_at | timestamptz |  |  |
+| used_at | timestamptz |  | oui |
+| revoked_at | timestamptz |  | oui |
+| id_user | uuid | FK |  |
 
 ## collar
 
@@ -152,15 +171,20 @@ Hors diagramme (script SQL) : CHECK (listes de valeurs, RG26 / RG48 / RG59), ind
 | center_latitude | numeric(9,6) |  |  |
 | center_longitude | numeric(9,6) |  |  |
 | radius | integer |  |  |
-| id_user | uuid | FK |  |
+| emoji | varchar(8) |  |  |
+| alerts_enabled | boolean |  |  |
+| id_pet | uuid | FK |  |
 
-## pet_geo_zone (liaison)
+## reminder
 
 | Colonne | Type | Clés | Null |
 | --- | --- | --- | --- |
-| id_geo_zone | uuid | PK, FK |  |
-| id_pet | uuid | PK, FK |  |
-| is_active | boolean |  |  |
+| id_reminder | uuid | PK |  |
+| reminder_type | varchar(20) |  |  |
+| label | varchar(100) |  |  |
+| due_at | timestamptz |  |  |
+| done_at | timestamptz |  | oui |
+| id_pet | uuid | FK |  |
 
 ## veterinarian
 
@@ -217,6 +241,20 @@ Hors diagramme (script SQL) : CHECK (listes de valeurs, RG26 / RG48 / RG59), ind
 | id_pet | uuid | FK |  |
 | id_geo_zone | uuid | FK | oui |
 
+## notification
+
+| Colonne | Type | Clés | Null |
+| --- | --- | --- | --- |
+| id_notification | uuid | PK |  |
+| notification_type | varchar(10) |  |  |
+| title | varchar(200) |  |  |
+| created_at | timestamptz |  |  |
+| read_at | timestamptz |  | oui |
+| id_user | uuid | FK |  |
+| id_pet | uuid | FK |  |
+| id_alert | uuid | FK | oui |
+| id_reminder | uuid | FK | oui |
+
 ## conversation
 
 | Colonne | Type | Clés | Null |
@@ -237,6 +275,7 @@ Hors diagramme (script SQL) : CHECK (listes de valeurs, RG26 / RG48 / RG59), ind
 | model_version | varchar(50) |  | oui |
 | sources | jsonb |  | oui |
 | confidence_score | numeric(4,3) |  | oui |
+| quick_replies | jsonb |  | oui |
 | id_conversation | uuid | FK |  |
 
 ## escalation
@@ -296,19 +335,23 @@ Notation pattes d'oie, à gauche la table qui porte la FK : `||` exactement un �
 | `invitation }o──|| user_account` |
 | `device }o──|| user_account` |
 | `consent }|──|| user_account` |
+| `refresh_token }o──|| user_account` |
 | `collar_assignment }o──|| pet` |
 | `collar_assignment }o──|| collar` |
 | `health_entry }o──|| pet` |
 | `document }o──|| health_entry` |
-| `geo_zone_security }o──|| user_account` |
-| `pet_geo_zone }o──|| geo_zone_security` |
-| `pet_geo_zone }o──|| pet` |
+| `geo_zone_security }o──|| pet` |
+| `reminder }o──|| pet` |
 | `vet_clinic }|──|| veterinarian` |
 | `vet_clinic }o──|| clinic` |
 | `pet_vet_access }o──|| pet` |
 | `pet_vet_access }o──|| veterinarian` |
 | `alert }o──|| pet` |
 | `alert }o──|o geo_zone_security` |
+| `notification }o──|| user_account` |
+| `notification }o──|| pet` |
+| `notification }o──|o alert` |
+| `notification }o──|o reminder` |
 | `conversation }o──|| user_account` |
 | `conversation }o──|| pet` |
 | `message }|──|| conversation` |

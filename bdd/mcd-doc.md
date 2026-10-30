@@ -1,6 +1,8 @@
 <!-- Source : Notion « BDD ARCHITECTURE 2 » > Doc explicative du métier et des choix (page modifiée le 2026-09-22). Copie locale : si le diagramme drawio diffère, le diagramme fait foi. -->
 
 # MCD App-DB — règles de gestion et justifications
+
+> /!\ Modifié le 2026-10-30 (contrat d'interface, `../contrat-interface/questions.md` D2–D6, D9, D12, D15, Q3) : REFRESH_TOKEN, REMINDER, NOTIFICATION, zone du chien, préférences, PET.height / medical_notes, MESSAGE.quick_replies ; RG14, RG16, RG28, RG33, RG34, RG36, RG59 réécrites ; RG77–RG85 ajoutées. draw.io cloud et Notion pas à jour. Les `.drawio` locaux le sont.
 > Niveau MCD (Merise) : entités, associations, attributs, identifiants (soulignés), cardinalités, règles de gestion.  
 Types et tailles → dictionnaire de données (à part).
 
@@ -40,12 +42,14 @@ Marqueurs : ✅ justifié · ⚠️ à expliciter · ❓ question ouverte · �
 - ✅ Forme : n,n pour les croisés (Oslo = berger allemand + labrador) ; aucune ligne = race inconnue (RG3 à RG5).
 **Référentiels**
 - ❓ Qui alimente les listes d'espèces, de races et de types (liste FCI / LOF, saisie manuelle) ? La réponse fixe le format de breed_code.
+- ❓ « Croisé » (RG85) est une race du référentiel, or BREED est classée dans un BREED_TYPE (1,1) : quel type lui donner (type « non défini ») ?
 ### Règles de gestion
 - <a name="RG1"></a>RG1 : les codes d'espèce, de type et de race sont uniques et immuables.
 - <a name="RG2"></a>RG2 : un nom de race est unique au sein d'une espèce.
 - <a name="RG3"></a>RG3 : les races d'un animal appartiennent à son espèce.
 - <a name="RG4"></a>RG4 : un animal a au plus une race principale (*is_primary*).
 - <a name="RG5"></a>RG5 : un animal peut n'avoir aucune race (race inconnue).
+- <a name="RG85"></a>RG85 : le référentiel contient une race « Croisé » (code mixed), choisie quand l'animal est croisé sans races connues. « Je ne sais pas » = aucune race (RG5).
 ---
 ## 2. PET
 ### Entités
@@ -58,6 +62,8 @@ Marqueurs : ✅ justifié · ⚠️ à expliciter · ❓ question ouverte · �
 - identification_number
 - coat_color
 - photo
+- height
+- medical_notes
 ### Associations
 | Association | Entité A | Card. A | Entité B | Card. B | Attributs portés |
 | --- | --- | --- | --- | --- | --- |
@@ -66,13 +72,15 @@ Marqueurs : ✅ justifié · ⚠️ à expliciter · ❓ question ouverte · �
 **PET** : table évidente, seuls deux points sont à signaler.
 - 💡 is_sterilized : pour un animal adopté, le statut peut être inconnu. Un booléen force oui ou non ; prévoir trois états (oui / non / inconnu).
 - ❓ birth_date est souvent approximative (adoption, refuge). Le Care Engine utilise l'âge : faut-il savoir qu'une date est estimée ?
+- ✅ height et medical_notes (2026-10-30, D2) : la maquette les saisit à l'ajout du chien. Valeur unique caractérisant l'animal, donc dans PET (RG30) ; medical_notes est un texte libre, non découpé en HEALTH_ENTRY.
 ### Règles de gestion
 - <a name="RG6"></a>RG6 : l'espèce d'un animal est immuable.
 - <a name="RG7"></a>RG7 : l'âge est calculé à partir de birth_date, il n'est pas stocké.
 - <a name="RG8"></a>RG8 : le poids est historisé dans HEALTH_ENTRY, pas porté par PET.
 - <a name="RG9"></a>RG9 : identification_number (puce / tatouage) est facultatif, mais unique lorsqu'il est renseigné.
+- <a name="RG80"></a>RG80 : photo contient soit la référence d'une photo en stockage objet, soit la clé d'une photo d'exemple embarquée dans l'app (sample_1…).
 ---
-## 3. USER_ACCOUNT / DEVICE / CONSENT / INVITATION
+## 3. USER_ACCOUNT / DEVICE / CONSENT / INVITATION / REFRESH_TOKEN
 > /!\ Modifié le 2026-10-18 (co-propriété chef / second, INVITATION, RG15 et RG73–RG76) : schéma draw.io cloud pas à jour. Les `.drawio` locaux le sont.
 ### Entités
 **USER_ACCOUNT**
@@ -85,6 +93,8 @@ Marqueurs : ✅ justifié · ⚠️ à expliciter · ❓ question ouverte · �
 - email_verified_at
 - registration_date
 - payment_customer_ref
+- location_sharing
+- health_notifications
 **DEVICE**
 - <u>id_device</u>
 - push_token
@@ -101,6 +111,14 @@ Marqueurs : ✅ justifié · ⚠️ à expliciter · ❓ question ouverte · �
 - invitation_status
 - invited_at
 - responded_at
+**REFRESH_TOKEN**
+- <u>id_refresh_token</u>
+- token_hash
+- family_id
+- issued_at
+- expires_at
+- used_at
+- revoked_at
 ### Associations
 | Association | Entité A | Card. A | Entité B | Card. B | Attributs portés |
 | --- | --- | --- | --- | --- | --- |
@@ -109,6 +127,7 @@ Marqueurs : ✅ justifié · ⚠️ à expliciter · ❓ question ouverte · �
 | posséder | PET | 1,n | USER_ACCOUNT | 0,n | owner_role |
 | envoyer | INVITATION | 1,1 | USER_ACCOUNT | 0,n | — |
 | viser | INVITATION | 1,1 | PET | 0,n | — |
+| ouvrir_session | REFRESH_TOKEN | 1,1 | USER_ACCOUNT | 0,n | — |
 ### Justification
 **DEVICE**
 - ✅ Rôle : téléphone ou tablette qui reçoit les notifications push, identifié par son token (Apple / Google).
@@ -126,7 +145,13 @@ Marqueurs : ✅ justifié · ⚠️ à expliciter · ❓ question ouverte · �
 - ✅ Rôle : invitation d'une personne, par e-mail, à devenir propriétaire second d'un animal (maquette US-23).
 - ✅ Forme : entité et pas une ligne de *posséder* en attente, car l'invité peut ne pas avoir de compte (pas d'id_user).
 - ✅ Règles : RG75, RG76.
-- ❓ Parcours d'acceptation (création de compte, refus, expiration) non défini dans la maquette. À trancher en équipe.
+- ✅ Parcours d'acceptation (2026-10-30, Q3, hypothèse validée par Aaditya, à confirmer en équipe) : acceptation explicite par l'invité, après inscription s'il n'a pas de compte ; refus possible ; pas d'expiration ni d'annulation au MVP.
+**REFRESH_TOKEN**
+- ✅ Rôle : jeton de rafraîchissement d'une session (2026-10-30, D15). Le jeton d'accès reste un JWT sans état, non stocké.
+- ✅ Besoin : révoquer une session (déconnexion, vol) et détecter la réutilisation d'un jeton volé.
+- ✅ Forme : entité et pas attribut, car un utilisateur a une session par appareil et chaque rotation crée un jeton ; family_id regroupe les jetons d'une même session (RG77 à RG79).
+**Préférences** (location_sharing, health_notifications)
+- ✅ Attributs de USER_ACCOUNT, sans historique (2026-10-30, D6) : simples réglages, contrairement aux consentements RGPD. location_sharing = position du téléphone de l'utilisateur envoyée à Pawrise.
 **USER_ACCOUNT**
 - ❓ Connexion OAuth (Google / Apple, prévue dans la présentation) : password devient facultatif et le fournisseur doit être stocké. À confirmer avant le MLD.
 ### Règles de gestion
@@ -134,15 +159,20 @@ Marqueurs : ✅ justifié · ⚠️ à expliciter · ❓ question ouverte · �
 - <a name="RG11"></a>RG11 : l'acceptation des CGU est obligatoire à l'inscription.
 - <a name="RG12"></a>RG12 : un seul consentement actif par type et par utilisateur.
 - <a name="RG13"></a>RG13 : un consentement révoqué n'est pas supprimé, il est daté (traçabilité RGPD).
-- <a name="RG14"></a>RG14 : types de consentement MVP : CGU/confidentialité, traitement IA externe.
+- <a name="RG14"></a>RG14 : types de consentement MVP : CGU/confidentialité, traitement IA externe, données anonymisées pour la recherche (D6).
 - <a name="RG15"></a>RG15 : un propriétaire est soit chef, soit second. Le chef seul peut transférer son rôle ; les autres droits réservés au chef restent à définir.
-- <a name="RG16"></a>RG16 : quand un compte est supprimé, seul son lien *posséder* disparaît. Quand le dernier propriétaire est supprimé, l'animal et ses données sont supprimés. ❓ À revoir : la maquette (US-35) détruit les données du collier dès la suppression du chef ; sort des données santé et RGPD à trancher en équipe.
+- <a name="RG16"></a>RG16 : quand un compte est supprimé, seul son lien *posséder* disparaît. Quand le dernier propriétaire est supprimé, l'animal et ses données sont supprimés. ❓ Sort des données santé et RGPD à trancher en équipe (Q1). Voir RG82 pour le chef.
 - <a name="RG17"></a>RG17 : un push_token est unique.
 - <a name="RG18"></a>RG18 : un appareil dont le token est invalidé est supprimé.
 - <a name="RG73"></a>RG73 : un animal a exactement un propriétaire chef.
 - <a name="RG74"></a>RG74 : le chef peut transférer son rôle à un propriétaire second ; il devient alors second.
 - <a name="RG75"></a>RG75 : une invitation acceptée crée un lien *posséder* avec le rôle second.
 - <a name="RG76"></a>RG76 : une seule invitation en attente par animal et par e-mail.
+- <a name="RG77"></a>RG77 : un jeton de rafraîchissement est stocké haché et ne sert qu'une fois ; chaque usage en crée un nouveau dans la même famille.
+- <a name="RG78"></a>RG78 : un jeton déjà utilisé présenté à nouveau révoque toute sa famille (vol présumé).
+- <a name="RG79"></a>RG79 : la déconnexion révoque le jeton de l'appareil ; la suppression du compte supprime tous ses jetons.
+- <a name="RG82"></a>RG82 : un chef qui a au moins un second actif sur l'un de ses animaux doit lui transférer son rôle (RG74) avant de supprimer son compte.
+- <a name="RG84"></a>RG84 : health_notifications désactivé : pas de push pour les alertes santé ; la notification reste consultable.
 - <a name="RG19"></a>RG19 : la position du user n'est pas conservée. Elle est lue sur le téléphone à l'affichage et à la recherche de vétos.
 ---
 ## 4. COLLAR / COLLAR_ASSIGNMENT
@@ -169,15 +199,16 @@ Marqueurs : ✅ justifié · ⚠️ à expliciter · ❓ question ouverte · �
 - ⚠️ Ce lien avec TimescaleDB, raison principale de l'historique, n'était écrit nulle part.
 - ❓ TimescaleDB stocke-t-elle les mesures par serial_number ou par id_pet ? Par serial_number, COLLAR_ASSIGNMENT est indispensable pour lire l'historique d'un animal ; par id_pet, elle sert surtout à l'audit.
 **COLLAR**
-- ❓ Qui crée un collier : Pawrise au provisioning (stock), ou l'utilisateur à l'appairage ? Le statut « en stock » suppose le premier cas.
+- ✅ Création (2026-10-30, D9) : Pawrise enregistre chaque collier avant la vente (statut inactif) ; l'utilisateur ne fait que l'associer par son code (serial_number). Pour le MVP, un script de données de départ ; back-office plus tard.
 ### Règles de gestion
 - <a name="RG20"></a>RG20 : un animal a au plus un collier affecté à la fois.
 - <a name="RG21"></a>RG21 : un collier est affecté à au plus un animal à la fois.
 - <a name="RG22"></a>RG22 : une affectation n'est jamais supprimée, elle est clôturée par unassigned_at (historique des données par collier).
 - <a name="RG23"></a>RG23 : seul un collier au statut actif peut être affecté.
+- <a name="RG81"></a>RG81 : un collier est créé par Pawrise avant la vente, inactif ; il passe actif à sa première association. Un collier remplacé repasse inactif et peut être réassocié.
 - <a name="RG24"></a>RG24 : la batterie et la position du collier ne sont pas stockées dans l'App-DB (séries temporelles → TimescaleDB).
 ---
-## 5. HEALTH_ENTRY
+## 5. HEALTH_ENTRY / REMINDER
 ### Entités
 **HEALTH_ENTRY**
 - <u>id_health_entry</u>
@@ -189,21 +220,33 @@ Marqueurs : ✅ justifié · ⚠️ à expliciter · ❓ question ouverte · �
 - end_date
 - next_due_date
 - notes
+**REMINDER**
+- <u>id_reminder</u>
+- reminder_type
+- label
+- due_at
+- done_at
 ### Associations
 | Association | Entité A | Card. A | Entité B | Card. B | Attributs portés |
 | --- | --- | --- | --- | --- | --- |
 | consigner | HEALTH_ENTRY | 1,1 | PET | 0,n | — |
+| planifier | REMINDER | 1,1 | PET | 0,n | — |
 ### Justification
 **HEALTH_ENTRY**
 - ✅ Rôle : événement daté du carnet de santé (vaccin, pesée, consultation…).
 - ✅ Forme : une table générique typée par entry_type, plutôt qu'une table par type : un seul historique, un seul écran, un seul export (RG30).
 - ⚠️ Contrepartie : certains attributs n'ont de sens que pour certains types (RG26), d'où des champs vides. Choix assumé face à la spécialisation que proposerait Merise ; à expliciter.
+**REMINDER**
+- ✅ Rôle : soin à faire à une échéance (vaccin, traitement, autre), marqué effectué ou non (2026-10-30, D3).
+- ✅ Besoin : la maquette crée, modifie, coche et supprime des rappels, y compris sans soin passé dans le carnet.
+- ✅ Forme : entité et pas next_due_date d'une HEALTH_ENTRY, qui ne permettait ni rappel sans entrée, ni « effectué », ni type « autre ».
+- 💡 next_due_date de HEALTH_ENTRY ne génère plus de rappel et fait doublon : à supprimer si aucun usage n'apparaît.
 - 💡 Pas d'auteur de l'entrée : une consultation saisie par le véto via le Portail n'a pas la même valeur qu'une saisie du propriétaire. DOCUMENT a document_source, HEALTH_ENTRY non ; ajouter entry_source par cohérence.
 ### Règles de gestion
 - <a name="RG25"></a>RG25 : types d'entrée : vaccin, antiparasitaire, traitement, consultation, examen, intervention, pesée, allergie, maladie chronique.
 - <a name="RG26"></a>RG26 : weight n'est renseigné que pour une pesée ; dosage et end_date que pour un traitement ou un antiparasitaire ; pour une allergie ou une maladie chronique, entry_date = diagnostic et end_date = guérison.
 - <a name="RG27"></a>RG27 : le poids actuel d'un animal est celui de sa dernière pesée.
-- <a name="RG28"></a>RG28 : une next_due_date génère un rappel à l'approche de l'échéance.
+- <a name="RG28"></a>RG28 : un rappel est un REMINDER (types : vaccin, traitement, autre) ; done_at vide = à faire. Marquer effectué ne crée pas d'entrée dans le carnet. Une échéance à moins de 24 h génère une notification (RG83).
 - <a name="RG29"></a>RG29 : is_sterilized est porté par PET (état actuel, connu même sans date) ; l'intervention datée, si connue, est une entrée HEALTH_ENTRY.
 - <a name="RG30"></a>RG30 : pas d'entité carnet de santé : le carnet est une vue déduite de PET + HEALTH_ENTRY. Une donnée à valeur unique caractérisant l'animal va dans PET ; une donnée datée ou répétée va dans HEALTH_ENTRY.
 ---
@@ -216,22 +259,24 @@ Marqueurs : ✅ justifié · ⚠️ à expliciter · ❓ question ouverte · �
 - center_latitude
 - center_longitude
 - radius
+- emoji
+- alerts_enabled
 ### Associations
 | Association | Entité A | Card. A | Entité B | Card. B | Attributs portés |
 | --- | --- | --- | --- | --- | --- |
-| définir | GEO_ZONE_SECURITY | 1,1 | USER_ACCOUNT | 0,n | — |
-| surveiller | GEO_ZONE_SECURITY | 0,n | PET | 0,n | *is_active* |
+| protéger | GEO_ZONE_SECURITY | 1,1 | PET | 0,n | — |
 ### Justification
-**GEO_ZONE_SECURITY / surveiller**
-- ✅ Forme : la zone est séparée de son attribution aux animaux (voir doc MLD « PET_GEO_ZONE ») ; is_active est porté par surveiller pour désactiver un seul animal (RG34).
-- ❓ RG33 contre RG15 : la zone appartient à son créateur, mais un co-propriétaire a les mêmes droits sur l'animal. Peut-il voir, modifier ou désactiver la zone de l'autre ?
+**GEO_ZONE_SECURITY**
+- ✅ Forme (révisée le 2026-10-30, D5) : la zone appartient à **un animal** (*protéger*), et non plus à son créateur avec une attribution n,n (*définir* + *surveiller*). Raisons : la maquette liste et gère les zones par chien ; tous les propriétaires du chien voient et gèrent les mêmes zones, ce qui ferme la question RG33 / RG15.
+- ⚠️ Contrepartie assumée : deux chiens d'un même foyer ont chacun leur zone « Maison » (voir doc MLD, section PET_GEO_ZONE révisée).
+- ✅ emoji (affiché par la maquette) et alerts_enabled (interrupteur « Alertes de sortie ») sont portés par la zone.
 ### Règles de gestion
 - <a name="RG31"></a>RG31 : une zone est un cercle (centre + rayon).
 - <a name="RG32"></a>RG32 : une zone sécurisée alerte en sortie, une zone interdite alerte en entrée.
-- <a name="RG33"></a>RG33 : une zone ne surveille que les animaux dont son créateur est propriétaire.
-- <a name="RG34"></a>RG34 : la surveillance s'active et se désactive par animal et par zone (*is_active* sur *surveiller*).
+- <a name="RG33"></a>RG33 : une zone protège un seul animal ; tous ses propriétaires la voient et la gèrent.
+- <a name="RG34"></a>RG34 : les alertes s'activent et se désactivent par zone (alerts_enabled).
 - <a name="RG35"></a>RG35 : une alerte de zone est envoyée à tous les propriétaires de l'animal.
-- <a name="RG36"></a>RG36 : la suppression d'un compte supprime les zones qu'il a définies.
+- <a name="RG36"></a>RG36 : les zones d'un animal sont supprimées avec lui ; la suppression d'un compte ne les touche pas.
 ---
 ## 7. VETERINARIAN / CLINIC / PET_VET_ACCESS
 ### Entités
@@ -291,7 +336,7 @@ Ils ne peuvent pas être fusionnés : le vétérinaire traitant peut être un no
 - <a name="RG44"></a>RG44 : le vétérinaire traitant est choisi dans l'annuaire, sans création manuelle.
 - <a name="RG45"></a>RG45 : désigner un partenaire comme vétérinaire traitant ne lui ouvre pas d'accès aux données ; l'accès reste validé explicitement par un propriétaire (RG40).
 ---
-## 8. ALERT
+## 8. ALERT / NOTIFICATION
 ### Entités
 **ALERT**
 - <u>id_alert</u>
@@ -300,14 +345,28 @@ Ils ne peuvent pas être fusionnés : le vétérinaire traitant peut être un no
 - explanation
 - triggered_at
 - acknowledged_at
+**NOTIFICATION**
+- <u>id_notification</u>
+- notification_type
+- title
+- created_at
+- read_at
 ### Associations
 | Association | Entité A | Card. A | Entité B | Card. B | Attributs portés |
 | --- | --- | --- | --- | --- | --- |
 | déclencher | ALERT | 1,1 | PET | 0,n | — |
 | provoquer | ALERT | 0,1 | GEO_ZONE_SECURITY | 0,n | — |
+| recevoir | NOTIFICATION | 1,1 | USER_ACCOUNT | 0,n | — |
+| signaler | NOTIFICATION | 1,1 | PET | 0,n | — |
+| notifier | NOTIFICATION | 0,1 | ALERT | 0,n | — |
+| échoir | NOTIFICATION | 0,1 | REMINDER | 0,n | — |
 ### Justification
 **ALERT**
 - ✅ Forme : entité et pas simple notification push : historique consultable dans l'app, lecture sur le Portail, traçabilité (RG49, WBS 8.2.3).
+**NOTIFICATION**
+- ✅ Rôle : élément du fil de notifications d'**une** personne (alerte, échéance de rappel, nouveau collier, message véto) (2026-10-30, D4).
+- ✅ Besoin : la maquette marque chaque notification lue ou non lue par personne, et affiche des notifications qui ne sont pas des alertes.
+- ✅ Forme : entité distincte d'ALERT. ALERT est l'événement (cause, acquittement partagé RG52) ; NOTIFICATION est sa remise à chaque propriétaire, avec son propre read_at (RG83).
 - ❓ Une alerte urgente peut mener à une escalade, mais ALERT et ESCALATION ne sont pas liées : le véto ne sait pas quelle alerte a motivé l'escalade. Utile ?
 ### Règles de gestion
 - <a name="RG46"></a>RG46 : types d'alerte : santé, sortie de zone, entrée de zone, batterie faible, collier déconnecté.
@@ -317,6 +376,7 @@ Ils ne peuvent pas être fusionnés : le vétérinaire traitant peut être un no
 - <a name="RG50"></a>RG50 : une alerte est envoyée sur tous les appareils de tous les propriétaires de l'animal.
 - <a name="RG51"></a>RG51 : explanation est obligatoire : chaque alerte indique pourquoi elle a été déclenchée.
 - <a name="RG52"></a>RG52 : acknowledged_at est partagé par tous les propriétaires de l'animal.
+- <a name="RG83"></a>RG83 : une notification est créée pour chaque propriétaire destinataire ; read_at ne vaut que pour lui. Types : santé, carte, rappel, véto.
 ---
 ## 9. CONVERSATION / MESSAGE / ESCALATION
 ### Entités
@@ -331,6 +391,7 @@ Ils ne peuvent pas être fusionnés : le vétérinaire traitant peut être un no
 - model_version
 - sources
 - confidence_score
+- quick_replies
 **ESCALATION**
 - <u>id_escalation</u>
 - escalation_reason
@@ -350,7 +411,7 @@ Ils ne peuvent pas être fusionnés : le vétérinaire traitant peut être un no
 **ESCALATION**
 - ✅ Forme : entité distincte de CONVERSATION car elle a son propre cycle de vie (statut, véto, rapport, clôture). En attributs de CONVERSATION, ces champs seraient vides pour la plupart des conversations (RG54 à RG56).
 **CONVERSATION**
-- ⚠️ RG53 (visible par son seul initiateur) va à l'encontre de RG15 (mêmes droits pour tous les propriétaires). Justifier ce choix (confidentialité de l'échange) ou l'aligner.
+- ✅ RG53 confirmée (2026-10-30, D12) : un fil par animal **et par propriétaire**, pour la confidentialité des questions posées à l'IA. L'app utilise la conversation la plus récente ; une alerte ajoute un message de contexte dans le fil du propriétaire qui ouvre le chat dessus.
 ### Règles de gestion
 - <a name="RG53"></a>RG53 : une conversation porte sur un seul animal et n'est visible que par le propriétaire qui l'a initiée.
 - <a name="RG54"></a>RG54 : une conversation donne lieu à au plus une escalade.
@@ -358,7 +419,7 @@ Ils ne peuvent pas être fusionnés : le vétérinaire traitant peut être un no
 - <a name="RG56"></a>RG56 : une escalade est attribuée à un véto partenaire disponible ; sa prise en charge ouvre un accès (access_source = escalade IA), validé par le propriétaire (RG40).
 - <a name="RG57"></a>RG57 : un message véto n'est possible que dans une conversation escaladée vers ce véto.
 - <a name="RG58"></a>RG58 : conversations et messages ne sont jamais supprimés, sauf avec le compte ou l'animal.
-- <a name="RG59"></a>RG59 : sender_role vaut propriétaire, IA ou véto ; model_version, sources et confidence_score ne sont renseignés que pour les messages de l'IA.
+- <a name="RG59"></a>RG59 : sender_role vaut propriétaire, IA ou véto ; model_version, sources, confidence_score et quick_replies (suggestions de réponse) ne sont renseignés que pour les messages de l'IA.
 ---
 ## 10. SUBSCRIPTION
 ### Entités
