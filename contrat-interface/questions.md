@@ -26,8 +26,8 @@ Règle d'arbitrage BDD ↔ maquette : la maquette fait foi sur le fonctionnement
 | <a name="D14"></a>D14 | Longueur du mot de passe : 6 caractères dans la maquette (S20) | 8 minimum (recommandation ANSSI / NIST pour un mot de passe seul) ; maquette à adapter | Non | À trancher | — |
 | <a name="D15"></a>D15 | Sessions : rien en BDD pour stocker les jetons de rafraîchissement, donc impossible de révoquer une session (déconnexion, rotation, vol) | Nouvelle table `refresh_token` (hash du jeton, `id_user`, expiration, révocation) ; seuls les jetons de rafraîchissement sont stockés, le jeton d'accès reste un JWT sans état | Non | Tranché (2026-10-30) → BDD à mettre à jour | — |
 | <a name="Q1"></a>Q1 | Données d'un animal à la suppression du compte (RGPD) | GPS + identité effacés ; métriques santé anonymisées gardées si consentement ; seconds conservent tout | Non | À trancher en équipe + avocate | Confluence (à publier) |
-| <a name="Q2"></a>Q2 | Droits d'un propriétaire second | Mêmes droits que le chef, sauf transfert du rôle et suppression des données de l'animal | Non | À trancher en équipe | Confluence (à publier) |
-| <a name="Q3"></a>Q3 | Acceptation d'une invitation | Invitation `pending` → acceptée par l'invité (crée un compte s'il n'en a pas) ; refus ou annulation possibles | Non | À trancher en équipe | Confluence (à publier) |
+| <a name="Q2"></a>Q2 | Droits d'un propriétaire second | Mêmes droits que le chef, sauf transfert du rôle, invitation (texte de S18) et suppression des données de l'animal | Non | À trancher en équipe | Confluence (à publier) |
+| <a name="Q3"></a>Q3 | Acceptation d'une invitation | Acceptation **explicite** par l'invité (`GET /me/invitations`, accepter / refuser), après inscription s'il n'a pas de compte ; pas d'annulation ni d'expiration au MVP ; écran à ajouter (M6) | Non | Hypothèse validée par Aaditya (2026-10-30), à confirmer en équipe | Confluence (à publier) |
 
 ## T1 — Jeton d'auth
 

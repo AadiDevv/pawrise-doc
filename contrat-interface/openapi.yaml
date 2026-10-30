@@ -25,6 +25,8 @@ tags:
     description: Liste, lu / non lu (C8)
   - name: Chat
     description: Chat avec l'IA Pawrise (C9)
+  - name: Partage
+    description: Propriétaires, invitations, rôle de chef (C10)
 
 paths:
   /auth/register:
@@ -1524,6 +1526,256 @@ paths:
               schema: { $ref: '#/components/schemas/Problem' }
               example: { status: 503, code: AI_UNAVAILABLE, title: AI unavailable }
 
+  /pets/{petId}/owners:
+    parameters:
+      - { name: petId, in: path, required: true, schema: { type: string, format: uuid } }
+    get:
+      tags: [Partage]
+      operationId: listOwners
+      summary: Lister les propriétaires du chien
+      description: |
+        Écran S18 Propriétaires et partage (US-31) et S25 Détruire le compte : nom, e-mail, rôle (chef, second, invitation en attente), « vous ». Liste non paginée (convention 5) : chef d'abord, puis seconds, puis invitations en attente.
+
+        Règles appliquées :
+        - Visible par tout propriétaire du chien (RG15).
+        - Une invitation en attente apparaît avec `role: pending`, `userId` et `name` à `null`.
+      x-status: provisoire
+      x-depends-on: [T1, Q3]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Propriétaires et invitations en attente.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/PetOwner' }
+              example:
+                items:
+                  - { userId: 2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d, name: Camille Martin, email: camille.martin@example.com, role: chief, isMe: true, invitationId: null }
+                  - { userId: null, name: null, email: lea.moreau@example.com, role: pending, isMe: false, invitationId: 8c9d0e1f-2a3b-4c5d-6e7f-8a9b0c1d2e3f }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Chien inexistant ou d'un autre compte.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: PET_NOT_FOUND, title: Pet not found }
+
+  /pets/{petId}/owners/{userId}/chief:
+    parameters:
+      - { name: petId, in: path, required: true, schema: { type: string, format: uuid } }
+      - { name: userId, in: path, required: true, schema: { type: string, format: uuid } }
+    post:
+      tags: [Partage]
+      operationId: transferChief
+      summary: Donner le rôle de chef
+      description: |
+        S18 → S22 Rôle de chef, bouton de confirmation (US-32). Le propriétaire cible devient chef ; moi, second.
+
+        Règles appliquées :
+        - Seul le chef peut le faire (RG15, RG74) → sinon 403 `NOT_CHIEF`.
+        - La cible doit être un second du chien (pas une invitation en attente) → sinon 404 `OWNER_NOT_FOUND`.
+        - Un seul chef par chien, à tout instant (RG73) : les deux rôles changent dans la même transaction.
+      x-status: provisoire
+      x-depends-on: [T1]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Rôle transféré ; liste des propriétaires à jour.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/PetOwner' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '403':
+          description: Je ne suis pas le chef de ce chien.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 403, code: NOT_CHIEF, title: Not chief }
+        '404':
+          description: Chien introuvable (`PET_NOT_FOUND`) ou cible qui n'est pas un second du chien (`OWNER_NOT_FOUND`).
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+
+  /pets/{petId}/invitations:
+    parameters:
+      - { name: petId, in: path, required: true, schema: { type: string, format: uuid } }
+    post:
+      tags: [Partage]
+      operationId: inviteOwner
+      summary: Inviter un propriétaire second
+      description: |
+        S18 → « Inviter un propriétaire » (US-23) : e-mail de la personne. Elle rejoint le chien comme second après avoir accepté (Q3, acceptation explicite).
+
+        Règles appliquées :
+        - Seul le chef invite (texte de S18 : « Seul le propriétaire chef peut lui donner ce rôle ») → sinon 403 `NOT_CHIEF`.
+        - Une seule invitation en attente par chien et par e-mail (RG76) → 409 `INVITATION_ALREADY_PENDING`.
+        - E-mail déjà propriétaire du chien (dont le mien) → 409 `ALREADY_OWNER`.
+        - L'invité peut ne pas avoir de compte : il verra l'invitation après inscription avec cet e-mail. L'envoi de l'e-mail d'invitation est hors de ce contrat (NOTIFICATION, I9).
+        - Pas d'expiration ni d'annulation au MVP (aucun écran).
+      x-status: provisoire
+      x-depends-on: [T1, Q3]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [email]
+              properties:
+                email: { type: string, format: email, maxLength: 255 }
+            example: { email: lea.moreau@example.com }
+      responses:
+        '201':
+          description: Invitation créée (en attente).
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PetOwner' }
+        '400':
+          description: "E-mail invalide (`VALIDATION_FAILED`, codes `REQUIRED`, `INVALID_EMAIL`)."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/ValidationProblem' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '403':
+          description: Je ne suis pas le chef de ce chien.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 403, code: NOT_CHIEF, title: Not chief }
+        '404':
+          description: Chien inexistant ou d'un autre compte.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: PET_NOT_FOUND, title: Pet not found }
+        '409':
+          description: Invitation déjà en attente (`INVITATION_ALREADY_PENDING`, RG76) ou personne déjà propriétaire (`ALREADY_OWNER`).
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+
+  /me/invitations:
+    get:
+      tags: [Partage]
+      operationId: listMyInvitations
+      summary: Lister les invitations que j'ai reçues
+      description: |
+        Écran à ajouter dans la maquette (M6) : invitations en attente adressées à mon e-mail, avec le chien et la personne qui invite.
+
+        Règles appliquées :
+        - Correspondance sur l'e-mail du compte, sans tenir compte de la casse (RG10).
+        - Seulement les invitations `pending`.
+      x-status: provisoire
+      x-depends-on: [T1, Q3]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Mes invitations en attente.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/ReceivedInvitation' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+
+  /invitations/{invitationId}/accept:
+    parameters:
+      - { name: invitationId, in: path, required: true, schema: { type: string, format: uuid } }
+    post:
+      tags: [Partage]
+      operationId: acceptInvitation
+      summary: Accepter une invitation
+      description: |
+        Écran M6. Crée mon lien *posséder* avec le rôle second (RG75) ; l'invitation passe `accepted` (`responded_at`). Le chien apparaît dans `GET /pets`.
+      x-status: provisoire
+      x-depends-on: [T1, Q3]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Invitation acceptée ; le chien rejoint ma liste.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Pet' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Invitation inexistante, déjà traitée ou adressée à un autre e-mail.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: INVITATION_NOT_FOUND, title: Invitation not found }
+
+  /invitations/{invitationId}/decline:
+    parameters:
+      - { name: invitationId, in: path, required: true, schema: { type: string, format: uuid } }
+    post:
+      tags: [Partage]
+      operationId: declineInvitation
+      summary: Refuser une invitation
+      description: |
+        Écran M6. L'invitation passe `declined` (`responded_at`) ; le chef peut en envoyer une nouvelle.
+      x-status: provisoire
+      x-depends-on: [T1, Q3]
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Invitation refusée.
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Invitation inexistante, déjà traitée ou adressée à un autre e-mail.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: INVITATION_NOT_FOUND, title: Invitation not found }
+
 components:
   securitySchemes:
     bearerAuth:
@@ -1661,6 +1913,39 @@ components:
         weightKg: { type: [number, 'null'], exclusiveMinimum: 0 }
         heightCm: { type: [number, 'null'], exclusiveMinimum: 0 }
         medicalNotes: { type: [string, 'null'], maxLength: 2000 }
+
+    PetOwner:
+      type: object
+      required: [userId, name, email, role, isMe, invitationId]
+      properties:
+        userId: { type: [string, 'null'], format: uuid, description: "`null` pour une invitation en attente." }
+        name: { type: [string, 'null'], description: "Prénom + nom ; `null` pour une invitation en attente." }
+        email: { type: string, format: email }
+        role: { type: string, enum: [chief, secondary, pending] }
+        isMe: { type: boolean, description: "« vous » dans la maquette." }
+        invitationId: { type: [string, 'null'], format: uuid }
+
+    ReceivedInvitation:
+      type: object
+      required: [id, invitedAt, pet, invitedBy]
+      properties:
+        id: { type: string, format: uuid }
+        invitedAt: { type: string, format: date-time }
+        pet:
+          type: object
+          required: [id, name, photoUrl, photoSample]
+          properties:
+            id: { type: string, format: uuid }
+            name: { type: string }
+            photoUrl: { type: [string, 'null'], format: uri }
+            photoSample:
+              oneOf: [{ $ref: '#/components/schemas/SamplePhotoKey' }, { type: 'null' }]
+        invitedBy:
+          type: object
+          required: [name, email]
+          properties:
+            name: { type: string }
+            email: { type: string, format: email }
 
     ChatMessage:
       type: object
