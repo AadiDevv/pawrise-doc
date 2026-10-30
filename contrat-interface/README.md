@@ -4,8 +4,10 @@ Mission sprint 1 : contrat REST entre l'app propriétaire et l'API-CORE. Le Port
 
 ## Où j'en suis
 
-- **Maintenant** : BDD co-propriété (D1) faite en local ; synchronisation Notion en fin de session.
-- **Ensuite** : C3 Compte & auth dans `openapi.yaml`, puis les autres domaines.
+- **Fait (2026-10-24 → 30)** : C2 validé. `openapi.yaml` créé : `POST /auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout` (provisoires). Écarts D13, D14, D15 ajoutés ; `maquette-a-modifier.md` (M1–M3) ; sommaire `../context/references.md`.
+- **Question en cours** : D15 — stocker les jetons de rafraîchissement en BDD (table `refresh_token`, révocation possible) ou JWT sans état (pas de table, aucune session révocable) ? Recommandation : table, pour les seuls jetons de rafraîchissement.
+- **Ensuite** : C3 suite → `GET/PATCH /me` (S17 Mon profil), `GET/PATCH /me/preferences`, `DELETE /me`. Puis C4 Animaux.
+- **Méthode** : un endpoint à la fois ; à chaque avancée, mettre à jour `openapi.yaml`, `questions.md`, la carte (artifact, republier par son URL), puis commit + push (github.com/AadiDevv/pawrise-doc).
 - **En attente de l'équipe** : T1, Q1, Q2, Q3 (voir `questions.md`).
 
 ## À synchroniser en fin de session
