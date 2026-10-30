@@ -260,6 +260,67 @@ paths:
                 code: EMAIL_ALREADY_USED
                 title: Email already used
 
+  /me/preferences:
+    get:
+      tags: [Compte]
+      operationId: getMyPreferences
+      summary: Lire mes préférences de confidentialité
+      description: |
+        Écran S17 Paramètres → section Confidentialité (US-24) : les trois interrupteurs.
+      x-status: provisoire
+      x-depends-on: [T1, D6]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Préférences de l'utilisateur connecté.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Preferences' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+    patch:
+      tags: [Compte]
+      operationId: updateMyPreferences
+      summary: Modifier mes préférences de confidentialité
+      description: |
+        Écran S17 Confidentialité : un appel par interrupteur basculé. Seuls les champs envoyés changent (convention 9).
+
+        Règles appliquées (hypothèses D6) :
+        - `anonymizedDataSharing` est un consentement RGPD : l'activer crée une ligne `consent` (nouveau `consent_type`), le désactiver renseigne `consent_revoked_at`. Historique conservé.
+        - `deviceLocationSharing` et `healthNotifications` sont des préférences du compte, sans historique.
+        - Aucun champ ne peut valoir `null` (400).
+      x-status: provisoire
+      x-depends-on: [T1, D6]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdatePreferencesRequest' }
+            example:
+              anonymizedDataSharing: true
+      responses:
+        '200':
+          description: Préférences mises à jour.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Preferences' }
+        '400':
+          description: "Données invalides (`VALIDATION_FAILED`). Code par champ : `REQUIRED`."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/ValidationProblem' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+
 components:
   securitySchemes:
     bearerAuth:
@@ -322,6 +383,29 @@ components:
           type: [string, 'null']
           maxLength: 20
           description: Format E.164 ; `null` efface le numéro.
+
+    Preferences:
+      type: object
+      required: [deviceLocationSharing, healthNotifications, anonymizedDataSharing]
+      properties:
+        deviceLocationSharing:
+          type: boolean
+          description: Position du téléphone de l'utilisateur envoyée à Pawrise (pas celle du chien). Vrai par défaut.
+        healthNotifications:
+          type: boolean
+          description: Alertes en cas d'anomalie de santé détectée. Vrai par défaut.
+        anonymizedDataSharing:
+          type: boolean
+          description: Consentement à l'usage des données anonymisées pour la recherche vétérinaire. Faux par défaut (RGPD, consentement explicite).
+
+    UpdatePreferencesRequest:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        deviceLocationSharing: { type: boolean }
+        healthNotifications: { type: boolean }
+        anonymizedDataSharing: { type: boolean }
 
     AuthTokens:
       type: object

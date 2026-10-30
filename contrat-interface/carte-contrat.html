@@ -138,7 +138,7 @@ const DOMAINS=[
   {v:["POST"],p:"/auth/logout",st:"written",sc:[["S17","Se déconnecter"]],g:["T1","D15"],r:"rien",w:"fermeture de session sur l'appareil"},
   {v:["POST"],p:"/auth/refresh",st:"written",sc:[],g:["T1","D15"],r:"rien (appel automatique quand le jeton expire)",w:"jeton de rafraîchissement"},
   {v:["GET","PATCH"],p:"/me",st:"written",sc:[["S17","Mon profil"]],g:["D7"],r:"initiales, nom, e-mail, téléphone",w:"nom, e-mail, téléphone"},
-  {v:["GET","PATCH"],p:"/me/preferences",sc:[["S17","Confidentialité"]],g:["D6"],r:"partage de localisation, notifications santé, données anonymisées",w:"les trois interrupteurs"},
+  {v:["GET","PATCH"],p:"/me/preferences",st:"written",sc:[["S17","Confidentialité"]],g:["D6"],r:"partage de la position du téléphone, notifications santé, données anonymisées",w:"les trois interrupteurs"},
   {v:["DELETE"],p:"/me",sc:[["S25","Détruire le compte"],["S26","Confirmation"]],g:["Q1"],r:"par chien : mon rôle, code collier, chef ou seconds ; rendez-vous confirmés",w:"confirmer la destruction"}]},
  {name:"Animaux",code:"C4",s:"todo",eps:[
   {v:["GET"],p:"/pets",sc:[["S05","Mes chiens"],["S25","Détruire le compte"]],g:[],r:"photo, nom, race ; chien actif",w:"chien actif (reste local à l'app)"},
@@ -186,7 +186,7 @@ const Q=[
  ["D3","Rappels : objet autonome ou next_due_date","open","Vue sur health_entry.next_due_date"],
  ["D4","Notifications : lu par personne ou partagé","open","Vue agrégée, lu partagé"],
  ["D5","Zones : emoji, zone interdite, par chien","open","L'API suit la BDD"],
- ["D6","Préférences de confidentialité","open","Nouveau consent_type + préférences du compte"],
+ ["D6","Préférences de confidentialité","open","Localisation = téléphone ; consent_type + préférences du compte"],
  ["D7","Nom en un champ ou deux","open","Deux champs, maquette à adapter"],
  ["D9","Code collier et création des colliers","open","Code PW = serial_number"],
  ["D10","Données hors App-DB (score, position…)","open","Exposées par API-CORE"],

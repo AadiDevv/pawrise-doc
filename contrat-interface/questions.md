@@ -77,7 +77,7 @@ La maquette crée aussi des notifications que la BDD ne connaît pas : « Soin �
 | --- | --- | --- |
 | Données anonymisées | absent ; `consent_type` = CGU, traitement IA externe | nouveau `consent_type` (consentement RGPD, historisé) |
 | Notifications santé | absent | préférence du compte (colonne ou table) |
-| Partage de localisation | absent ; sens flou (avec qui ?) | à clarifier avec la personne qui a fait la maquette |
+| Partage de localisation | absent | position du téléphone de l'utilisateur (pas celle du chien) envoyée à Pawrise ; préférence du compte, activée par défaut (Aaditya, 2026-10-30) |
 
 ## D10 — Données hors App-DB
 
