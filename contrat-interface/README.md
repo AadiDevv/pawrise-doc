@@ -4,9 +4,9 @@ Mission sprint 1 : contrat REST entre l'app propriétaire et l'API-CORE. Le Port
 
 ## Où j'en suis
 
-- **Fait (2026-10-24 → 30)** : C2 validé. `openapi.yaml` créé : `POST /auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout`, `GET/PATCH /me`, `GET/PATCH /me/preferences` (provisoires). Écarts D13, D14, D15 ajoutés ; D15 tranché (table `refresh_token`, BDD à mettre à jour) ; `maquette-a-modifier.md` (M1–M3) ; sommaire `../context/references.md`.
-- **Question en cours** : `DELETE /me` (dépend de Q1, en attente de l'équipe).
-- **Ensuite** : C3 suite → `DELETE /me`. Puis C4 Animaux.
+- **Fait (2026-10-24 → 30)** : C2 validé. `openapi.yaml` créé : `POST /auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout`, `GET/PATCH /me`, `GET/PATCH /me/preferences`, `DELETE /me` (provisoires) : C3 écrit. Écarts D13, D14, D15 ajoutés ; D15 tranché (table `refresh_token`, BDD à mettre à jour) ; `maquette-a-modifier.md` (M1–M4) ; sommaire `../context/references.md`.
+- **Question en cours** : `DELETE /me`, chef avec un second actif → 409 `CHIEF_TRANSFER_REQUIRED` (transfert d'abord, M4) : à confirmer.
+- **Ensuite** : C4 Animaux (`GET/POST /pets`, `PATCH /pets/{id}`, photo, `/breeds`).
 - **Méthode** : un endpoint à la fois ; à chaque avancée, mettre à jour `openapi.yaml`, `questions.md`, la carte (`carte-contrat.html`, puis republier l'artifact avec son URL), puis commit + push (github.com/AadiDevv/pawrise-doc).
 - **En attente de l'équipe** : T1, Q1, Q2, Q3 (voir `questions.md`).
 

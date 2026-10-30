@@ -259,6 +259,41 @@ paths:
                 status: 409
                 code: EMAIL_ALREADY_USED
                 title: Email already used
+    delete:
+      tags: [Compte]
+      operationId: deleteMe
+      summary: Détruire mon compte
+      description: |
+        Écran S17 → S25 Détruire le compte, bouton de confirmation (US-35 chef, US-36 second). Action définitive. Les conséquences affichées par S25 viennent de `GET /pets` et `GET /pets/{id}/owners`.
+
+        Règles appliquées (hypothèses Q1, à valider par l'équipe et l'avocate) :
+        - Compte : `user_account` supprimé (profil, mot de passe), toutes les sessions révoquées (`refresh_token`), appareils (`device`) et invitations en attente envoyées supprimés.
+        - Chien dont je suis second : seul mon lien *posséder* disparaît (RG16, US-36).
+        - Chien dont je suis chef avec au moins un second actif → 409 `CHIEF_TRANSFER_REQUIRED` : transférer d'abord le rôle de chef (RG73, RG74). Le compte n'est pas supprimé.
+        - Chien dont je suis le seul propriétaire : localisation et identité de l'animal effacées ; métriques santé anonymisées et conservées si `anonymizedDataSharing` est actif, sinon effacées ; collier dissocié et réinitialisé (US-35).
+        - Rendez-vous et dossiers déjà transmis à une clinique : archivés côté Portail (hors sprint).
+      x-status: provisoire
+      x-depends-on: [T1, D15, Q1]
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Compte détruit. L'app efface ses jetons et revient à S19 Connexion.
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '409':
+          description: Je suis chef d'au moins un chien qui a un second actif ; transférer le rôle avant de détruire le compte. `detail` cite les chiens concernés.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example:
+                status: 409
+                code: CHIEF_TRANSFER_REQUIRED
+                title: Chief role transfer required
+                detail: "Nala"
 
   /me/preferences:
     get:
