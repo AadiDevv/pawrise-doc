@@ -758,6 +758,64 @@ paths:
               schema: { $ref: '#/components/schemas/Problem' }
               example: { status: 404, code: PET_NOT_FOUND, title: Pet not found }
 
+  /pets/{petId}/health/{indicator}:
+    parameters:
+      - { name: petId, in: path, required: true, schema: { type: string, format: uuid } }
+      - { name: indicator, in: path, required: true, schema: { $ref: '#/components/schemas/IndicatorCode' } }
+    get:
+      tags: [Santé]
+      operationId: getPetIndicator
+      summary: Détail d'un indicateur santé
+      description: |
+        Écran S02 Détail indicateur (US-02), ouvert depuis une tuile de S01 : état, valeur actuelle, message simple, détail, courbe sur la période choisie, plage normale. Série non paginée, bornée par `period` (convention 5).
+
+        Règles appliquées (D10) :
+        - Série lue par API-CORE dans TimescaleDB (lecture seule) : `today` = 24 points horaires, `7d` = 7 points journaliers, `30d` = 30 points journaliers. Point sans mesure : `value` à `null` (trou dans la courbe).
+        - `state`, `message`, `detail`, `normalRange` : IA-ENGINE (I5) ; à `null` s'il est indisponible. Textes en français (convention 6).
+        - Unité fixe par indicateur (champ `unit`) : `heart_rate` bpm (moyenne), `atrial_fibrillation` nombre d'épisodes irréguliers, `activity` minutes actives, `sleep` minutes de sommeil, `temperature` °C (moyenne).
+        - Fibrillation : la maquette n'affiche que `today` (pas de choix de période) ; l'API accepte quand même les trois.
+        - Chien inexistant ou d'un autre compte → 404 `PET_NOT_FOUND`.
+      x-status: provisoire
+      x-depends-on: [T1, D10]
+      security:
+        - bearerAuth: []
+      parameters:
+        - { name: period, in: query, required: false, schema: { type: string, enum: [today, 7d, 30d], default: today } }
+      responses:
+        '200':
+          description: Détail de l'indicateur sur la période.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/IndicatorDetail' }
+              example:
+                indicator: heart_rate
+                period: today
+                unit: bpm
+                state: watch
+                current: 112
+                message: "Le rythme cardiaque de Nala est inhabituellement élevé depuis 45 minutes."
+                detail: "Au repos, il reste au-dessus de 100 bpm. Si cela dure, parlez-en à un vétérinaire."
+                normalRange: { min: 60, max: 100 }
+                points:
+                  - { at: "2026-10-30T08:00:00Z", value: 84 }
+                  - { at: "2026-10-30T09:00:00Z", value: 112 }
+        '400':
+          description: "Période inconnue (`VALIDATION_FAILED`, code `INVALID_PERIOD`)."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/ValidationProblem' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Chien inexistant ou d'un autre compte.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: PET_NOT_FOUND, title: Pet not found }
+
 components:
   securitySchemes:
     bearerAuth:
@@ -895,6 +953,40 @@ components:
         weightKg: { type: [number, 'null'], exclusiveMinimum: 0 }
         heightCm: { type: [number, 'null'], exclusiveMinimum: 0 }
         medicalNotes: { type: [string, 'null'], maxLength: 2000 }
+
+    IndicatorCode:
+      type: string
+      enum: [heart_rate, atrial_fibrillation, activity, sleep, temperature]
+
+    IndicatorDetail:
+      type: object
+      required: [indicator, period, unit, state, current, message, detail, normalRange, points]
+      properties:
+        indicator: { $ref: '#/components/schemas/IndicatorCode' }
+        period: { type: string, enum: [today, 7d, 30d] }
+        unit: { type: string, enum: [bpm, count, min, celsius], description: "Fixe par indicateur ; exception à la convention 8 (unité dans le nom du champ), car la série est commune aux 5 indicateurs." }
+        state:
+          oneOf: [{ $ref: '#/components/schemas/HealthState' }, { type: 'null' }]
+        current: { type: [number, 'null'], description: "Valeur actuelle (titre de l'écran), dans `unit`." }
+        message: { type: [string, 'null'], description: Message simple, sans connaissance médicale (IA-ENGINE). }
+        detail: { type: [string, 'null'], description: Explication un peu plus poussée (IA-ENGINE). }
+        normalRange:
+          oneOf:
+            - type: object
+              required: [min, max]
+              properties:
+                min: { type: number }
+                max: { type: number }
+            - { type: 'null' }
+          description: Plage habituelle tracée sur la courbe ; `null` si l'indicateur n'en a pas.
+        points:
+          type: array
+          items:
+            type: object
+            required: [at, value]
+            properties:
+              at: { type: string, format: date-time, description: Début de l'heure ou du jour (UTC). }
+              value: { type: [number, 'null'] }
 
     HealthState:
       type: string

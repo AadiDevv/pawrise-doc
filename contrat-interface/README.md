@@ -4,11 +4,11 @@ Mission sprint 1 : contrat REST entre l'app propriétaire et l'API-CORE. Le Port
 
 ## Où j'en suis
 
-- **Fait (2026-10-24 → 30)** : C2 validé. `openapi.yaml` créé : `POST /auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout`, `GET/PATCH /me`, `GET/PATCH /me/preferences`, `DELETE /me` (provisoires) : C3 écrit. C4 : `GET /pets`, `POST /pets`, `POST /pets/{id}/photo` (photos d'exemple embarquées dans l'app, clé stockée), `PATCH /pets/{id}`, `GET /breeds` : C4 écrit. C5 : `GET/PUT /pets/{id}/collar` (un seul PUT pour associer et remplacer). C6 : `GET /pets/{id}/health`. Écarts D13, D14, D15 ajoutés ; D15 tranché (table `refresh_token`, BDD à mettre à jour) ; D9 tranché (colliers enregistrés avant la vente) ; D10 tranché (API-CORE lit TimescaleDB en lecture seule, score par l'IA-ENGINE ; `context/architecture.md` mis à jour, à confirmer avec Yassine) ; `maquette-a-modifier.md` (M1–M5) ; sommaire `../context/references.md`.
-- **Question en cours** : C6, `GET /pets/{id}/health/{indicator}?period=` (S02 Détail indicateur).
+- **Fait (2026-10-24 → 30)** : C2 validé. `openapi.yaml` créé : `POST /auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout`, `GET/PATCH /me`, `GET/PATCH /me/preferences`, `DELETE /me` (provisoires) : C3 écrit. C4 : `GET /pets`, `POST /pets`, `POST /pets/{id}/photo` (photos d'exemple embarquées dans l'app, clé stockée), `PATCH /pets/{id}`, `GET /breeds` : C4 écrit. C5 : `GET/PUT /pets/{id}/collar` (un seul PUT pour associer et remplacer). C6 : `GET /pets/{id}/health`, `GET /pets/{id}/health/{indicator}`. Écarts D13, D14, D15 ajoutés ; D15 tranché (table `refresh_token`, BDD à mettre à jour) ; D9 tranché (colliers enregistrés avant la vente) ; D10 tranché (API-CORE lit TimescaleDB en lecture seule, score par l'IA-ENGINE ; `context/architecture.md` mis à jour, à confirmer avec Yassine) ; `maquette-a-modifier.md` (M1–M5) ; sommaire `../context/references.md`.
+- **Question en cours** : C6, rappels `GET/POST /pets/{id}/reminders` (D3).
 - **BDD à mettre à jour** (local `bdd/` + `.drawio`, puis Notion) : table `refresh_token` (D15), colonnes `pet.height_cm` et `pet.medical_notes` (D2), race `mixed` « Croisé » dans les données de `breed` (D2), `mcd-doc.md` ❓ « Qui crée un collier » → Pawrise avant la vente + script de colliers de départ (D9).
 - Validé 2026-10-30 : `DELETE /me`, chef avec un second actif → 409 `CHIEF_TRANSFER_REQUIRED` (transfert d'abord, M4).
-- **Ensuite** : C6 suite → `GET /pets/{id}/health/{indicator}`, rappels (D3). Puis C7 Localisation.
+- **Ensuite** : C6 suite → rappels (D3). Puis C7 Localisation.
 - **Méthode** : un endpoint à la fois ; à chaque avancée, mettre à jour `openapi.yaml`, `questions.md`, la carte (`carte-contrat.html`, puis republier l'artifact avec son URL), puis commit + push (github.com/AadiDevv/pawrise-doc).
 - **En attente de l'équipe** : T1, Q1, Q2, Q3 (voir `questions.md`).
 

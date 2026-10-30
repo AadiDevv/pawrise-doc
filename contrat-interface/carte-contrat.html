@@ -151,7 +151,7 @@ const DOMAINS=[
   {v:["PUT"],p:"/pets/{id}/collar",st:"written",sc:[["S10","Associer un collier"],["S11","Remplacer le collier"]],g:["D9"],r:"rien",w:"nouveau code ; l'ancien est dissocié ; une notification est créée"}]},
  {name:"Santé",code:"C6",s:"doing",eps:[
   {v:["GET"],p:"/pets/{id}/health",st:"written",sc:[["S01","Santé"]],g:["D10"],r:"score bien-être, état, synthèse, 5 indicateurs, batterie, collier connecté",w:"rien"},
-  {v:["GET"],p:"/pets/{id}/health/{indicator}?period=",sc:[["S02","Détail indicateur"]],g:["D10"],r:"état, valeur, message, série de points par période, plage normale",w:"rien"},
+  {v:["GET"],p:"/pets/{id}/health/{indicator}?period=",st:"written",sc:[["S02","Détail indicateur"]],g:["D10"],r:"état, valeur, message, série de points par période, plage normale",w:"rien"},
   {v:["GET","POST"],p:"/pets/{id}/reminders",sc:[["S12","Rappels"]],g:["D3"],r:"type, nom, échéance, état (à venir, en retard, effectué)",w:"créer un rappel"},
   {v:["PATCH","DELETE"],p:"/reminders/{id}",sc:[["S12","Rappels"]],g:["D3"],r:"rien",w:"modifier, marquer effectué ou rouvrir, supprimer"}]},
  {name:"Localisation",code:"C7",s:"todo",eps:[
