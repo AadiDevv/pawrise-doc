@@ -4,9 +4,9 @@ Mission sprint 1 : contrat REST entre l'app propriétaire et l'API-CORE. Le Port
 
 ## Où j'en suis
 
-- **Fait (2026-10-24 → 30)** : C2 validé. `openapi.yaml` créé : `POST /auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout` (provisoires). Écarts D13, D14, D15 ajoutés ; `maquette-a-modifier.md` (M1–M3) ; sommaire `../context/references.md`.
-- **Question en cours** : D15 — stocker les jetons de rafraîchissement en BDD (table `refresh_token`, révocation possible) ou JWT sans état (pas de table, aucune session révocable) ? Recommandation : table, pour les seuls jetons de rafraîchissement.
-- **Ensuite** : C3 suite → `GET/PATCH /me` (S17 Mon profil), `GET/PATCH /me/preferences`, `DELETE /me`. Puis C4 Animaux.
+- **Fait (2026-10-24 → 30)** : C2 validé. `openapi.yaml` créé : `POST /auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout`, `GET/PATCH /me` (provisoires). Écarts D13, D14, D15 ajoutés ; D15 tranché (table `refresh_token`, BDD à mettre à jour) ; `maquette-a-modifier.md` (M1–M3) ; sommaire `../context/references.md`.
+- **Question en cours** : D6 pour `GET/PATCH /me/preferences` — « Partage de localisation » : avec qui ? (sens flou dans la maquette).
+- **Ensuite** : C3 suite → `GET/PATCH /me/preferences` (S17 Confidentialité), `DELETE /me`. Puis C4 Animaux.
 - **Méthode** : un endpoint à la fois ; à chaque avancée, mettre à jour `openapi.yaml`, `questions.md`, la carte (`carte-contrat.html`, puis republier l'artifact avec son URL), puis commit + push (github.com/AadiDevv/pawrise-doc).
 - **En attente de l'équipe** : T1, Q1, Q2, Q3 (voir `questions.md`).
 

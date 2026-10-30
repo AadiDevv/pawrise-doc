@@ -85,7 +85,7 @@ aside section{display:grid;gap:10px}
 <div class="wrap">
   <header>
     <h1>Contrat app mobile ↔ API-CORE</h1>
-    <p class="meta">Pawrise Care, sprint 1. Sources : <a class="doc" href="https://github.com/AadiDevv/pawrise-doc/tree/main/contrat-interface" target="_blank" rel="noopener">contrat-interface/ sur GitHub</a>. Clique une étape pour ouvrir son document. Mis à jour le 24 octobre 2026.</p>
+    <p class="meta">Pawrise Care, sprint 1. Sources : <a class="doc" href="https://github.com/AadiDevv/pawrise-doc/tree/main/contrat-interface" target="_blank" rel="noopener">contrat-interface/ sur GitHub</a>. Clique une étape pour ouvrir son document. Mis à jour le 30 octobre 2026.</p>
   </header>
 
   <section aria-labelledby="t-steps" style="display:grid;gap:10px">
@@ -137,7 +137,7 @@ const DOMAINS=[
   {v:["POST"],p:"/auth/login",st:"written",sc:[["S19","Connexion"]],g:["T1"],r:"rien",w:"e-mail, mot de passe"},
   {v:["POST"],p:"/auth/logout",st:"written",sc:[["S17","Se déconnecter"]],g:["T1","D15"],r:"rien",w:"fermeture de session sur l'appareil"},
   {v:["POST"],p:"/auth/refresh",st:"written",sc:[],g:["T1","D15"],r:"rien (appel automatique quand le jeton expire)",w:"jeton de rafraîchissement"},
-  {v:["GET","PATCH"],p:"/me",sc:[["S17","Mon profil"]],g:["D7"],r:"initiales, nom, e-mail, téléphone",w:"nom, e-mail, téléphone"},
+  {v:["GET","PATCH"],p:"/me",st:"written",sc:[["S17","Mon profil"]],g:["D7"],r:"initiales, nom, e-mail, téléphone",w:"nom, e-mail, téléphone"},
   {v:["GET","PATCH"],p:"/me/preferences",sc:[["S17","Confidentialité"]],g:["D6"],r:"partage de localisation, notifications santé, données anonymisées",w:"les trois interrupteurs"},
   {v:["DELETE"],p:"/me",sc:[["S25","Détruire le compte"],["S26","Confirmation"]],g:["Q1"],r:"par chien : mon rôle, code collier, chef ou seconds ; rendez-vous confirmés",w:"confirmer la destruction"}]},
  {name:"Animaux",code:"C4",s:"todo",eps:[
