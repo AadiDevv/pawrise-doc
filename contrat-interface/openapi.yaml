@@ -15,6 +15,8 @@ tags:
     description: Inscription, connexion, profil, suppression (C3)
   - name: Animaux
     description: Liste, ajout, édition des chiens (C4)
+  - name: Colliers
+    description: Association, état, remplacement du collier (C5)
 
 paths:
   /auth/register:
@@ -410,7 +412,7 @@ paths:
       operationId: createPet
       summary: Ajouter un chien
       description: |
-        Écran S09 Ajouter un chien (US-11), étapes nom → photo → naissance → sexe → race → poids → taille → infos santé → récapitulatif. L'app appelle cet endpoint à la fin du récapitulatif, puis enchaîne sur l'association du collier (`POST /pets/{id}/collar`) et la photo (`POST /pets/{id}/photo`). Si l'association échoue, le chien existe sans collier (`collarSerial: null`).
+        Écran S09 Ajouter un chien (US-11), étapes nom → photo → naissance → sexe → race → poids → taille → infos santé → récapitulatif. L'app appelle cet endpoint à la fin du récapitulatif, puis enchaîne sur l'association du collier (`PUT /pets/{petId}/collar`) et la photo (`POST /pets/{id}/photo`). Si l'association échoue, le chien existe sans collier (`collarSerial: null`).
 
         Règles appliquées :
         - Le créateur devient propriétaire chef (RG73).
@@ -608,6 +610,102 @@ paths:
             application/problem+json:
               schema: { $ref: '#/components/schemas/Problem' }
 
+  /pets/{petId}/collar:
+    parameters:
+      - { name: petId, in: path, required: true, schema: { type: string, format: uuid } }
+    get:
+      tags: [Colliers]
+      operationId: getPetCollar
+      summary: Voir le collier du chien
+      description: |
+        Feuille « Collier » ouverte depuis la pastille batterie de S01 Santé (US-13) : batterie, réseau, code, modèle.
+
+        Règles appliquées :
+        - `serialNumber`, `model` : App-DB (`collar`). `batteryPct`, `lastSeenAt`, `connected` : dernière mesure reçue, lue dans TimescaleDB (RG24, D10).
+        - `connected` est calculé par l'API (dernière mesure récente ; seuil fixé côté serveur, 3 min dans la maquette).
+        - Chien sans collier → 404 `COLLAR_NOT_ASSIGNED` ; chien inexistant ou d'un autre compte → 404 `PET_NOT_FOUND`.
+      x-status: provisoire
+      x-depends-on: [T1, D10]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Collier actuel du chien.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Collar' }
+              example:
+                serialNumber: PW-C28A4F
+                model: C2
+                batteryPct: 72
+                connected: true
+                lastSeenAt: "2026-10-30T09:12:04Z"
+                assignedAt: "2026-09-02T18:40:00Z"
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Chien introuvable (`PET_NOT_FOUND`) ou sans collier (`COLLAR_NOT_ASSIGNED`).
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+    put:
+      tags: [Colliers]
+      operationId: setPetCollar
+      summary: Associer ou remplacer le collier du chien
+      description: |
+        Deux écrans, un seul endpoint (le collier du chien est remplacé par celui du code) :
+        - S10 Associer un collier, après l'ajout du chien (US-12) : code `PW-XXXXXX` scanné (QR) ou saisi.
+        - Feuille « Collier » → « Remplacer le collier » (US-13) : nouveau code ; l'ancien collier est dissocié.
+
+        Règles appliquées (D9 validé : les colliers sont enregistrés par Pawrise avant la vente) :
+        - Code normalisé (majuscules, sans espaces) puis cherché dans `collar.serial_number` ; inconnu ou retiré (`retired`) → 400 `UNKNOWN_COLLAR`.
+        - Collier déjà affecté à un autre chien → 409 `COLLAR_ALREADY_ASSIGNED` (RG21).
+        - Collier libre : passé `active` (`activated_at` à la première activation), puis nouvelle affectation `collar_assignment` (RG20, RG23).
+        - Remplacement : l'affectation de l'ancien collier est clôturée (`unassigned_at`, RG22), l'ancien collier repasse `inactive` ; une notification « Nouveau collier associé » est créée pour les propriétaires (C8, D4).
+        - Même code que le collier actuel : rien ne change, 200.
+        - Tout propriétaire du chien, chef ou second (hypothèse Q2).
+      x-status: provisoire
+      x-depends-on: [T1, D4, Q2]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SetCollarRequest' }
+            example: { serialNumber: PW-C28A4F }
+      responses:
+        '200':
+          description: Collier associé.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Collar' }
+        '400':
+          description: "Code invalide (`VALIDATION_FAILED`). Codes par champ : `REQUIRED`, `INVALID_COLLAR_CODE` (format), `UNKNOWN_COLLAR` (absent du stock ou retiré)."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/ValidationProblem' }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Chien inexistant ou d'un autre compte.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: PET_NOT_FOUND, title: Pet not found }
+        '409':
+          description: Collier déjà associé à un autre chien (RG21).
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 409, code: COLLAR_ALREADY_ASSIGNED, title: Collar already assigned }
+
 components:
   securitySchemes:
     bearerAuth:
@@ -745,6 +843,24 @@ components:
         weightKg: { type: [number, 'null'], exclusiveMinimum: 0 }
         heightCm: { type: [number, 'null'], exclusiveMinimum: 0 }
         medicalNotes: { type: [string, 'null'], maxLength: 2000 }
+
+    Collar:
+      type: object
+      required: [serialNumber, model, batteryPct, connected, lastSeenAt, assignedAt]
+      properties:
+        serialNumber: { type: string, description: "Code `PW-XXXXXX` (D9)." }
+        model: { type: string, description: "`collar.hardware_version` ; l'app affiche « Pawrise Collar <model> »." }
+        batteryPct: { type: [integer, 'null'], minimum: 0, maximum: 100, description: "Dernière mesure (TimescaleDB) ; `null` si aucune mesure reçue." }
+        connected: { type: boolean, description: "Dernière mesure récente (« Signal fort » / « Déconnecté »)." }
+        lastSeenAt: { type: [string, 'null'], format: date-time }
+        assignedAt: { type: string, format: date-time }
+
+    SetCollarRequest:
+      type: object
+      additionalProperties: false
+      required: [serialNumber]
+      properties:
+        serialNumber: { type: string, maxLength: 50, description: "Code scanné ou saisi, `PW-` + 6 caractères." }
 
     UpdatePetRequest:
       type: object

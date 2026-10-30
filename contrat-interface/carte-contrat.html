@@ -126,7 +126,7 @@ aside section{display:grid;gap:10px}
 <script>
 const STEPS=[
   ["C1","Écrans → données","done","ecrans.md"],["C2","Conventions","done","conventions.md"],["C3","Compte et auth","done","openapi.yaml"],["C4","Animaux","done","openapi.yaml"],
-  ["C5","Colliers","doing","openapi.yaml"],["C6","Santé","todo","openapi.yaml"],["C7","Localisation","todo","openapi.yaml"],["C8","Notifications","todo","openapi.yaml"],
+  ["C5","Colliers","done","openapi.yaml"],["C6","Santé","doing","openapi.yaml"],["C7","Localisation","todo","openapi.yaml"],["C8","Notifications","todo","openapi.yaml"],
   ["C9","Chat IA","todo","openapi.yaml"],["C10","Partage","todo","openapi.yaml"],["C11","Relecture équipe","todo"]];
 const GH="https://github.com/AadiDevv/pawrise-doc/blob/main/contrat-interface/";
 const LABEL={done:"fait",doing:"en cours",todo:"à faire",open:"à trancher",written:"écrit, provisoire"};
@@ -146,11 +146,10 @@ const DOMAINS=[
   {v:["POST"],p:"/pets/{id}/photo",st:"written",sc:[["S09","Ajouter un chien"]],g:[],r:"rien",w:"photo (fichier de 1,5 Mo maximum, ou clé d'une photo d'exemple embarquée dans l'app)"},
   {v:["PATCH"],p:"/pets/{id}",st:"written",sc:[["S05","Édition du chien"]],g:["D2"],r:"photo, nom, race, naissance, sexe, poids, taille, infos santé",w:"les mêmes champs"},
   {v:["GET"],p:"/breeds",st:"written",sc:[["S09","Ajouter un chien"]],g:[],r:"liste des races avec recherche",w:"rien"}]},
- {name:"Colliers",code:"C5",s:"doing",eps:[
-  {v:["GET"],p:"/pets/{id}/collar",sc:[["S11","Collier"]],g:["D9","D10"],r:"batterie, réseau, code du collier, modèle",w:"rien"},
-  {v:["POST"],p:"/pets/{id}/collar",sc:[["S10","Associer un collier"]],g:["D9"],r:"rien",w:"code PW-XXXXXX par QR ou saisie ; erreur si invalide ou déjà associé"},
-  {v:["PUT"],p:"/pets/{id}/collar",sc:[["S11","Remplacer le collier"]],g:["D9"],r:"rien",w:"nouveau code ; l'ancien est dissocié ; une notification est créée"}]},
- {name:"Santé",code:"C6",s:"todo",eps:[
+ {name:"Colliers",code:"C5",s:"done",eps:[
+  {v:["GET"],p:"/pets/{id}/collar",st:"written",sc:[["S11","Collier"]],g:["D9","D10"],r:"batterie, réseau, code du collier, modèle",w:"rien"},
+  {v:["PUT"],p:"/pets/{id}/collar",st:"written",sc:[["S10","Associer un collier"],["S11","Remplacer le collier"]],g:["D9"],r:"rien",w:"nouveau code ; l'ancien est dissocié ; une notification est créée"}]},
+ {name:"Santé",code:"C6",s:"doing",eps:[
   {v:["GET"],p:"/pets/{id}/health",sc:[["S01","Santé"]],g:["D10"],r:"score bien-être, état, synthèse, 5 indicateurs, batterie, collier connecté",w:"rien"},
   {v:["GET"],p:"/pets/{id}/health/{indicator}?period=",sc:[["S02","Détail indicateur"]],g:["D10"],r:"état, valeur, message, série de points par période, plage normale",w:"rien"},
   {v:["GET","POST"],p:"/pets/{id}/reminders",sc:[["S12","Rappels"]],g:["D3"],r:"type, nom, échéance, état (à venir, en retard, effectué)",w:"créer un rappel"},
@@ -188,7 +187,7 @@ const Q=[
  ["D5","Zones : emoji, zone interdite, par chien","open","L'API suit la BDD"],
  ["D6","Préférences de confidentialité","open","Localisation = téléphone ; consent_type + préférences du compte"],
  ["D7","Nom en un champ ou deux","open","Deux champs, maquette à adapter"],
- ["D9","Code collier et création des colliers","open","Code PW = serial_number"],
+ ["D9","Code collier et création des colliers","done","Tranché : colliers enregistrés avant la vente"],
  ["D10","Données hors App-DB (score, position…)","open","Exposées par API-CORE"],
  ["D12","Chat : fil unique, suggestions","open","Une conversation active par chien"],
  ["D13","CGU à l'inscription absentes de la maquette","open","acceptedTermsVersion exigé (RG11)"],

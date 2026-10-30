@@ -27,7 +27,7 @@ Domaines : **Compte** · **Animaux** · **Colliers** · **Santé** · **Localisa
 | 08 | S04 Chat | en-tête : photo, nom, collier connecté ; messages (rôle, texte) ; suggestions de réponse sous un message de Pawrise ; « en train d'écrire » | message libre ou suggestion choisie | `GET /pets/{id}/conversation`, `POST .../messages` (Chat) | D12 |
 | 10 | S04 → S08 « Contacter un vétérinaire » | — | — | navigation seule | D11 |
 | 11 | S09 Ajouter un chien (étapes) | photos d'exemple ; liste des races (recherche) | photo (fichier ≤ 1,5 Mo ou exemple), nom, naissance, sexe, race, poids, taille, infos santé | `POST /pets`, `POST /pets/{id}/photo`, `GET /breeds` (Animaux) | D2 |
-| 12 | S10 Associer un collier | — | code `PW-XXXXXX` par QR ou saisie ; erreur si invalide ou déjà associé | `POST /pets/{id}/collar` (Colliers) | D9 |
+| 12 | S10 Associer un collier | — | code `PW-XXXXXX` par QR ou saisie ; erreur si invalide ou déjà associé | `PUT /pets/{id}/collar` (Colliers) | D9 |
 | 15 | S12 Rappels | rappels du chien : type (vaccin, traitement, autre), nom, échéance, état (à venir, en retard, effectué) | créer, modifier, marquer effectué ou rouvrir, supprimer | `GET/POST /pets/{id}/reminders`, `PATCH/DELETE /reminders/{id}` (Santé) | D3, C-1 |
 | 16 | S12 → S13 échéance < 24 h | — | crée une notification « Soin à prévoir » | côté serveur (Notifications) | D4 |
 | 17 | S13 Notifications & alertes | chien, titre, type (santé, carte, rappel, véto), lue ou non, date ; filtre non lues | marquer lue (une ou toutes) ; ouvrir → écran concerné | `GET /notifications`, `PATCH /notifications/{id}`, `POST /notifications/read-all` (Notifications) | D4, C-1 |

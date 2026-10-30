@@ -4,11 +4,11 @@ Mission sprint 1 : contrat REST entre l'app propriétaire et l'API-CORE. Le Port
 
 ## Où j'en suis
 
-- **Fait (2026-10-24 → 30)** : C2 validé. `openapi.yaml` créé : `POST /auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout`, `GET/PATCH /me`, `GET/PATCH /me/preferences`, `DELETE /me` (provisoires) : C3 écrit. C4 : `GET /pets`, `POST /pets`, `POST /pets/{id}/photo` (photos d'exemple embarquées dans l'app, clé stockée), `PATCH /pets/{id}`, `GET /breeds` : C4 écrit. Écarts D13, D14, D15 ajoutés ; D15 tranché (table `refresh_token`, BDD à mettre à jour) ; `maquette-a-modifier.md` (M1–M5) ; sommaire `../context/references.md`.
-- **Question en cours** : C5 Colliers, `POST /pets/{id}/collar` (D9).
-- **BDD à mettre à jour** (local `bdd/` + `.drawio`, puis Notion) : table `refresh_token` (D15), colonnes `pet.height_cm` et `pet.medical_notes` (D2), race `mixed` « Croisé » dans les données de `breed` (D2).
+- **Fait (2026-10-24 → 30)** : C2 validé. `openapi.yaml` créé : `POST /auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout`, `GET/PATCH /me`, `GET/PATCH /me/preferences`, `DELETE /me` (provisoires) : C3 écrit. C4 : `GET /pets`, `POST /pets`, `POST /pets/{id}/photo` (photos d'exemple embarquées dans l'app, clé stockée), `PATCH /pets/{id}`, `GET /breeds` : C4 écrit. C5 : `GET/PUT /pets/{id}/collar` (un seul PUT pour associer et remplacer). Écarts D13, D14, D15 ajoutés ; D15 tranché (table `refresh_token`, BDD à mettre à jour) ; D9 tranché (colliers enregistrés avant la vente) ; `maquette-a-modifier.md` (M1–M5) ; sommaire `../context/references.md`.
+- **Question en cours** : C6 Santé, `GET /pets/{id}/health` (D10).
+- **BDD à mettre à jour** (local `bdd/` + `.drawio`, puis Notion) : table `refresh_token` (D15), colonnes `pet.height_cm` et `pet.medical_notes` (D2), race `mixed` « Croisé » dans les données de `breed` (D2), `mcd-doc.md` ❓ « Qui crée un collier » → Pawrise avant la vente + script de colliers de départ (D9).
 - Validé 2026-10-30 : `DELETE /me`, chef avec un second actif → 409 `CHIEF_TRANSFER_REQUIRED` (transfert d'abord, M4).
-- **Ensuite** : C5 Colliers → `POST`, `GET`, `PUT /pets/{id}/collar`. Puis C6 Santé.
+- **Ensuite** : C6 Santé → `GET /pets/{id}/health`, `GET /pets/{id}/health/{indicator}`, rappels. Puis C7 Localisation.
 - **Méthode** : un endpoint à la fois ; à chaque avancée, mettre à jour `openapi.yaml`, `questions.md`, la carte (`carte-contrat.html`, puis republier l'artifact avec son URL), puis commit + push (github.com/AadiDevv/pawrise-doc).
 - **En attente de l'équipe** : T1, Q1, Q2, Q3 (voir `questions.md`).
 
@@ -45,7 +45,6 @@ Sources croisées pour chaque sujet : BDD `../bdd/`, maquette `../pawrise-figma/
 
 ### À faire
 
-- [ ] **C6** OpenAPI — Santé (indicateurs, périodes, score, rappels)
 - [ ] **C7** OpenAPI — Localisation & géozones
 - [ ] **C8** OpenAPI — Alertes & notifications
 - [ ] **C9** OpenAPI — Chat IA & escalade
@@ -55,7 +54,7 @@ Sources croisées pour chaque sujet : BDD `../bdd/`, maquette `../pawrise-figma/
 
 ### En cours
 
-- [ ] **C5** OpenAPI — Colliers (association QR / code, état, remplacement)
+- [ ] **C6** OpenAPI — Santé (indicateurs, périodes, score, rappels)
 - [ ] **B1** BDD co-propriété (D1) : local fait (`mcd-doc.md`, `mld-doc.md`, `.drawio`, `schema.md`, SQL) ; Notion en fin de session
 
 ### En attente de l'équipe
@@ -72,6 +71,7 @@ Sources croisées pour chaque sujet : BDD `../bdd/`, maquette `../pawrise-figma/
 
 ### Fait
 
+- [x] **C5** OpenAPI — Colliers, écrit en provisoire (2026-10-30)
 - [x] **C4** OpenAPI — Animaux, écrit en provisoire (2026-10-30)
 - [x] **C3** OpenAPI — Compte & auth, écrit en provisoire (2026-10-30)
 
