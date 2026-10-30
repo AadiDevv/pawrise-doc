@@ -17,6 +17,8 @@ tags:
     description: Liste, ajout, édition des chiens (C4)
   - name: Colliers
     description: Association, état, remplacement du collier (C5)
+  - name: Santé
+    description: Score, indicateurs, séries, rappels (C6)
 
 paths:
   /auth/register:
@@ -621,7 +623,7 @@ paths:
         Feuille « Collier » ouverte depuis la pastille batterie de S01 Santé (US-13) : batterie, réseau, code, modèle.
 
         Règles appliquées :
-        - `serialNumber`, `model` : App-DB (`collar`). `batteryPct`, `lastSeenAt`, `connected` : dernière mesure reçue, lue dans TimescaleDB (RG24, D10).
+        - `serialNumber`, `model` : App-DB (`collar`). `batteryPct`, `lastSeenAt`, `connected` : dernière mesure reçue, lue par API-CORE dans TimescaleDB en lecture seule (RG24, D10).
         - `connected` est calculé par l'API (dernière mesure récente ; seuil fixé côté serveur, 3 min dans la maquette).
         - Chien sans collier → 404 `COLLAR_NOT_ASSIGNED` ; chien inexistant ou d'un autre compte → 404 `PET_NOT_FOUND`.
       x-status: provisoire
@@ -705,6 +707,56 @@ paths:
             application/problem+json:
               schema: { $ref: '#/components/schemas/Problem' }
               example: { status: 409, code: COLLAR_ALREADY_ASSIGNED, title: Collar already assigned }
+
+  /pets/{petId}/health:
+    parameters:
+      - { name: petId, in: path, required: true, schema: { type: string, format: uuid } }
+    get:
+      tags: [Santé]
+      operationId: getPetHealth
+      summary: Tableau de bord santé du chien
+      description: |
+        Écran S01 Santé (US-01) : score bien-être, état, message de synthèse, 5 indicateurs (valeur et état), batterie et collier connecté. Le détail d'un indicateur (message, série, plage normale) est dans `GET /pets/{petId}/health/{indicator}`.
+
+        Règles appliquées (D10) :
+        - Valeurs, batterie, connexion : lues par API-CORE dans TimescaleDB (lecture seule), sur les dernières 24 h.
+        - `score`, `state`, `summary`, états des indicateurs : calculés par l'IA-ENGINE (I5). `summary` est un texte généré, donc en français, seule langue du MVP (convention 6 : pas d'en-tête de langue).
+        - IA-ENGINE indisponible : 200 avec `score`, `state`, `summary` à `null` et les valeurs brutes quand même ; l'app affiche les valeurs sans score.
+        - Pas encore de mesure (collier jamais connecté) ou chien sans collier : indicateurs à `null`, `collar` à `null` si aucun collier.
+        - Rythme cardiaque et fibrillation : capteur non identifié (D10) ; `null` tant qu'ils ne sont pas mesurés.
+        - Chien inexistant ou d'un autre compte → 404 `PET_NOT_FOUND`.
+      x-status: provisoire
+      x-depends-on: [T1, D10]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: État de santé actuel.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/HealthDashboard' }
+              example:
+                score: 87
+                state: good
+                summary: "Nala va bien : activité, sommeil et température dans ses habitudes."
+                indicators:
+                  heartRate: { state: good, heartRateBpm: 78 }
+                  atrialFibrillation: { state: good, irregularBeatDetected: false }
+                  activity: { state: good, activityMin: 94 }
+                  sleep: { state: good, sleepMin: 450 }
+                  temperature: { state: good, temperatureC: 38.6 }
+                collar: { batteryPct: 72, connected: true, lastSeenAt: "2026-10-30T09:12:04Z" }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '404':
+          description: Chien inexistant ou d'un autre compte.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example: { status: 404, code: PET_NOT_FOUND, title: Pet not found }
 
 components:
   securitySchemes:
@@ -843,6 +895,75 @@ components:
         weightKg: { type: [number, 'null'], exclusiveMinimum: 0 }
         heightCm: { type: [number, 'null'], exclusiveMinimum: 0 }
         medicalNotes: { type: [string, 'null'], maxLength: 2000 }
+
+    HealthState:
+      type: string
+      enum: [good, watch, alert]
+      description: "« Tout va bien », « À surveiller », « Alerte » dans la maquette."
+
+    HealthDashboard:
+      type: object
+      required: [score, state, summary, indicators, collar]
+      properties:
+        score: { type: [integer, 'null'], minimum: 0, maximum: 100, description: Score bien-être (IA-ENGINE). }
+        state:
+          oneOf: [{ $ref: '#/components/schemas/HealthState' }, { type: 'null' }]
+        summary: { type: [string, 'null'], description: Message de synthèse en langage simple (IA-ENGINE). }
+        indicators:
+          type: object
+          required: [heartRate, atrialFibrillation, activity, sleep, temperature]
+          description: Les 5 indicateurs du MVP. Chaque indicateur vaut `null` sans mesure.
+          properties:
+            heartRate:
+              oneOf:
+                - type: object
+                  required: [state, heartRateBpm]
+                  properties:
+                    state: { $ref: '#/components/schemas/HealthState' }
+                    heartRateBpm: { type: integer, description: Moyenne des dernières 24 h. }
+                - { type: 'null' }
+            atrialFibrillation:
+              oneOf:
+                - type: object
+                  required: [state, irregularBeatDetected]
+                  properties:
+                    state: { $ref: '#/components/schemas/HealthState' }
+                    irregularBeatDetected: { type: boolean }
+                - { type: 'null' }
+            activity:
+              oneOf:
+                - type: object
+                  required: [state, activityMin]
+                  properties:
+                    state: { $ref: '#/components/schemas/HealthState' }
+                    activityMin: { type: integer, description: Minutes actives depuis minuit. }
+                - { type: 'null' }
+            sleep:
+              oneOf:
+                - type: object
+                  required: [state, sleepMin]
+                  properties:
+                    state: { $ref: '#/components/schemas/HealthState' }
+                    sleepMin: { type: integer, description: Sommeil de la dernière nuit. }
+                - { type: 'null' }
+            temperature:
+              oneOf:
+                - type: object
+                  required: [state, temperatureC]
+                  properties:
+                    state: { $ref: '#/components/schemas/HealthState' }
+                    temperatureC: { type: number, description: Dernière mesure. }
+                - { type: 'null' }
+        collar:
+          oneOf:
+            - type: object
+              required: [batteryPct, connected, lastSeenAt]
+              properties:
+                batteryPct: { type: [integer, 'null'], minimum: 0, maximum: 100 }
+                connected: { type: boolean }
+                lastSeenAt: { type: [string, 'null'], format: date-time, description: "« Dernières mesures reçues » quand le collier est déconnecté." }
+            - { type: 'null' }
+          description: "`null` si le chien n'a pas de collier."
 
     Collar:
       type: object

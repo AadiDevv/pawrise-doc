@@ -104,7 +104,7 @@ Choix « un seul VPS » : coût et simplicité d'exploitation ; scaling vertical
 | Base | Contenu | Accédée par |
 | --- | --- | --- |
 | APP-DB | Entités métier (utilisateurs, animaux, abonnements, profils véto). ORM Prisma | API-CORE (+ IoT-GATEWAY post-MVP) |
-| TIME-SCALE-DB | Séries temporelles capteurs (TimescaleDB) | DATA-INGESTION, IA-ENGINE |
+| TIME-SCALE-DB | Séries temporelles capteurs (TimescaleDB) | DATA-INGESTION (écriture), IA-ENGINE, API-CORE (lecture seule : mesures brutes, batterie, position, séries ; décision 2026-10-30, D10, à confirmer avec Yassine) |
 | VECTORIAL-DB | Embeddings du corpus véto (pgvector, dimension 1536 — OpenAI) | IA-ENGINE |
 
 ## Interfaces à contractualiser
@@ -117,7 +117,7 @@ Base de travail pour le contrat d'interface : chaque ligne est une frontière en
 | I2 | Collier → Mosquitto | MQTT (topics, QoS, format des Data Packets) | MVP |
 | I3 | Collier → Mobile-App | BLE | MVP |
 | I4 | Mosquitto → DATA-INGESTION (MVP) / → IoT-GATEWAY (post-MVP) | MQTT | MVP |
-| I5 | API-CORE → IA-ENGINE | REST / HTTP | MVP |
+| I5 | API-CORE → IA-ENGINE | REST / HTTP (dont score bien-être et synthèse santé, D10) | MVP |
 | I6 | IA-ENGINE ⇢ données de DATA-INGESTION (lecture, pointillés) | ? (TimescaleDB partagée ?) | MVP |
 | I7 | IoT-GATEWAY → DATA-INGESTION | AMQP (RabbitMQ) selon les fiches ; flèche directe sur le schéma | Post-MVP |
 | I8 | Dialog-API ↔ IA-ENGINE (via Traefik VPS 2) | ? | Post-MVP |

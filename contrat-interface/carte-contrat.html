@@ -150,7 +150,7 @@ const DOMAINS=[
   {v:["GET"],p:"/pets/{id}/collar",st:"written",sc:[["S11","Collier"]],g:["D9","D10"],r:"batterie, réseau, code du collier, modèle",w:"rien"},
   {v:["PUT"],p:"/pets/{id}/collar",st:"written",sc:[["S10","Associer un collier"],["S11","Remplacer le collier"]],g:["D9"],r:"rien",w:"nouveau code ; l'ancien est dissocié ; une notification est créée"}]},
  {name:"Santé",code:"C6",s:"doing",eps:[
-  {v:["GET"],p:"/pets/{id}/health",sc:[["S01","Santé"]],g:["D10"],r:"score bien-être, état, synthèse, 5 indicateurs, batterie, collier connecté",w:"rien"},
+  {v:["GET"],p:"/pets/{id}/health",st:"written",sc:[["S01","Santé"]],g:["D10"],r:"score bien-être, état, synthèse, 5 indicateurs, batterie, collier connecté",w:"rien"},
   {v:["GET"],p:"/pets/{id}/health/{indicator}?period=",sc:[["S02","Détail indicateur"]],g:["D10"],r:"état, valeur, message, série de points par période, plage normale",w:"rien"},
   {v:["GET","POST"],p:"/pets/{id}/reminders",sc:[["S12","Rappels"]],g:["D3"],r:"type, nom, échéance, état (à venir, en retard, effectué)",w:"créer un rappel"},
   {v:["PATCH","DELETE"],p:"/reminders/{id}",sc:[["S12","Rappels"]],g:["D3"],r:"rien",w:"modifier, marquer effectué ou rouvrir, supprimer"}]},
@@ -188,7 +188,7 @@ const Q=[
  ["D6","Préférences de confidentialité","open","Localisation = téléphone ; consent_type + préférences du compte"],
  ["D7","Nom en un champ ou deux","open","Deux champs, maquette à adapter"],
  ["D9","Code collier et création des colliers","done","Tranché : colliers enregistrés avant la vente"],
- ["D10","Données hors App-DB (score, position…)","open","Exposées par API-CORE"],
+ ["D10","Données hors App-DB (score, position…)","doing","Tranché : mesures lues dans TimescaleDB, score par l'IA-ENGINE ; à confirmer (Yassine)"],
  ["D12","Chat : fil unique, suggestions","open","Une conversation active par chien"],
  ["D13","CGU à l'inscription absentes de la maquette","open","acceptedTermsVersion exigé (RG11)"],
  ["D14","Mot de passe : 6 caractères dans la maquette","open","8 minimum"],
