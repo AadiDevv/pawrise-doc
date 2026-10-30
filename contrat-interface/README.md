@@ -9,7 +9,7 @@ Mission sprint 1 : contrat REST entre l'app propriétaire et l'API-CORE. Le Port
 - **BDD à mettre à jour** (local `bdd/` + `.drawio`, puis Notion) : table `refresh_token` (D15), colonnes `pet.height_cm` et `pet.medical_notes` (D2), race `mixed` « Croisé » dans les données de `breed` (D2), `mcd-doc.md` ❓ « Qui crée un collier » → Pawrise avant la vente + script de colliers de départ (D9), table `reminder` et RG28 réécrite (D3), zone du chien : `geo_zone_security.id_pet`, `emoji`, `alerts_enabled`, suppression de `pet_geo_zone`, RG33–RG34 réécrites (D5), table `notification` (D4), colonne `message.quick_replies` (D12).
 - Validé 2026-10-30 : `DELETE /me`, chef avec un second actif → 409 `CHIEF_TRANSFER_REQUIRED` (transfert d'abord, M4).
 - **Ensuite** : BDD locale (`bdd/` + `.drawio`), puis Notion en fin de session, puis C11 relecture équipe (Yassine : D10 et architecture ; équipe : Q1–Q3, M1–M6).
-- **Méthode** : un endpoint à la fois ; à chaque avancée, mettre à jour `openapi.yaml`, `questions.md`, la carte (`carte-contrat.html`, puis republier l'artifact avec son URL), puis commit + push (github.com/AadiDevv/pawrise-doc).
+- **Méthode** : un endpoint à la fois ; à chaque avancée, mettre à jour `openapi.yaml`, `questions.md`, la carte (`carte-contrat.html` ; lancer `python3 build-carte-doc.py` pour réinjecter la doc des endpoints depuis `openapi.yaml`, puis republier l'artifact avec son URL), puis commit + push (github.com/AadiDevv/pawrise-doc).
 - **En attente de l'équipe** : T1, Q1, Q2, Q3 (voir `questions.md`).
 
 ## À synchroniser en fin de session
@@ -30,6 +30,7 @@ Les appels Notion / Confluence / MCP se font en fin de session uniquement. File 
 | `conventions.md` | Règles communes à tous les endpoints (dates, ids, erreurs, pagination…) |
 | `ecrans.md` | Lien US / écran / overlay → données lues et écrites → endpoint (ordre du Figma) |
 | `openapi.yaml` | Le contrat, C3–C10 écrits (provisoires) |
+| `build-carte-doc.py` | Injecte dans la carte la doc de chaque endpoint (résumé, règles, corps, réponses) depuis `openapi.yaml` |
 | `carte-contrat.html` | Source de la carte visuelle (avancement, endpoints ↔ écrans, registre). Modifier ce fichier puis le publier sur l'artifact https://claude.ai/artifact/D2uBEcXosYW5a7KR8ZNcAz (passer cette URL en `url`) |
 
 Sources croisées pour chaque sujet : BDD `../bdd/`, maquette `../pawrise-figma/` (`src/`, `docs/USER_STORIES_FIGMA.md`), architecture `../context/architecture.md`.
