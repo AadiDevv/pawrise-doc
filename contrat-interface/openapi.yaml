@@ -127,6 +127,68 @@ paths:
                 code: TOO_MANY_ATTEMPTS
                 title: Too many attempts
 
+  /auth/refresh:
+    post:
+      tags: [Compte]
+      operationId: refreshSession
+      summary: Renouveler le jeton d'accès
+      description: |
+        Aucun écran : l'app l'appelle seule quand le jeton d'accès expire (convention 6).
+        Échange le jeton de rafraîchissement contre une nouvelle paire de jetons. L'ancien jeton de rafraîchissement devient invalide (rotation à chaque usage).
+
+        Règles appliquées :
+        - Jeton inconnu, expiré ou révoqué → 401 `INVALID_REFRESH_TOKEN` ; l'app renvoie alors vers S19 Connexion.
+        - Un jeton déjà utilisé qui revient est le signe d'un vol : toute la session de cet appareil est révoquée.
+      x-status: provisoire
+      x-depends-on: [T1, D15]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RefreshRequest' }
+      responses:
+        '200':
+          description: Nouvelle paire de jetons.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuthTokens' }
+        '401':
+          description: Jeton de rafraîchissement invalide.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              example:
+                status: 401
+                code: INVALID_REFRESH_TOKEN
+                title: Invalid refresh token
+
+  /auth/logout:
+    post:
+      tags: [Compte]
+      operationId: logout
+      summary: Se déconnecter de cet appareil
+      description: |
+        Écran S17 Paramètres → S19 Connexion (US-26). Révoque le jeton de rafraîchissement envoyé : la session de cet appareil est fermée, les autres appareils restent connectés.
+        Idempotent : un jeton déjà révoqué renvoie aussi 204.
+      x-status: provisoire
+      x-depends-on: [T1, D15]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RefreshRequest' }
+      responses:
+        '204':
+          description: Session fermée.
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+
 components:
   securitySchemes:
     bearerAuth:
@@ -177,13 +239,27 @@ components:
         phoneNumber: { type: [string, 'null'] }
         registeredAt: { type: string, format: date-time }
 
-    AuthSession:
+    AuthTokens:
       type: object
-      required: [user, accessToken, refreshToken]
+      required: [accessToken, refreshToken]
       properties:
-        user: { $ref: '#/components/schemas/User' }
         accessToken: { type: string, description: Jeton court (≈ 15 min). }
-        refreshToken: { type: string, description: Jeton long, échangé via POST /auth/refresh. }
+        refreshToken: { type: string, description: "Jeton long, à usage unique, échangé via POST /auth/refresh." }
+
+    AuthSession:
+      allOf:
+        - $ref: '#/components/schemas/AuthTokens'
+        - type: object
+          required: [user]
+          properties:
+            user: { $ref: '#/components/schemas/User' }
+
+    RefreshRequest:
+      type: object
+      additionalProperties: false
+      required: [refreshToken]
+      properties:
+        refreshToken: { type: string }
 
     Problem:
       type: object
