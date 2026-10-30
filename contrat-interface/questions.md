@@ -51,7 +51,7 @@ Un seul type de jeton, rôle `owner` / `vet` dans le payload. Les rôles propres
 | Taille (cm) | absent | nouvelle colonne `pet.height_cm` (validé 2026-10-30, BDD à mettre à jour) |
 | Infos médicales (texte libre) | absent ; allergies et maladies chroniques sont des `health_entry` | nouvelle colonne `pet.medical_notes`, texte libre (validé 2026-10-30, BDD à mettre à jour) |
 | Sexe : mâle / femelle, obligatoire | `male`, `female`, `unknown` | l'API accepte les trois ; la maquette n'envoie que deux |
-| Race : un seul choix, dont « Croisé » et « Je ne sais pas » | `pet_breed` n,n ; aucune ligne = inconnue | l'API accepte une liste de races ; « Je ne sais pas » = liste vide ; « Croisé » à trancher |
+| Race : un seul choix, dont « Croisé » et « Je ne sais pas » | `pet_breed` n,n ; aucune ligne = inconnue | l'API accepte une liste de races ; « Je ne sais pas » = liste vide (côté app) ; « Croisé » = une ligne `breed` fixe (`mixed`), insérée avec les races par défaut (validé 2026-10-30) |
 | Poids | `health_entry` de type pesée (RG8) | l'API crée une pesée à l'ajout |
 | (absent) espèce | `species_code` obligatoire | `dog` par défaut |
 

@@ -125,8 +125,8 @@ aside section{display:grid;gap:10px}
 
 <script>
 const STEPS=[
-  ["C1","Écrans → données","done","ecrans.md"],["C2","Conventions","done","conventions.md"],["C3","Compte et auth","done","openapi.yaml"],["C4","Animaux","doing","openapi.yaml"],
-  ["C5","Colliers","todo","openapi.yaml"],["C6","Santé","todo","openapi.yaml"],["C7","Localisation","todo","openapi.yaml"],["C8","Notifications","todo","openapi.yaml"],
+  ["C1","Écrans → données","done","ecrans.md"],["C2","Conventions","done","conventions.md"],["C3","Compte et auth","done","openapi.yaml"],["C4","Animaux","done","openapi.yaml"],
+  ["C5","Colliers","doing","openapi.yaml"],["C6","Santé","todo","openapi.yaml"],["C7","Localisation","todo","openapi.yaml"],["C8","Notifications","todo","openapi.yaml"],
   ["C9","Chat IA","todo","openapi.yaml"],["C10","Partage","todo","openapi.yaml"],["C11","Relecture équipe","todo"]];
 const GH="https://github.com/AadiDevv/pawrise-doc/blob/main/contrat-interface/";
 const LABEL={done:"fait",doing:"en cours",todo:"à faire",open:"à trancher",written:"écrit, provisoire"};
@@ -140,13 +140,13 @@ const DOMAINS=[
   {v:["GET","PATCH"],p:"/me",st:"written",sc:[["S17","Mon profil"]],g:["D7"],r:"initiales, nom, e-mail, téléphone",w:"nom, e-mail, téléphone"},
   {v:["GET","PATCH"],p:"/me/preferences",st:"written",sc:[["S17","Confidentialité"]],g:["D6"],r:"partage de la position du téléphone, notifications santé, données anonymisées",w:"les trois interrupteurs"},
   {v:["DELETE"],p:"/me",st:"written",sc:[["S25","Détruire le compte"],["S26","Confirmation"]],g:["Q1"],r:"par chien : mon rôle, code collier, chef ou seconds ; rendez-vous confirmés",w:"confirmer la destruction"}]},
- {name:"Animaux",code:"C4",s:"doing",eps:[
+ {name:"Animaux",code:"C4",s:"done",eps:[
   {v:["GET"],p:"/pets",st:"written",sc:[["S05","Mes chiens"],["S25","Détruire le compte"]],g:[],r:"photo, nom, race ; chien actif",w:"chien actif (reste local à l'app)"},
   {v:["POST"],p:"/pets",st:"written",sc:[["S09","Ajouter un chien"]],g:["D2"],r:"photos d'exemple",w:"nom, naissance, sexe, race, poids, taille, infos santé"},
   {v:["POST"],p:"/pets/{id}/photo",st:"written",sc:[["S09","Ajouter un chien"]],g:[],r:"rien",w:"photo (fichier de 1,5 Mo maximum, ou clé d'une photo d'exemple embarquée dans l'app)"},
   {v:["PATCH"],p:"/pets/{id}",st:"written",sc:[["S05","Édition du chien"]],g:["D2"],r:"photo, nom, race, naissance, sexe, poids, taille, infos santé",w:"les mêmes champs"},
-  {v:["GET"],p:"/breeds",sc:[["S09","Ajouter un chien"]],g:[],r:"liste des races avec recherche",w:"rien"}]},
- {name:"Colliers",code:"C5",s:"todo",eps:[
+  {v:["GET"],p:"/breeds",st:"written",sc:[["S09","Ajouter un chien"]],g:[],r:"liste des races avec recherche",w:"rien"}]},
+ {name:"Colliers",code:"C5",s:"doing",eps:[
   {v:["GET"],p:"/pets/{id}/collar",sc:[["S11","Collier"]],g:["D9","D10"],r:"batterie, réseau, code du collier, modèle",w:"rien"},
   {v:["POST"],p:"/pets/{id}/collar",sc:[["S10","Associer un collier"]],g:["D9"],r:"rien",w:"code PW-XXXXXX par QR ou saisie ; erreur si invalide ou déjà associé"},
   {v:["PUT"],p:"/pets/{id}/collar",sc:[["S11","Remplacer le collier"]],g:["D9"],r:"rien",w:"nouveau code ; l'ancien est dissocié ; une notification est créée"}]},

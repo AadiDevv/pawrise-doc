@@ -417,7 +417,7 @@ paths:
         - Espèce `dog` par défaut (`species_code` obligatoire en BDD, absent de la maquette, D2).
         - `weightKg` crée une pesée dans le carnet (`health_entry`, RG8).
         - `heightCm` et `medicalNotes` : nouvelles colonnes `pet.height_cm` et `pet.medical_notes` (D2).
-        - `breedCodes` : liste vide = race inconnue (« Je ne sais pas ») ; le premier code est la race principale. « Croisé » à trancher (D2).
+        - `breedCodes` : liste vide = race inconnue (« Je ne sais pas ») ; le premier code est la race principale. « Croisé » = code `mixed` (D2).
         - Date de naissance dans le futur → 400 `BIRTH_DATE_IN_FUTURE`.
       x-status: provisoire
       x-depends-on: [T1, D2]
@@ -564,6 +564,49 @@ paths:
             application/problem+json:
               schema: { $ref: '#/components/schemas/Problem' }
               example: { status: 413, code: FILE_TOO_LARGE, title: File too large }
+
+  /breeds:
+    get:
+      tags: [Animaux]
+      operationId: listBreeds
+      summary: Lister les races
+      description: |
+        Écran S09 Ajouter un chien, étape race (recherche), et fiche d'édition du chien (M5). Liste filtrée par `q` et bornée par `limit`, sans curseur (convention 5).
+
+        Règles appliquées :
+        - Races du chien uniquement (`species_code = dog`, D2).
+        - « Croisé » est une race comme les autres (code `mixed`, D2), renvoyée en premier quand `q` est vide.
+        - « Je ne sais pas » n'est pas renvoyé : l'app l'affiche elle-même et envoie une liste de races vide.
+        - `q` : recherche sur le nom, sans tenir compte de la casse ni des accents.
+      x-status: provisoire
+      x-depends-on: [T1, D2]
+      security:
+        - bearerAuth: []
+      parameters:
+        - { name: q, in: query, required: false, schema: { type: string, maxLength: 100 } }
+        - { name: limit, in: query, required: false, schema: { type: integer, minimum: 1, maximum: 100, default: 50 } }
+      responses:
+        '200':
+          description: Races correspondantes, triées par nom (`mixed` en tête si `q` est vide).
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/Breed' }
+              example:
+                items:
+                  - { code: mixed, name: Croisé }
+                  - { code: akita_inu, name: Akita Inu }
+                  - { code: beagle, name: Beagle }
+        '401':
+          description: Jeton d'accès absent ou expiré.
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
 
 components:
   securitySchemes:
