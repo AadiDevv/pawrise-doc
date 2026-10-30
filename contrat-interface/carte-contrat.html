@@ -139,7 +139,7 @@ const DOMAINS=[
   {v:["POST"],p:"/auth/refresh",st:"written",sc:[],g:["T1","D15"],r:"rien (appel automatique quand le jeton expire)",w:"jeton de rafraîchissement"},
   {v:["GET","PATCH"],p:"/me",st:"written",sc:[["S17","Mon profil"]],g:["D7"],r:"initiales, nom, e-mail, téléphone",w:"nom, e-mail, téléphone"},
   {v:["GET","PATCH"],p:"/me/preferences",st:"written",sc:[["S17","Confidentialité"]],g:["D6"],r:"partage de la position du téléphone, notifications santé, données anonymisées",w:"les trois interrupteurs"},
-  {v:["DELETE"],p:"/me",st:"written",sc:[["S25","Détruire le compte"],["S26","Confirmation"]],g:["Q1"],r:"par chien : mon rôle, code collier, chef ou seconds ; rendez-vous confirmés",w:"confirmer la destruction"}]},
+  {v:["DELETE"],p:"/me",st:"written",sc:[["S25","Détruire le compte"],["S26","Suppression (second)"]],g:["Q1"],r:"par chien : mon rôle, code collier, chef ou seconds ; rendez-vous confirmés",w:"confirmer la destruction"}]},
  {name:"Animaux",code:"C4",s:"done",eps:[
   {v:["GET"],p:"/pets",st:"written",sc:[["S05","Mes chiens"],["S25","Détruire le compte"]],g:[],r:"photo, nom, race ; chien actif",w:"chien actif (reste local à l'app)"},
   {v:["POST"],p:"/pets",st:"written",sc:[["S09","Ajouter un chien"]],g:["D2"],r:"photos d'exemple",w:"nom, naissance, sexe, race, poids, taille, infos santé"},
