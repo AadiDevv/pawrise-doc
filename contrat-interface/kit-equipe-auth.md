@@ -2,6 +2,8 @@
 
 À envoyer à la personne qui code l'onboarding et l'authentification dans son propre repo.
 
+**En deux étapes** : (1) cloner la doc (ci-dessous) ; (2) envoyer la partie 2 comme premier message à son agent. L'agent installe lui-même la partie 1.
+
 **Installation** : cloner la doc **à côté** du repo de code, avec la maquette (sous-module `pawrise-figma`).
 
 ```bash
@@ -66,6 +68,7 @@ Décisions déjà prises, à respecter :
 - NestJS, Prisma en base d'abord (le SQL de `../pawrise-doc/bdd/sql/` est la source du schéma), architecture en vertical slice : un dossier par cas d'usage, règles métier dans `domain/` (`../pawrise-doc/context/decisions.md`).
 
 Commence ainsi, sans écrire de code :
+0. Copie le bloc de la partie 1 de `../pawrise-doc/contrat-interface/kit-equipe-auth.md` dans le `CLAUDE.md` de ce repo (crée-le s'il n'existe pas).
 1. Lis `../pawrise-doc/contrat-interface/conventions.md`, les endpoints du tag `Compte` dans `openapi.yaml`, les entrées T1, D13, D14, D15 de `questions.md`, puis les tables `user_account`, `consent`, `refresh_token`, `device` de `../pawrise-doc/bdd/schema.md`. Terminé quand chaque endpoint du périmètre a son corps, ses réponses et ses règles identifiés.
 2. Rends-moi un résumé court : ce que fait chaque endpoint, les tables qu'il touche, les règles (RG) qu'il applique. Puis la liste de tout ce qui est ambigu, manquant ou contradictoire, avec le fichier et l'ancre concernés. Terminé quand chaque point provisoire (`x-depends-on`) est soit expliqué, soit dans la liste.
 3. Propose un plan de travail découpé en tranches livrables (une tranche = un endpoint testable de bout en bout), dans l'ordre, avec les tests prévus pour chacune.
