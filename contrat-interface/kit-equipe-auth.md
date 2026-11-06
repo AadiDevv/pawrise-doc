@@ -2,24 +2,20 @@
 
 À envoyer à la personne qui code l'onboarding et l'authentification dans son propre repo.
 
-**Installation** : cloner la doc **à côté** du repo de code, sous le nom par défaut.
+**Installation** : cloner la doc **à côté** du repo de code, avec la maquette (sous-module `pawrise-figma`).
 
 ```bash
-git clone https://github.com/AadiDevv/pawrise-doc.git
+git clone --recurse-submodules https://github.com/AadiDevv/pawrise-doc.git
 ```
-
-```bash
-git clone git@github.com:Pawrise/pawrise-figma.git pawrise-doc/pawrise-figma
-```
-
-La maquette (`pawrise-figma`) est un repo séparé, ignoré par `pawrise-doc` : la cloner **dans** `pawrise-doc/` pour que les liens de la doc vers les écrans fonctionnent.
 
 ```
 ~/code/
 ├── pawrise-doc/          ← doc, lecture seule
-│   └── pawrise-figma/    ← maquette (repo séparé)
+│   └── pawrise-figma/    ← maquette (sous-module)
 └── <repo-auth>/          ← code
 ```
+
+Déjà cloné sans la maquette : `git -C pawrise-doc submodule update --init`.
 
 ---
 
@@ -28,7 +24,7 @@ La maquette (`pawrise-figma`) est un repo séparé, ignoré par `pawrise-doc` : 
 ```markdown
 ## Documentation Pawrise (source de vérité)
 
-La doc du projet vit dans `../pawrise-doc/` (repo cloné à côté de celui-ci). Elle fait foi : ce repo l'implémente, il ne la modifie pas. Avant chaque session : `git -C ../pawrise-doc pull`.
+La doc du projet vit dans `../pawrise-doc/` (repo cloné à côté de celui-ci). Elle fait foi : ce repo l'implémente, il ne la modifie pas. Avant chaque session : `git -C ../pawrise-doc pull --recurse-submodules`.
 
 Lire selon la tâche :
 

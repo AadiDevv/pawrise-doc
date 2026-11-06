@@ -1,0 +1,3 @@
+[submodule "pawrise-figma"]
+	path = pawrise-figma
+	url = https://github.com/Pawrise/pawrise-figma.git
